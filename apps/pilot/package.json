@@ -1,0 +1,48 @@
+{
+  "name": "pilot",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "ui": "workspace:*",
+    "@heroicons/react": "^2.0.11",
+    "@mapbox/geojson-area": "^0.2.2",
+    "@mapbox/mapbox-gl-draw": "^1.3.0",
+    "@reduxjs/toolkit": "^1.8.5",
+    "@supabase/auth-helpers-nextjs": "^0.4.0",
+    "@supabase/auth-helpers-react": "^0.3.0",
+    "@supabase/supabase-js": "^2.0.0",
+    "@userback/react": "^0.3.0",
+    "add-to-calendar-button": "^1.18.8",
+    "aws-sdk": "^2.1311.0",
+    "axios": "^0.27.2",
+    "crypto-js": "^4.1.1",
+    "generate-password": "^1.7.0",
+    "mapbox-gl": "^2.10.0",
+    "next": "12.3.1",
+    "next-transpile-modules": "^10.0.1",
+    "nookies": "^2.5.2",
+    "react": "18.2.0",
+    "react-datepicker": "^4.8.0",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.2",
+    "react-hook-form": "^7.36.1",
+    "react-hot-toast": "^2.4.0",
+    "react-redux": "^8.0.4",
+    "turf-area": "^3.0.12",
+    "tw-elements": "^1.0.0-alpha12"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "eslint": "8.55.0",
+    "eslint-config-next": "13.3.0",
+    "postcss": "^8.4.27",
+    "tailwind-scrollbar": "^2.1.0-preview.0",
+    "tailwindcss": "^3.3.3"
+  }
+}

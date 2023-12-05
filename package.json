@@ -1,4 +1,5 @@
 {
+  "name": "duber-uk",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -6,6 +7,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "web": "pnpm --filter web --",
+    "customer": "pnpm --filter customer --",
+    "pilot": "pnpm --filter pilot --",
     "workshop": "pnpm --filter workshop --"
   },
   "devDependencies": {
@@ -14,6 +17,5 @@
     "prettier": "^2.5.1",
     "turbo": "latest"
   },
-  "packageManager": "pnpm@8.6.10",
-  "name": "design-system-template"
+  "packageManager": "pnpm@8.6.10"
 }

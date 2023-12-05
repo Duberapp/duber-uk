@@ -1,0 +1,14 @@
+# Block all crawlers for /accounts
+User-agent: *
+Disallow: /hire/confirm
+Disallow: /hire/checkout
+Disallow: /hire/track-order/
+Disallow: /Dashboard
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+Allow: /hire
+Allow: /Contact
+Allow: /DuberPilots
+allow: /blog

@@ -1,0 +1,98 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .title-select-btn {
+    @apply sm:h-full w-12 bg-primaryBlueLight text-primaryBlue text-sm font-light rounded-md;
+  }
+  .title-select-btn.active {
+    @apply bg-primaryTealLight text-[#2dd1b6];
+  }
+  .form-input {
+    @apply bg-transparent border-none outline-none text-primaryBlue placeholder:text-primaryBlue;
+  }
+  .normal-input {
+    @apply w-full border border-transparent bg-primaryBlueLight sm:text-[16px] text-base text-primaryBlue h-12 rounded-md px-4 outline-none placeholder:text-primaryBlue;
+  }
+  .title-button {
+    @apply w-12 h-12 rounded-md sm:text-sm text-base;
+  }
+  .tracking-page-badge {
+    @apply w-36 px-3 py-1 cursor-default rounded-md;
+  }
+  .tracking-dot {
+    @apply sm:w-6 sm:h-6 w-3 h-3 rounded-full bg-gray-100 relative flex items-center justify-center;
+  }
+  .tracking-dot.completed {
+    @apply bg-teal-400;
+  }
+  .tracking-bar {
+    @apply flex-1 sm:h-[.6rem] h-[.4rem] rounded-full bg-gray-100;
+  }
+  .tracking-bar.completed {
+    @apply bg-teal-400;
+  }
+}
+
+@layer utilities {
+  .scrollbar-medium::-webkit-scrollbar {
+    width: 5px;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
+}
+
+.custom-shadow {
+  -webkit-box-shadow: 0px 2px 26px -3px #00000040;
+  -moz-box-shadow: 0px 2px 26px -3px #00000040;
+  box-shadow: 0px 2px 26px -3px #00000040;
+}
+.custom-shadow-sm {
+  -webkit-box-shadow: 0px 3px 22px -6px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px 3px 22px -6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 3px 22px -6px rgba(0, 0, 0, 0.3);
+}
+.custom-shadow-xs {
+  -webkit-box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Toggle B */
+input:checked ~ .dot {
+  transform: translateX(150%);
+  background-color: #fff;
+}
+
+input:checked ~ .block {
+  background-color: #007aff;
+  transition: 0.4s ease-in-out;
+}
+
+/* Add to Calender Button */
+.atcb-button {
+  background-color: #0b2c60 !important;
+  color: #fff !important;
+  font-family: "Poppins" !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  box-shadow: 0px 0px !important;
+}
+.atcb-active {
+  padding: 0.65em 1em !important;
+  margin: 0.13em !important;
+}
+.atcb-checkmark {
+  visibility: collapse !important;
+}
