@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import "../style/styles.css"
 
 // component exports
