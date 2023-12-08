@@ -12,9 +12,9 @@ function getAbsolutePath(value) {
 const config = {
   stories: [
     {
-      directory: '../../../packages/ui/src/**',
-      titlePrefix: 'UI',
-      files: '*.stories.*'
+      directory: "../../../packages/ui/src/stories/**",
+      titlePrefix: "UI",
+      files: "*.stories.*",
     },
   ],
   addons: [

@@ -9,7 +9,26 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // Duber Variants
         default:
+          "bg-duber-navyBlue text-primary-foreground shadow hover:bg-duber-navyBlue-dark",
+
+        skyBlue:
+          "bg-duber-skyBlue text-primary-foreground shadow hover:bg-duber-skyBlue-dark",
+
+        "skyBlue-light":
+          "bg-duber-skyBlue-light text-duber-skyBlue shadow",
+
+        teal:
+          "bg-duber-teal text-white shadow hover:bg-duber-teal-dark",
+
+        "teal-light":
+          "bg-duber-teal-light text-duber-teal shadow",
+
+        pink: "bg-duber-pink text-white shadow hover:bg-duber-pink-dark",
+
+        // Defaults by Shadcn UI
+        primary:
           "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
@@ -25,6 +44,7 @@ const buttonVariants = cva(
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
+        xxl: "w-32 h-12 rounded-md text-lg uppercase font-bold"
       },
     },
     defaultVariants: {
@@ -52,6 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     )
   }
 )
+
 Button.displayName = "Button"
 
 export { Button, buttonVariants }

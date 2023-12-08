@@ -9,6 +9,8 @@ module.exports = function (app, options) {
       // Nextjs 12 apps
       `../../apps/${app}/pages/**/*.{ts,tsx,js,jsx,html,stories.tsx}`,
       `../../apps/${app}/components/**/*.{ts,tsx,js,jsx,html,stories.tsx}`,
+      `./pages/**/*.{ts,tsx,js,jsx,html,stories.tsx}`,
+      `./components/**/*.{ts,tsx,js,jsx,html,stories.tsx}`,
     ],
     darkMode: ["class"],
     theme: {
@@ -74,6 +76,26 @@ module.exports = function (app, options) {
           card: {
             DEFAULT: "hsl(var(--card))",
             foreground: "hsl(var(--card-foreground))",
+          },
+
+          // Customize Colors
+          "duber-navyBlue": {
+            DEFAULT: "hsl(var(--navy-blue))",
+            dark: "hsl(var(--navy-blue-dark))",
+          },
+          "duber-skyBlue": {
+            DEFAULT: "hsl(var(--sky-blue))",
+            dark: "hsl(var(--sky-blue-dark))",
+            light: "hsl(var(--sky-blue-light))",
+          },
+          "duber-teal": {
+            DEFAULT: "hsl(var(--teal-primary))",
+            dark: "hsl(var(--teal-dark))",
+            light: "hsl(var(--teal-light))",
+          },
+          "duber-pink": {
+            DEFAULT: "hsl(var(--pink-primary))",
+            dark: "hsl(var(--pink-dark))",
           },
 
           // from customer repo

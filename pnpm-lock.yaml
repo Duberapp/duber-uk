@@ -305,6 +305,9 @@ importers:
 
   apps/workshop:
     dependencies:
+      lucide-react:
+        specifier: ^0.294.0
+        version: 0.294.0(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -468,6 +471,12 @@ importers:
       clsx:
         specifier: ^2.0.0
         version: 2.0.0
+      lucide-react:
+        specifier: ^0.294.0
+        version: 0.294.0(react@17.0.2)
+      prop-types:
+        specifier: ^15.8.1
+        version: 15.8.1
       tailwind-merge:
         specifier: ^1.14.0
         version: 1.14.0
@@ -478,6 +487,9 @@ importers:
       '@types/node':
         specifier: ^20.4.5
         version: 20.4.5
+      '@types/prop-types':
+        specifier: ^15.7.11
+        version: 15.7.11
       '@types/react':
         specifier: ^18.2.0
         version: 18.2.5
@@ -4264,8 +4276,12 @@ packages:
   /@types/pretty-hrtime@1.0.1:
     resolution: {integrity: sha512-VjID5MJb1eGKthz2qUerWT8+R4b9N+CHvGCzg9fn4kWZgaF9AhdYikQio3R7wV8YY1NsQKPaCwKz1Yff+aHNUQ==}
 
+  /@types/prop-types@15.7.11:
+    resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
+
   /@types/prop-types@15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
+    dev: true
 
   /@types/qs@6.9.7:
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
@@ -4302,14 +4318,14 @@ packages:
   /@types/react@18.2.18:
     resolution: {integrity: sha512-da4NTSeBv/P34xoZPhtcLkmZuJ+oYaCxHmyHzwaDQo9RQPBeXV+06gEk2FpqEcsX9XrnNLvRpVh6bdavDSjtiQ==}
     dependencies:
-      '@types/prop-types': 15.7.5
+      '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.3
       csstype: 3.1.2
 
   /@types/react@18.2.5:
     resolution: {integrity: sha512-RuoMedzJ5AOh23Dvws13LU9jpZHIc/k90AgmK7CecAYeWmSr3553L4u5rk4sWAPBuQosfT7HmTfG4Rg5o4nGEA==}
     dependencies:
-      '@types/prop-types': 15.7.5
+      '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.3
       csstype: 3.1.2
 
@@ -8619,6 +8635,22 @@ packages:
   /lru-cache@7.18.3:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
+    dev: false
+
+  /lucide-react@0.294.0(react@17.0.2):
+    resolution: {integrity: sha512-V7o0/VECSGbLHn3/1O67FUgBwWB+hmzshrgDVRJQhMh8uj5D3HBuIvhuAmQTtlupILSplwIZg5FTc4tTKMA2SA==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 17.0.2
+    dev: false
+
+  /lucide-react@0.294.0(react@18.2.0):
+    resolution: {integrity: sha512-V7o0/VECSGbLHn3/1O67FUgBwWB+hmzshrgDVRJQhMh8uj5D3HBuIvhuAmQTtlupILSplwIZg5FTc4tTKMA2SA==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /lz-string@1.5.0:

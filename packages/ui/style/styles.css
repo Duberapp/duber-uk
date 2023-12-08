@@ -34,6 +34,21 @@
     --ring: 215 20.2% 65.1%;
 
     --radius: 0.5rem;
+
+    /* Custom Colors */
+    --navy-blue: 217, 79%, 21%, 1;
+    --navy-blue-dark: 217, 80%, 16%, 1;
+
+    --sky-blue: 220, 75%, 50%, 1;
+    --sky-blue-dark: 220, 78%, 40%, 1;
+    --sky-blue-light: 216, 100%, 93%, 1;
+
+    --teal-primary: 173, 100%, 43%, 1;
+    --teal-dark: 173, 100%, 35%, 1;
+    --teal-light: 173, 64%, 67%, 0.25;
+
+    --pink-primary: 314, 100%, 60%, 1;
+    --pink-dark: 314, 71%, 44%, 1;
   }
 
   .dark {

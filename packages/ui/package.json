@@ -13,10 +13,12 @@
   "scripts": {
     "lint": "eslint src --cache",
     "typecheck": "tsc -b",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
   "devDependencies": {
     "@types/node": "^20.4.5",
+    "@types/prop-types": "^15.7.11",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "autoprefixer": "^10.4.14",
@@ -33,6 +35,8 @@
     "@storybook/react": "^7.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "lucide-react": "^0.294.0",
+    "prop-types": "^15.8.1",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6"
   }
