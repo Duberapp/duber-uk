@@ -87,6 +87,7 @@ module.exports = function (app, options) {
             DEFAULT: "hsl(var(--sky-blue))",
             dark: "hsl(var(--sky-blue-dark))",
             light: "hsl(var(--sky-blue-light))",
+            low: "hsl(var(--sky-blue-low))",
           },
           "duber-teal": {
             DEFAULT: "hsl(var(--teal-primary))",
