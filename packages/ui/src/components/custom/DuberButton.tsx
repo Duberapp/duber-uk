@@ -1,8 +1,10 @@
+'use client'
+
 import { Loader2 } from 'lucide-react'
 import { Button, type ButtonProps } from '../ui/button'
 
 interface DuberButtonProps extends ButtonProps {
-  isLoading: boolean,
+  isLoading?: boolean,
   loadingText?: string,
   isIcon?: boolean,
   withIcon?: boolean,
