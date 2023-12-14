@@ -1,4 +1,16 @@
 import type { Config } from "tailwindcss";
+import {
+  pilotApp_extended_boxShadow,
+  pilotApp_extended_animations,
+  pilotApp_extended_colors,
+  pilotApp_extended_keyframes
+} from "./extended/pilot";
+import {
+  customerApp_extended_colors,
+  customerApp_extended_boxShadow,
+  customerApp_extended_animation,
+  customerApp_extended_keyframes
+} from "./extended/customer";
 
 // import tailwindcssAnimatePlugin from "tailwindcss-animate";
 
@@ -93,7 +105,11 @@ let config: Config = {
         "duber-pink": {
           DEFAULT: "hsl(var(--pink-primary))",
           dark: "hsl(var(--pink-dark))",
-        }
+        },
+
+        // pilot-app-extended
+        ...pilotApp_extended_colors,
+        ...customerApp_extended_colors
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -109,10 +125,18 @@ let config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0px" },
         },
+        ...pilotApp_extended_keyframes,
+        ...customerApp_extended_keyframes
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        ...pilotApp_extended_animations,
+        ...customerApp_extended_animation
+      },
+      boxShadow: {
+        ...pilotApp_extended_boxShadow,
+        ...customerApp_extended_boxShadow
       }
     },
   },

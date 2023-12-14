@@ -7,6 +7,7 @@ import Head from "next/head";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import supabaseClient from "../config/supabaseClient";
 import { UserbackProvider } from "@userback/react";
+import {} from "ui";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {

@@ -38,7 +38,10 @@ export default function DatePicker({ error }: DatePickerProps) {
           selected={date}
           onSelect={setDate}
           initialFocus
-          classNames={{ day_selected: "bg-duber-skyBlue text-primary-foreground hover:bg-duber-skyBlue-dark hover:text-primary-foreground focus:bg-duber-skyBlue focus:text-primary-foreground" }}
+          classNames={{
+            day_selected: "bg-duber-skyBlue text-primary-foreground hover:bg-duber-skyBlue-dark hover:text-primary-foreground focus:bg-duber-skyBlue focus:text-primary-foreground",
+            day_today: "bg-duber-skyBlue-light text-duber-skyBlue"
+          }}
         />
       </PopoverContent>
     </Popover>

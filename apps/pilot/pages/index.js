@@ -9,7 +9,6 @@ const Index = () => {
   const user = useUser();
 
   // Added just a comment on index.js
-
   useEffect(() => {
     if (!isLoading && user === null) {
       router.push("/auth/login");

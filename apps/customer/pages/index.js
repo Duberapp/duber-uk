@@ -87,6 +87,7 @@ export default function Home() {
           smallText="Instant & Secure Booking"
           boldText="From £250."
         />
+
         <ThreeBoxes
           oneTitle="Lightning Fast"
           oneText="100% automated."
