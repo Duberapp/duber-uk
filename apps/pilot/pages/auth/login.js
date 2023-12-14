@@ -91,7 +91,7 @@ const Login = () => {
             <form className="w-full">
               {/* <h2 className='text-logoText font-light'><span className="font-bold">Onthefly</span> DronePilots</h2> */}
               <div className="flex items-center gap-x-3">
-                <img src="/assets/Duber icon.svg" className="w-8 h-8" />
+                <img src="/assets/Duber Icon.svg" className="w-8 h-8" />
                 <p className="font-bold text-white text-xl tracking-widest">
                   Duber
                 </p>
