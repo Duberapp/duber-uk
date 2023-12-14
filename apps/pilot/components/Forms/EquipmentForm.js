@@ -12,6 +12,8 @@ import {
   setActiveForm,
 } from "../../redux/registerSlice";
 
+import { PilotSkillCard, pilot_skills } from "ui";
+
 const EquipmentsForm = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.register);
@@ -27,6 +29,9 @@ const EquipmentsForm = () => {
   });
   const [activeSkills, setActiveSkills] = useState(state.skills);
   const [activeEquipments, setActiveEquipments] = useState(state.equipments);
+
+  // V2
+  const [selectedSkills, setSelectedSkills] = useState([...state.skills_new]);
 
   // Load drones data when component mount
   useEffect(() => {
@@ -71,8 +76,8 @@ const EquipmentsForm = () => {
   // ------------------------------------------------
   const onSubmit = async (data) => {
     const skillSet = [];
-    activeSkills.map((skill) => {
-      skillSet.push({ id: skill.id, text: skill.text });
+    selectedSkills.map((skill) => {
+      skill.slug && skillSet.push(skill.slug);
     });
 
     const equipmentSet = [];
@@ -89,14 +94,15 @@ const EquipmentsForm = () => {
     // --------------------------------
     try {
       // Validate
-      const isError = validateForm(skillSet, equipmentSet);
+      const isError = validateForm(selectedSkills, equipmentSet);
       if (isError) return;
 
       setLoading(true);
 
       dispatch(
         submitEquipmentForm({
-          skills: skillSet,
+          skills_new: selectedSkills,
+          skills_new_enum: skillSet,
           equipments: equipmentSet,
         })
       );
@@ -128,13 +134,13 @@ const EquipmentsForm = () => {
       )}
       <div className="mt-6">
         <p className="mb-5">Skill / Experience</p>
-        <div className="max-w-fit flex flex-wrap gap-x-8 gap-y-5">
-          {skills.map((item) => (
-            <SkillCard
-              key={item.id}
-              item={item}
-              setActiveSkills={setActiveSkills}
-              activeSkills={activeSkills}
+        <div className="w-full flex gap-x-3 ">
+          {pilot_skills.map((skill) => (
+            <PilotSkillCard
+              key={skill.slug}
+              skill={skill.slug}
+              selectedSkillList={selectedSkills}
+              setSelectedSkillList={setSelectedSkills}
             />
           ))}
         </div>

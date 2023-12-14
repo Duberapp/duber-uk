@@ -614,7 +614,7 @@ const ContractModal = () => {
               <div className=" border-black border-b-2 space-y-5">
                 <p className=" text-sm">Sign here:</p>
                 <input
-                  className="outline-none"
+                  className="outline-none font-['Homemade_Apple']"
                   type="text"
                   placeholder="Enter text here"
                   value={value}

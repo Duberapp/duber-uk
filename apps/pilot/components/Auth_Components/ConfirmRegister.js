@@ -8,6 +8,7 @@ import { insertToUsers, uploadProofFile } from "../../config/supabaseFunctions";
 import { setActiveForm, setUpdateMode } from "../../redux/registerSlice";
 import axios from "axios";
 import { ContractModal, LoadingSpinner } from "../../components";
+import { Button } from "ui";
 
 const Confirm = ({ proofDoc, insuranceDoc }) => {
   const state = useSelector((state) => state.register);
@@ -58,7 +59,7 @@ const Confirm = ({ proofDoc, insuranceDoc }) => {
           confirmNoProof: state.confirmNoProof,
           proofDoc: proofFileDoc,
           droneInsurance: insuranceFileLink,
-          userSkills: state.skills,
+          pilot_skill: state.skills_new_enum,
           userDrones: state.equipments,
           email: state.email,
         },
@@ -178,9 +179,9 @@ const Confirm = ({ proofDoc, insuranceDoc }) => {
             Skills / Experiences
           </p>
           <div className="flex flex-row gap-2 mt-2 flex-wrap">
-            {state.skills.map((skill) => (
-              <p className="text-primaryBlue text-xs w-fit" key={skill.id}>
-                {skill.text},{" "}
+            {state.skills_new.map((skill) => (
+              <p className="text-primaryBlue text-xs w-fit" key={skill.slug}>
+                {skill.title},{" "}
               </p>
             ))}
           </div>
@@ -215,12 +216,12 @@ const Confirm = ({ proofDoc, insuranceDoc }) => {
           }}
         />
         <p className="sm:text-base text-sm">
-          I accept the{" "}
-          <span className="font-semibold">Supplier Agreement.</span>
+          I have signed and accepted the terms in the{" "}
+          <span className="font-semibold">Supplier Contract Agreement.</span>
         </p>
       </div>
 
-      <button
+      {/* <button
         disabled={!checked}
         onClick={handleSubmit}
         className={`w-full flex items-center justify-center ${
@@ -232,7 +233,18 @@ const Confirm = ({ proofDoc, insuranceDoc }) => {
         ) : (
           <span>Submit</span>
         )}
-      </button>
+      </button> */}
+
+      <Button
+        disabled={!checked || loading}
+        onClick={handleSubmit}
+        isLoading={loading}
+        className="w-full h-12 text-lg font-semibold"
+        variant={"teal"}
+      >
+        Submit Application
+      </Button>
+
       {showModal && <ContractModal />}
     </div>
   );

@@ -10,6 +10,7 @@ import {
 import { LoadingSpinner } from "../../components";
 import { Toaster } from "react-hot-toast";
 import { successToast, errorToast } from "../../components/UI/Toast";
+import { Button } from "ui";
 
 const Login = () => {
   const router = useRouter();
@@ -82,108 +83,112 @@ const Login = () => {
   // ---------------------------------------------
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-screen">
+    <div className="w-screen h-full bg-[url('/assets/authBG.jpg')] bg-cover bg-fixed p-14">
       <Toaster position="top-right" />
-      <div className="hidden md:block lg:col-span-2">
-        <img className="w-full h-full object-cover" src="/assets/loginBG.jpg" />
-      </div>
+      <div className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-screen">
+        <div className="flex items-center justify-center sm:px-12 px-8 bg-navyBlue rounded-3xl">
+          {!forgotPasswordView ? (
+            <form className="w-full">
+              {/* <h2 className='text-logoText font-light'><span className="font-bold">Onthefly</span> DronePilots</h2> */}
+              <div className="flex items-center gap-x-3">
+                <img src="/assets/Duber icon.svg" className="w-8 h-8" />
+                <p className="font-bold text-white text-xl tracking-widest">
+                  Duber
+                </p>
+              </div>
 
-      <div className="flex items-center justify-center sm:px-12 px-8">
-        {!forgotPasswordView ? (
-          <form className="w-full">
-            {/* <h2 className='text-logoText font-light'><span className="font-bold">Onthefly</span> DronePilots</h2> */}
-            <img src="/assets/Duber logo.svg" className="w-32" />
-            <h2 className="mt-12 mb-5 text-xl text-black font-bold">
-              Nice to see you again
-            </h2>
-
-            {error && <p className="mb-5 text-xs text-red-500">{error}</p>}
-            <InputItem
-              label={"Login"}
-              inputType="email"
-              id="email"
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email or Phone number"
-              value={email}
-            />
-            <InputItem
-              label={"Password"}
-              inputType="password"
-              id="password"
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
-              className="mt-5"
-              value={password}
-            />
-
-            <div className="w-full flex items-center flex-nowrap justify-between mt-6 mb-8">
-              <ToggleButton />
-
-              <p
-                className="text-skyBlue text-xs font-semibold cursor-pointer mr-1"
-                onClick={() => setForgotPasswordView(true)}
-              >
-                Forgot Password ?
-              </p>
-            </div>
-
-            <button
-              onClick={handleSubmit}
-              type="button"
-              className="w-full flex items-center justify-center bg-skyBlue py-3 rounded-md text-white font-semibold text-sm"
-            >
-              {!loading ? (
-                "Sign in"
-              ) : (
-                <LoadingSpinner width={5} height={5} color="white" />
-              )}
-            </button>
-
-            <div className="border-t border-gray-200 my-9" />
-
-            <p className="text-center text-xs">
-              Dont have an account?{" "}
-              <Link href="/auth/register">
-                <a className="text-skyBlue font-semibold ml-1">Sign up now</a>
-              </Link>
-            </p>
-          </form>
-        ) : (
-          <div className="w-full ">
-            <h2 className="mt-12 mb-5 text-xl text-black font-bold">
-              Forgot Password
-            </h2>
-            <InputItem
-              label={"Email"}
-              inputType="email"
-              className="mt-3"
-              id="email"
-              placeholder="Email Address"
-              value={emailToPassword}
-              onChange={(e) => setEmailToPassword(e.target.value)}
-            />
-
-            <div className="mt-4 flex items-center justify-between w-full">
-              <button
-                className="h-12 w-32 bg-primaryBlue flex items-center justify-center text-white rounded-md"
-                onClick={sendPasswordResetLink}
-              >
-                {sendingResetLink ? (
-                  <LoadingSpinner width={5} height={5} color="white" />
-                ) : (
-                  "Send Link"
-                )}
-              </button>
-
-              <h2
-                className="text-xs cursor-pointer text-gray-400 hover:text-primaryBlue"
-                onClick={() => setForgotPasswordView(false)}
-              >
-                Back to Login
+              <h2 className="mt-12 mb-5 text-xl text-white font-semibold">
+                Nice to see you again
               </h2>
+
+              {error && (
+                <p className="mb-5 text-xs py-2 px-3 rounded-lg bg-red-200 text-red-500">
+                  {error}
+                </p>
+              )}
+              <InputItem
+                label={"Username"}
+                inputType="email"
+                id="email"
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email or Phone number"
+                value={email}
+              />
+              <InputItem
+                label={"Password"}
+                inputType="password"
+                id="password"
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+                className="mt-5"
+                value={password}
+              />
+
+              <div className="w-full flex items-center flex-nowrap justify-between mt-6 mb-8">
+                <ToggleButton />
+
+                <p
+                  className="text-duber-pink text-xs font-semibold cursor-pointer mr-1"
+                  onClick={() => setForgotPasswordView(true)}
+                >
+                  Forgot Password ?
+                </p>
+              </div>
+
+              <Button
+                variant={"teal"}
+                isLoading={loading}
+                onClick={handleSubmit}
+                className="w-full h-10"
+              >
+                Sign in
+              </Button>
+
+              <div className="border-t border-gray-200 my-9" />
+
+              <p className="text-center text-xs text-white">
+                Dont have an account?{" "}
+                <Link href="/auth/register">
+                  <a className="text-duber-pink font-semibold ml-1">
+                    Sign up now
+                  </a>
+                </Link>
+              </p>
+            </form>
+          ) : (
+            <div className="w-full ">
+              <h2 className="mt-12 mb-5 text-xl text-duber-pink font-bold">
+                Forgot Password
+              </h2>
+              <InputItem
+                label={"Email"}
+                inputType="email"
+                className="mt-3"
+                id="email"
+                placeholder="Email Address"
+                value={emailToPassword}
+                onChange={(e) => setEmailToPassword(e.target.value)}
+              />
+
+              <div className="mt-4 flex items-center justify-between w-full">
+                <Button
+                  onClick={sendPasswordResetLink}
+                  variant={"skyBlue"}
+                  isLoading={sendingResetLink}
+                >
+                  Send Password Reset Link
+                </Button>
+
+                <h2
+                  className="text-xs cursor-pointer text-gray-400 hover:text-primaryBlue"
+                  onClick={() => setForgotPasswordView(false)}
+                >
+                  Back to Login
+                </h2>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
@@ -210,7 +215,7 @@ const InputItem = ({ label, leftComponent, inputType, ...props }) => {
 
   return (
     <div className={`flex flex-col ${props?.className}`}>
-      <label htmlFor={props?.id} className="text-xs ml-3 mb-2">
+      <label htmlFor={props?.id} className="text-xs ml-1 mb-2 text-white">
         {label}
       </label>
       <div className="flex items-center p-3 px-4 bg-[#eeeeee] border-1-gray-600 rounded-md">
@@ -241,12 +246,10 @@ const ToggleButton = () => {
             {/* <!-- line --> */}
             <div className="block bg-[#e7e7e7] w-12 h-6 rounded-full"></div>
             {/* <!-- dot --> */}
-            <div className="dot absolute left-1 top-1 bg-white shadow-lg w-4 h-4 rounded-full transition"></div>
+            <div className="dot absolute left-1 top-1 bg-gray-400 shadow-lg w-4 h-4 rounded-full transition"></div>
           </div>
           {/* <!-- label --> */}
-          <div className="ml-3 text-xs text-gray-700 font-normal">
-            Remember Me
-          </div>
+          <div className="ml-3 text-xs text-white font-normal">Remember Me</div>
         </label>
       </div>
     </div>

@@ -26,6 +26,8 @@ const initialState = {
   // Equipment form
   skills: [],
   equipments: [],
+  skills_new: [],
+  skills_new_enum: [],
 
   // Mode
   updateMode: false,
@@ -65,7 +67,8 @@ const registerSlice = createSlice({
     },
 
     submitEquipmentForm: (state, action) => {
-      state.skills = action.payload.skills;
+      state.skills_new = action.payload.skills_new;
+      state.skills_new_enum = action.payload.skills_new_enum;
       state.equipments = action.payload.equipments;
     },
 

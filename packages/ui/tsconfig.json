@@ -1,6 +1,6 @@
 {
   "extends": "../../packages/config/base.tsconfig.json",
-  "include": ["src"],
+  "include": ["src", "src/components/custom/.tsx"],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
     "rootDir": "src",
