@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import LoadingSpinner from "./LoadingSpinner";
 import { createStripeConnectedAccount } from "../../config/utilityFunctions";
 import { useSelector } from "react-redux";
-import { Toaster } from "react-hot-toast";
 import { errorToast } from "./Toast";
+import { StripeButton } from "ui";
 
-const StripeConnectButton = ({ withLogo, height, width, textSize }) => {
+const StripeConnectButton = () => {
   const userBilling = useSelector((state) => state.userBilling);
   const currentUser = useSelector((state) => state.currentUser.currentUser);
   const [type, setType] = useState(null);
@@ -67,67 +66,14 @@ const StripeConnectButton = ({ withLogo, height, width, textSize }) => {
   if (!type) return <></>;
 
   return (
-    <Wrapper type={type} disabled={disabled} onClick={handleCreate}>
-      <Toaster position="top-right" />
-      <div
-        className={`
-        ${
-          disabled
-            ? "bg-gray-200 cursor-not-allowed"
-            : "button-gradient cursor-pointer"
-        } 
-        ${width ? width : "w-48"} 
-        ${height ? height : "h-10"} 
-        flex items-center justify-center  rounded-lg relative`}
-      >
-        {!loading ? (
-          <p className={`${textSize} font-semibold text-black`}>
-            {type === "create" && "Create Stripe Account"}
-            {type === "manage" && "Manage Payouts"}
-          </p>
-        ) : (
-          <LoadingSpinner width={5} height={5} color="black" />
-        )}
-
-        {withLogo && (
-          <img
-            src="/assets/stripe-1.png"
-            alt=""
-            className="absolute right-1 bottom-1"
-          />
-        )}
-      </div>
-    </Wrapper>
+    <StripeButton
+      state={type}
+      disabled={disabled}
+      onClick={handleCreate}
+      loading={loading}
+      logo_url="/assets/stripe-1.png"
+    />
   );
-};
-
-const Wrapper = ({ type, disabled, onClick, children }) => {
-  switch (type) {
-    case "create":
-      return (
-        <button disabled={disabled} onClick={onClick}>
-          {children}
-        </button>
-      );
-
-    case "manage":
-      if (disabled) {
-        return <div>{children}</div>;
-      } else {
-        return (
-          <a
-            target="_blank"
-            href="https://connect.stripe.com/express_login"
-            rel="noopener noreferrer"
-          >
-            {children}
-          </a>
-        );
-      }
-
-    default:
-      return <></>;
-  }
 };
 
 export default StripeConnectButton;

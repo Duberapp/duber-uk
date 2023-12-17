@@ -83,9 +83,9 @@ const Login = () => {
   // ---------------------------------------------
 
   return (
-    <div className="w-screen h-full bg-[url('/assets/authBG.jpg')] bg-cover bg-fixed p-14">
+    <div className="w-screen h-screen bg-[url('/assets/authBG.jpg')] bg-cover bg-fixed sm:px-14 px-3 sm:py-10 py-6">
       <Toaster position="top-right" />
-      <div className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 h-screen">
+      <div className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 min-h-full">
         <div className="flex items-center justify-center sm:px-12 px-8 bg-navyBlue rounded-3xl">
           {!forgotPasswordView ? (
             <form className="w-full">

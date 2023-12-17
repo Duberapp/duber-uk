@@ -1,0 +1,14 @@
+  |  Supabase Project    |        Table        |       Previous Column       |       New Column         |
+--------------------------------------------------------------------------------------------------------
+
+*   Pilot Project                Employees                userSkills         ->      pilot_skill      
+
+
+
+
+
+
+Version 01 & Version 02 Clashes
+--------------------------------------------------------------------------------------------------------
+- Pilot/Components/AdminComponents -> ApplicationCard.js
+- Pilot/pages/dashboard/admin/application -> index.js

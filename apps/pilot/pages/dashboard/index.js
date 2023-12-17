@@ -63,8 +63,11 @@ export default function Home({ jobListing }) {
         }
         disableAccept={disableAccept}
       >
-        <BillingAlert setDisableAccept={setDisableAccept} />
-        <JobListLayout data={jobListing} />
+        <JobListLayout
+          data={jobListing}
+          disableAccept={disableAccept}
+          setDisableAccept={setDisableAccept}
+        />
       </DashboardLayout>
     </>
   );

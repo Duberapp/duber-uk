@@ -62,6 +62,9 @@ const Confirm = ({ proofDoc, insuranceDoc }) => {
           pilot_skill: state.skills_new_enum,
           userDrones: state.equipments,
           email: state.email,
+
+          // Only for V2 (New)
+          version: "v2",
         },
       ]);
       if (error) throw new Error(error.message);

@@ -12,8 +12,9 @@ import {
   getUserByEmail,
   selectPaymentData,
 } from "../../config/supabaseFunctions";
+import { BillingAlert } from "../../components";
 
-const JobListLayout = ({ data }) => {
+const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
   const router = useRouter();
   const user = useUser();
   const dispatch = useDispatch();
@@ -186,67 +187,46 @@ const JobListLayout = ({ data }) => {
             </div>
           </div>
 
-          {/* Area */}
-          {showJobList && (
-            <div className="my-4 bg-white rounded-lg w-full min-h-[70vh] mb-5 sm:p-5 p-3 flex flex-col gap-6">
-              {/* Available List for Homepage */}
-              {isHome &&
-                availableList.length !== 0 &&
-                availableList.map((item) => (
-                  <JobCard
-                    data={item}
-                    key={item.JobID}
-                    transferRate={transferRate}
-                  />
-                ))}
+          <BillingAlert
+            setDisableAccept={setDisableAccept}
+            isHome={isHome}
+            isMyJobs={isMyJobs}
+          >
+            {/* Area */}
+            {showJobList && (
+              <div className="my-4 bg-white rounded-lg w-full min-h-[70vh] mb-5 sm:p-5 p-3 flex flex-col gap-6">
+                {/* Available List for Homepage */}
+                {isHome &&
+                  availableList.length !== 0 &&
+                  availableList.map((item) => (
+                    <JobCard
+                      data={item}
+                      key={item.JobID}
+                      transferRate={transferRate}
+                    />
+                  ))}
 
-              {/* My Jobs list for /myJobs page */}
-              {isMyJobs &&
-                myJobsList.length !== 0 &&
-                myJobsList.map((item) => (
-                  <JobCard
-                    data={item}
-                    key={item.JobID}
-                    transferRate={transferRate}
-                  />
-                ))}
-            </div>
-          )}
-
-          {isHome && (
-            <div className="mb-4 grid grid-cols-2 h-36  gap-4">
-              <div className="rounded-md w-full h-full bg-white flex flex-col items-center justify-center">
-                <p className="sm:text-sm text-xs text-gray-400">
-                  Total Live Jobs
-                </p>
-                <p className="text-2xl mt-2 text-black font-semibold">
-                  {liveCount}
-                </p>
-                <div className="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-500">
-                  Live
-                </div>
+                {/* My Jobs list for /myJobs page */}
+                {isMyJobs &&
+                  myJobsList.length !== 0 &&
+                  myJobsList.map((item) => (
+                    <JobCard
+                      data={item}
+                      key={item.JobID}
+                      transferRate={transferRate}
+                    />
+                  ))}
               </div>
-              <div className="rounded-md w-full h-full bg-white flex flex-col items-center justify-center">
-                <p className="sm:text-sm text-xs text-gray-400">
-                  Total Completed Jobs
-                </p>
-                <p className="text-2xl mt-2 text-black font-semibold">
-                  {complteCount}
-                </p>
-                <div className="px-8 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-500">
-                  Completed
-                </div>
-              </div>
-            </div>
-          )}
+            )}
 
-          {!showJobList && (
-            <div className="w-full min-h-screen bg-white rounded-md my-4 flex items-center justify-center">
-              <p className="font-semibold text-gray-300">
-                {isHome && "Available"} {isMyJobs && "Your"} jobs show here
-              </p>
-            </div>
-          )}
+            {!showJobList && (
+              <div className="w-full min-h-[80vh] bg-white rounded-md my-4 flex items-center justify-center">
+                <p className="font-semibold text-gray-300">
+                  {isHome && "Available"} {isMyJobs && "Your"} jobs show here
+                </p>
+              </div>
+            )}
+          </BillingAlert>
         </div>
       </div>
     </>

@@ -3,8 +3,9 @@ import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import { setStripeState } from "../../redux/userBillingSlice";
 import StripeConnectButton from "../UI/StripeConnectButton";
+import { FillDetailsAlert, CreateStripeAlert } from "ui";
 
-const NoAddressAlert = ({ setDisableAccept }) => {
+const NoAddressAlert = ({ setDisableAccept, children, isHome, isMyJobs }) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [show, setShow] = useState(true);
@@ -66,6 +67,10 @@ const NoAddressAlert = ({ setDisableAccept }) => {
     }
   }, [currentUser]);
 
+  const handleNavigateAccountSettings = () => {
+    router.push("/dashboard/account#billing_section");
+  };
+
   // --------------------
 
   if (!show) return <></>;
@@ -75,36 +80,29 @@ const NoAddressAlert = ({ setDisableAccept }) => {
   // Create stripe connected account alert
   if (!emptyAlert_show && createAlert_show)
     return (
-      <div className="bg-red-400 p-4 pt-6 rounded-b-2xl">
-        <p className="text-white font-semibold mb-2">Action Required !</p>
+      <div className="relative">
+        {/* Blur overlay */}
+        {(isHome || isMyJobs) && <div className="blur-sm">{children}</div>}
 
-        <div className="flex sm:flex-row flex-col items-end justify-between gap-x-8">
-          <p className="text-sm text-white">
-            {`2. Create a Stripe payout account, in order to accept jobs and get paid.`}
-          </p>
-
-          <StripeConnectButton textSize={"text-sm"} />
-        </div>
+        {(isHome || isMyJobs) && (
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+            <CreateStripeAlert StripeButton={<StripeConnectButton />} />
+          </div>
+        )}
       </div>
     );
 
   // Fill billing details alerts
   return (
-    <div className="bg-red-400 p-4 pt-6 rounded-b-2xl">
-      <p className="text-white font-semibold mb-2">Action Required !</p>
+    <div className="relative">
+      {/* Blur overlay */}
+      {(isHome || isMyJobs) && <div className="blur-sm	">{children}</div>}
 
-      <div className="flex sm:flex-row flex-col items-end justify-between gap-x-8">
-        <p className="text-sm text-white">
-          {`Fill in your billing information in accounts settings`}
-        </p>
-
-        <button
-          onClick={() => router.push("/dashboard/account")}
-          className="sm:mt-0 mt-3 rounded-md text-xs bg-red-500 text-white py-2 px-3 min-w-fit"
-        >
-          Account Settings
-        </button>
-      </div>
+      {(isHome || isMyJobs) && (
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+          <FillDetailsAlert onAction={handleNavigateAccountSettings} />
+        </div>
+      )}
     </div>
   );
 };

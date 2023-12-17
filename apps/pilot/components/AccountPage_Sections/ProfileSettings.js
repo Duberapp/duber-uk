@@ -245,7 +245,7 @@ const ProfileSettings = ({ data, user }) => {
           {/* Update skills and drone equipments */}
           <div className="flex-1 mt-4">
             <p className="text-gray-400 sm:text-base text-sm">My Capabilties</p>
-            <UpdateSkills_Card skills={skills} setSkills={setSkills} />
+            {/* <UpdateSkills_Card skills={skills} setSkills={setSkills} /> */}
 
             <p className="mt-4 text-gray-400 sm:text-base text-sm">My Drones</p>
             <UpdateEquipments_Card drones={drones} setDrones={setDrones} />

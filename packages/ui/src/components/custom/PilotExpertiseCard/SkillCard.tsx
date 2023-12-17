@@ -6,7 +6,7 @@
 import { Dispatch, SetStateAction, useState, useRef } from 'react'
 import { pilot_skills, type PilotSkill, type PilotSkill_Slug } from '../../../shared-data'
 import { Card } from '../../../components/ui/card'
-import { CheckCircleIcon as CheckCircleSolid } from '@heroicons/react/24/solid';
+import CheckCircleIcon from '../../../icons/CheckCircleIcon';
 
 interface SkillCardProps {
   selectedSkillList: PilotSkill[],
@@ -69,9 +69,9 @@ export default function PilotSkillCard({ selectedSkillList, skill, setSelectedSk
 
       <div className="w-full flex items-center justify-end bottom-0">
         {isSelected ?
-          <CheckCircleSolid className={`w-6 h-6 text-duber-teal-dark`} />
+          <CheckCircleIcon className={`w-6 h-6 text-duber-teal-dark`} />
           :
-          <CheckCircleSolid className={`w-6 h-6 text-gray-400 opacity-60`} />
+          <CheckCircleIcon className={`w-6 h-6 text-gray-400 opacity-60`} />
         }
       </div>
     </Card>

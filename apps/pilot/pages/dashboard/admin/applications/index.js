@@ -91,12 +91,7 @@ const Index = () => {
               <div className="mt-3 bg-white rounded-lg w-full min-h-[70vh] mb-5 sm:p-5 p-3 flex flex-col gap-y-6">
                 {allApplications.length !== 0 &&
                   allApplications.map((employee) => (
-                    <ApplicationCard
-                      key={employee.id}
-                      item={employee}
-                      activeApplication={activeApplication}
-                      setActiveApplication={setActiveApplication}
-                    />
+                    <ApplicationCard key={employee.id} item={employee} />
                   ))}
               </div>
             )}

@@ -4,7 +4,6 @@ import {
   LoadingSpinner,
   Mobile_SidebarHeader,
   StripeConnectButton,
-  BillingAlert,
 } from "../../../components";
 import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,6 +29,7 @@ const Account = () => {
   const [expoPushToken, setExpoPushToken] = useState(
     typeof window !== "undefined" ? localStorage.getItem("expoPushToken") : null
   );
+  const [highlighted, setHighlighted] = useState(null);
 
   const currentUser = useSelector((state) => state.currentUser.currentUser);
 
@@ -59,6 +59,11 @@ const Account = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    const hash = router.asPath.split("#")[1];
+    setHighlighted(hash);
+  }, [router.asPath]);
+
   return (
     <DashboardLayout
       headerComponent={
@@ -69,7 +74,6 @@ const Account = () => {
       }
     >
       <Toaster position="top-right" />
-      <BillingAlert />
 
       {loading && (
         <div className="w-full h-full flex items-center justify-center">
@@ -95,7 +99,9 @@ const Account = () => {
           <ProfileSettings user={currentUser} />
 
           {/* Billing Section */}
-          <BillingSection user={currentUser} />
+          <section id="billing_section">
+            <BillingSection user={currentUser} highlight={highlighted} />
+          </section>
 
           <div className="sm:hidden flex items-center gap-x-2">
             <StripeConnectButton withLogo textSize="text-sm" height={"h-14"} />

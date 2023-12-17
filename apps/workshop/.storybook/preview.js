@@ -1,4 +1,4 @@
-import "ui/style"
+import "ui/style";
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {

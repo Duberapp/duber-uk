@@ -92,3 +92,13 @@
     @apply bg-background text-foreground;
   }
 } */
+
+/* Stripe Button Gradient */
+.stripe-button-gradient {
+  background: linear-gradient(
+    97.68deg,
+    #ffc327 20.76%,
+    #ff274e 50.53%,
+    #fa00ff 83.52%
+  );
+}

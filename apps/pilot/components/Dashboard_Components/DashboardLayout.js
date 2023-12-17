@@ -236,7 +236,7 @@ const DashboardLayout = ({
           <div>
             {/* Manage Payouts button */}
             <div className="mb-3">
-              <StripeConnectButton height={"h-14"} withLogo />
+              <StripeConnectButton height={"h-[68px]"} withLogo />
             </div>
 
             <Link href="/dashboard/account">

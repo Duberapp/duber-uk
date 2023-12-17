@@ -5,9 +5,10 @@ import { successToast, errorToast } from "../UI/Toast";
 import { createStripeConnectedAccount } from "../../config/utilityFunctions";
 import { useRouter } from "next/router";
 
-const BillingSection = ({ user }) => {
+const BillingSection = ({ user, highlight }) => {
   const { supabaseClient } = useSessionContext();
   const router = useRouter();
+
   // ----------------- Element States ---------------------
   const [userID, setUserID] = useState(user.id);
 
@@ -192,7 +193,11 @@ const BillingSection = ({ user }) => {
   return (
     <div>
       <p className="mt-8 text-black font-bold">Billing Details</p>
-      <div className="bg-white rounded-xl w-full px-4 py-8 mt-6">
+      <div
+        className={`${
+          highlight === "billing_section" && "outline outline-1 outline-red-300"
+        } bg-white rounded-xl w-full px-4 py-8 mt-6`}
+      >
         <p className="sm:text-base text-sm">
           Here you can edit your billing detail on which you get paid by us
         </p>
