@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import MapComponent from "../MapComponent";
 import { getSingleJob } from "../../config/supabaseFunctions";
 import { AddToCalender, LoadingSpinner } from "../../components";
+import { InitialSidebar } from "ui";
 
 const JobDetails_Sidebar = ({ disableAccept }) => {
   const activeJobID = useSelector((state) => state.activeJob.activeJob);
@@ -39,16 +40,20 @@ const JobDetails_Sidebar = ({ disableAccept }) => {
 
   return (
     <div
-      className={`fixed lg:block hidden right-0 w-[370px] p-5 h-full bg-white rounded-l-[30px] overflow-y-scroll scrollbar scrollbar-thumb-gray-300 scrollbar-track-gray-100 scrollbar-medium`}
+      className={`fixed lg:block hidden right-0 w-[350px] h-full rounded-md py-3 pr-3 overflow-y-scroll scrollbar scrollbar-thumb-gray-300 scrollbar-track-gray-100 scrollbar-medium`}
     >
       {activeJobID !== null && loading ? (
         <div className="w-full h-full flex items-center justify-center">
           <LoadingSpinner width={8} height={8} color="teal-400" />
         </div>
       ) : Object.keys(activeJob).length === 0 ? (
-        <div className="flex items-center justify-center h-full">
-          <p className="font-semibold text-gray-300">Select a job</p>
-        </div>
+        // Initial Sidebar
+        <InitialSidebar
+          title="Get started"
+          description="Accept a job and start earning."
+          img_1="/assets/sidebar_assets/halo_1.png"
+          img_2="/assets/sidebar_assets/halo_2.png"
+        />
       ) : (
         <>
           <div className="">

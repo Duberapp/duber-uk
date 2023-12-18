@@ -75,7 +75,7 @@ const NoAddressAlert = ({ setDisableAccept, children, isHome, isMyJobs }) => {
 
   if (!show) return <></>;
 
-  if (!emptyAlert_show && !createAlert_show) return <></>;
+  if (!emptyAlert_show && !createAlert_show) return children;
 
   // Create stripe connected account alert
   if (!emptyAlert_show && createAlert_show)
@@ -96,7 +96,7 @@ const NoAddressAlert = ({ setDisableAccept, children, isHome, isMyJobs }) => {
   return (
     <div className="relative">
       {/* Blur overlay */}
-      {(isHome || isMyJobs) && <div className="blur-sm	">{children}</div>}
+      {(isHome || isMyJobs) && <div className="blur-sm">{children}</div>}
 
       {(isHome || isMyJobs) && (
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">

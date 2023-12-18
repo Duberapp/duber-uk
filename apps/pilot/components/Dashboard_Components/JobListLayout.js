@@ -193,7 +193,7 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
             isMyJobs={isMyJobs}
           >
             {/* Area */}
-            {showJobList && (
+            {showJobList ? (
               <div className="my-4 bg-white rounded-lg w-full min-h-[70vh] mb-5 sm:p-5 p-3 flex flex-col gap-6">
                 {/* Available List for Homepage */}
                 {isHome &&
@@ -217,9 +217,7 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
                     />
                   ))}
               </div>
-            )}
-
-            {!showJobList && (
+            ) : (
               <div className="w-full min-h-[80vh] bg-white rounded-md my-4 flex items-center justify-center">
                 <p className="font-semibold text-gray-300">
                   {isHome && "Available"} {isMyJobs && "Your"} jobs show here

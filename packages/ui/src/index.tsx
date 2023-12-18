@@ -16,3 +16,7 @@ export { CreateButton as StripeCreateButton, StripeButton } from "./components/c
 
 // Admin -> Components Exports
 export { default as ApplicationCard } from './components/custom/AdminComponents/ApplicationCard'
+
+// Dashboard -> Components Exports
+export { default as JobCard } from './components/custom/DashboardComponents/JobCard'
+export { InitialSidebar } from './components/custom/DashboardComponents/Sidebar'

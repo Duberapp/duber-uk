@@ -283,7 +283,7 @@ const DashboardLayout = ({
           className={`lg:ml-[250px] lg:mt-0 lg:mb-0 ml-0 mt-16 mb-16 ${
             (router.pathname === "/dashboard" ||
               router.pathname === "/dashboard/myJobs") &&
-            "lg:mr-[370px] mr-0"
+            "lg:mr-[350px] mr-0"
           } min-h-full w-full bg-[#F7F9FA] flex-1`}
         >
           {children}

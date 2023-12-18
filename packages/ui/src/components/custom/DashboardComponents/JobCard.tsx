@@ -1,6 +1,6 @@
-import { type PilotSkill_Slug, pilot_skills, type PilotSkill } from "../../shared-data";
-import { Card } from '../ui/card'
-import Button from './DuberButton'
+import { type PilotSkill_Slug, pilot_skills, type PilotSkill } from "../../../shared-data";
+import { Card } from '../../ui/card'
+import Button from '../DuberButton'
 
 interface JobCardProps {
   expertise: PilotSkill_Slug,
