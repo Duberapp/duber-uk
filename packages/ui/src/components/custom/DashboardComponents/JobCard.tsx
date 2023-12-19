@@ -17,23 +17,25 @@ export default function JobCard({ expertise, jobDate, jobID, jobLocation }: JobC
   }
 
   return (
-    <Card className="bg-white p-2.5 grid grid-cols-4 grid-rows-1 gap-x-2.5">
+    <Card className="bg-white p-2.5 grid grid-cols-4 grid-rows-1 gap-x-2.5 ">
       <div className="bg-duber-navyBlue p-2.5 rounded-md">
         <p className="text-xs font-thin text-white">Required Expertise</p>
         <h2 className='font-semibold text-lg text-white'>{pilotSkill.title}</h2>
       </div>
 
-      <div className="">
+      <div className="flex flex-col justify-center">
         <p className="text-xs font-thin text-duber-navyBlue">Location</p>
-        <h2 className='font-semibold text-lg text-white'>{jobLocation}</h2>
+        <h2 className='font-semibold text-lg text-duber-navyBlue'>{jobLocation}</h2>
       </div>
 
-      <div className="">
+      <div className="flex flex-col justify-center">
         <p className="text-xs font-thin text-duber-navyBlue">Date</p>
-        <h2 className='font-semibold text-lg text-white'>{jobDate}</h2>
+        <h2 className='font-semibold text-lg text-duber-navyBlue'>{jobDate}</h2>
       </div>
 
-      <Button variant={"teal"} size={"xxl"} onClick={handleView}>View</Button>
+      <div className="flex flex-col justify-center items-end">
+        <Button variant={"teal"} size={"xxl"} onClick={handleView}>View</Button>
+      </div>
     </Card>
   )
 }

@@ -11,10 +11,11 @@ import CheckCircleIcon from '../../../icons/CheckCircleIcon';
 interface SkillCardProps {
   selectedSkillList: PilotSkill[],
   setSelectedSkillList: Dispatch<SetStateAction<PilotSkill[]>>
-  skill: PilotSkill_Slug
+  skill: PilotSkill_Slug,
+  previewOnly?: boolean
 }
 
-export default function PilotSkillCard({ selectedSkillList, skill, setSelectedSkillList }: SkillCardProps) {
+export default function PilotSkillCard({ selectedSkillList, skill, setSelectedSkillList, previewOnly = false }: SkillCardProps) {
   let isFoundInList = selectedSkillList.find(skillObj => skillObj.slug === skill);
 
   const [isSelected, setIsSelected] = useState<boolean>(isFoundInList ? true : false);
@@ -53,7 +54,7 @@ export default function PilotSkillCard({ selectedSkillList, skill, setSelectedSk
         ${isSelected ? "bg-duber-teal-light" : "bg-duber-skyBlue-light"}
         p-3 flex flex-col cursor-pointer
       `}
-      onClick={handleClick}
+      onClick={!previewOnly ? handleClick : () => console.log('Select Card')}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
