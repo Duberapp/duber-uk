@@ -24,6 +24,7 @@ import { Toaster } from "react-hot-toast";
 import { mapTheme } from "../../CustomerDashboard_Components/UI/Map/mapStyles";
 import { setStyleIndex } from "../../../redux/mapSlice";
 import useLongPress from "../../../hooks/useLongPress";
+import GoogleAutocomplete from "../UI/GoogleAutocomplete";
 
 const DynamicMap = dynamic(() => import("../UI/Map/DynamicMap"), {
   loading: () => <Loading className={"h-[45vh]"} />,
@@ -164,11 +165,17 @@ const LocationDate = () => {
       <div className="grid sm:grid-cols-5 grid-cols-1 sm:h-12 h-32 gap-x-5 sm:gap-y-5 gap-y-2">
         <div className={`sm:col-span-3 grid-cols-1 relative`}>
           <Input>
-            <Autocomplete
+            <GoogleAutocomplete
               searchCapture={searchCapture}
               setSearchCapture={setSearchCapture}
             />
           </Input>
+          {/* <Input>
+            <Autocomplete
+              searchCapture={searchCapture}
+              setSearchCapture={setSearchCapture}
+            />
+          </Input> */}
         </div>
 
         <div className={`sm:col-span-2 grid-cols-1`}>

@@ -101,6 +101,7 @@ const DynamicMap = ({ className, onSave, mapStyle, handleMapStyle }) => {
         setStartOnChange(true);
         setTooltipText("Click the first point to complete the shape");
       });
+
       map.current.on("touchstart", () => {
         setStartOnChange(true);
         setTooltipText("Click the first point to complete the shape");
@@ -303,6 +304,7 @@ const DynamicMap = ({ className, onSave, mapStyle, handleMapStyle }) => {
         className="overflow-hidden map-container w-full h-full relative"
         ref={mapContainer}
       >
+        {/* Duber Logo */}
         <div className="w-full sm:flex hidden absolute top-5 right-5 z-20 items-center justify-end">
           {/* <img src="/assets/Duber Logo.svg" className="w-40" alt="" /> */}
           <Image
@@ -313,7 +315,9 @@ const DynamicMap = ({ className, onSave, mapStyle, handleMapStyle }) => {
           />
         </div>
 
+        {/* Buttons */}
         <div className="w-fit absolute left-2 top-2 z-20 flex flex-col gap-y-2">
+          {/* Polygon Button */}
           <button
             onClick={() => handlePolygonEnabled({ inverse: false })}
             className={`${
@@ -331,6 +335,7 @@ const DynamicMap = ({ className, onSave, mapStyle, handleMapStyle }) => {
             />
           </button>
 
+          {/* Building selection button */}
           <button
             onClick={() => handlePolygonEnabled({ inverse: true })}
             className={`${
@@ -348,6 +353,7 @@ const DynamicMap = ({ className, onSave, mapStyle, handleMapStyle }) => {
             />
           </button>
 
+          {/* Delete button */}
           <button
             onClick={handleDeletePolygon}
             className=" p-1 rounded-md flex items-center shadow-lg justify-center border-2 bg-white border-gray-400 hover:border-gray-600 active:border-blue-400 active:bg-primaryBlueLight text-gray-500 hover:text-gray-700 active:text-primaryBlue"
@@ -356,6 +362,7 @@ const DynamicMap = ({ className, onSave, mapStyle, handleMapStyle }) => {
           </button>
         </div>
 
+        {/* Map theme switcher */}
         <div className="w-full absolute bottom-10 z-20 flex items-center justify-center">
           <div className="flex items-center gap-x-5">
             <Button

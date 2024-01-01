@@ -12,9 +12,16 @@ import {
 } from "../../components/CustomerDashboard_Components";
 import { Toaster } from "react-hot-toast";
 import Validating from "../../components/CustomerDashboard_Components/FormSteps/Validating";
+import { Loading } from "ui";
+import { useLoadScript } from "@react-google-maps/api";
 
 const Index = () => {
   const state = useSelector((state) => state.createOrder);
+
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    libraries: ["drawing", "places"],
+  });
 
   return (
     <div className="relative">
@@ -35,24 +42,29 @@ const Index = () => {
           <Toaster position="top-right" />
         </div>
 
-        {/* Fader Div */}
-        <div>
-          {state.active_step === 4 || state.active_step === 5 ? (
-            <ActiveStep />
-          ) : (
-            <div className="grid md:grid-cols-12 grid-cols-1 gap-x-8 ">
-              <div className="md:col-span-8 md:max-lg:col-span-12 col-span-12">
-                <StepNavigationBar />
+        {!isLoaded ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <Loading className={"w-9 h-9 text-duber-navyBlue mt-1"} />
+          </div>
+        ) : (
+          <div>
+            {state.active_step === 4 || state.active_step === 5 ? (
+              <ActiveStep />
+            ) : (
+              <div className="grid md:grid-cols-12 grid-cols-1 gap-x-8 ">
+                <div className="md:col-span-8 md:max-lg:col-span-12 col-span-12">
+                  <StepNavigationBar />
 
-                <ActiveStep />
-              </div>
+                  <ActiveStep />
+                </div>
 
-              <div className="md:col-span-4 col-auto lg:grid hidden h-auto 2xl:h-[660px] min-h-[560px]  bg-navyBlue rounded-lg py-6 px-4">
-                <OrderSidebar />
+                <div className="md:col-span-4 col-auto lg:grid hidden h-auto 2xl:h-[660px] min-h-[560px]  bg-navyBlue rounded-lg py-6 px-4">
+                  <OrderSidebar />
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </MainLayout>
     </div>
   );
