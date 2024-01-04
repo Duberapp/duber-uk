@@ -184,7 +184,9 @@ const TestMap = () => {
           onClick={onDeleteDrawing}
           title="Delete shape"
           style={deleteIconStyle}
-        ></div>
+        >
+          Delete
+        </div>
       )}
       <GoogleMap
         zoom={15}
