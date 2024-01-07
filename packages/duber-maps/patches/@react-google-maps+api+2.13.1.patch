@@ -1,0 +1,43 @@
+diff --git a/node_modules/@react-google-maps/api/dist/index.d.ts b/node_modules/@react-google-maps/api/dist/index.d.ts
+index 3fa1f01..7188180 100644
+--- a/node_modules/@react-google-maps/api/dist/index.d.ts
++++ b/node_modules/@react-google-maps/api/dist/index.d.ts
+@@ -92,7 +92,7 @@ declare class GoogleMap extends PureComponent<GoogleMapProps, GoogleMapState> {
+     render(): ReactNode;
+ }
+ 
+-type Libraries = ("drawing" | "geometry" | "localContext" | "places" | "visualization")[];
++export type Libraries = ("drawing" | "geometry" | "localContext" | "places" | "visualization")[];
+ interface LoadScriptUrlOptions {
+     googleMapsApiKey: string | "";
+     googleMapsClientId?: string | undefined;
+@@ -1025,10 +1025,10 @@ interface DirectionsServiceState {
+ interface DirectionsServiceProps {
+     options: google.maps.DirectionsRequest;
+     callback: (
+-    /** The directions response retrieved from the directions server. You can render these using a DirectionsRenderer or parse this object and render it yourself. You must display the warnings and copyrights as noted in the Google Maps Platform Terms of Service. Note that though this result is "JSON-like," it is not strictly JSON, as it indirectly includes LatLng objects */
+-    result: google.maps.DirectionsResult | null, 
+-    /** The status returned by the DirectionsService on the completion of a call to route(). Specify these by value, or by using the constant's name. For example, 'OK' or google.maps.DirectionsStatus.OK */
+-    status: google.maps.DirectionsStatus) => void;
++        /** The directions response retrieved from the directions server. You can render these using a DirectionsRenderer or parse this object and render it yourself. You must display the warnings and copyrights as noted in the Google Maps Platform Terms of Service. Note that though this result is "JSON-like," it is not strictly JSON, as it indirectly includes LatLng objects */
++        result: google.maps.DirectionsResult | null,
++        /** The status returned by the DirectionsService on the completion of a call to route(). Specify these by value, or by using the constant's name. For example, 'OK' or google.maps.DirectionsStatus.OK */
++        status: google.maps.DirectionsStatus) => void;
+     /** This callback is called when the directionsService instance has loaded. It is called with the directionsService instance. */
+     onLoad?: ((directionsService: google.maps.DirectionsService) => void) | undefined;
+     /** This callback is called when the component unmounts. It is called with the directionsService instance. */
+@@ -1078,10 +1078,10 @@ interface DistanceMatrixServiceState {
+ interface DistanceMatrixServiceProps {
+     options: google.maps.DistanceMatrixRequest;
+     callback: (
+-    /** The response to a DistanceMatrixService request, consisting of the formatted origin and destination addresses, and a sequence of DistanceMatrixResponseRows, one for each corresponding origin address. */
+-    response: google.maps.DistanceMatrixResponse | null, 
+-    /** The top-level status about the request in general returned by the DistanceMatrixService upon completion of a distance matrix request. Specify these by value, or by using the constant's name. For example, 'OK' or google.maps.DistanceMatrixStatus.OK. */
+-    status: google.maps.DistanceMatrixStatus) => void;
++        /** The response to a DistanceMatrixService request, consisting of the formatted origin and destination addresses, and a sequence of DistanceMatrixResponseRows, one for each corresponding origin address. */
++        response: google.maps.DistanceMatrixResponse | null,
++        /** The top-level status about the request in general returned by the DistanceMatrixService upon completion of a distance matrix request. Specify these by value, or by using the constant's name. For example, 'OK' or google.maps.DistanceMatrixStatus.OK. */
++        status: google.maps.DistanceMatrixStatus) => void;
+     /** This callback is called when the distanceMatrixService instance has loaded. It is called with the distanceMatrixService instance. */
+     onLoad?: ((distanceMatrixService: google.maps.DistanceMatrixService) => void) | undefined;
+     /** This callback is called when the component unmounts. It is called with the distanceMatrixService instance. */
