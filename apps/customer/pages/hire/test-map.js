@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import GoogleMap from "../../components/GoogleMap";
 
 const TestMap = () => {
+  const [polygons, setPolygons] = useState([]);
+
   return (
-    <div>
-      <GoogleMap />
+    <div className="w-full h-screen">
+      <GoogleMap polygons={polygons} setPolygons={setPolygons} />
     </div>
   );
 };

@@ -1,0 +1,2 @@
+
+export { PolygonAreaCalculator } from './areaCalculator'
