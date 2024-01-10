@@ -11,6 +11,7 @@ import { setAddress } from "../../../redux/mapSlice";
 export default function GoogleAutocomplete({
   searchCapture,
   setSearchCapture,
+  setLocationGeocode,
 }) {
   const {
     ready,
@@ -57,9 +58,10 @@ export default function GoogleAutocomplete({
       setValue(place, false);
 
       const geoCodes = await getCoordinates(place);
-      console.log(geoCodes);
+      // console.log(geoCodes);
 
       // Write codes for set center
+      setLocationGeocode(geoCodes);
       // --------------------------
 
       dispatch(setAddress(place));
@@ -71,7 +73,7 @@ export default function GoogleAutocomplete({
   };
 
   return (
-    <>
+    <div className="relative">
       <div className="w-full flex items-center justify-between">
         <input
           className="form-input bg-duber-skyBlue-light sm:text-sm text-[16px] w-[90%]"
@@ -102,6 +104,6 @@ export default function GoogleAutocomplete({
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }

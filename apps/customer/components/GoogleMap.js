@@ -22,7 +22,13 @@ import Image from "next/image";
 const libraries = ["places", "drawing"];
 const mapTypes = ["roadmap", "satellite"];
 
-const MapComponent = ({ polygons, setPolygons, mapState, onSaveArea }) => {
+const MapComponent = ({
+  polygons,
+  setPolygons,
+  mapState,
+  onSaveArea,
+  location,
+}) => {
   const mapRef = useRef();
   const polygonRefs = useRef([]);
   const activePolygonIndex = useRef();
@@ -57,6 +63,12 @@ const MapComponent = ({ polygons, setPolygons, mapState, onSaveArea }) => {
       setPolygons([...filtered_list, clickedPolygon]);
     }
   }, [activePolygonIndex.current]);
+
+  // Listen to location -> change center status
+  useEffect(() => {
+    mapRef.current?.setCenter(location);
+    mapRef.current?.setZoom(20);
+  }, [location]);
 
   const defaultCenter = {
     lat: 54.237933,
