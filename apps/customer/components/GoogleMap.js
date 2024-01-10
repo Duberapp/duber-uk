@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from "ui";
 import { PolygonAreaCalculator } from "duber-maps";
+import OutsideClickHandler from "react-outside-click-handler";
 
 const libraries = ["places", "drawing"];
 const mapTypes = ["roadmap", "satellite"];
@@ -67,6 +68,9 @@ const MapComponent = ({ polygons, setPolygons }) => {
   };
 
   const polygonOptions = {
+    fillColor: "#2060df",
+    strokeColor: "#2060df",
+    strokeWeight: 4,
     fillOpacity: 0.3,
     draggable: true,
     editable: true,
@@ -175,6 +179,28 @@ const MapComponent = ({ polygons, setPolygons }) => {
     }
   };
 
+  const setPolygonsInactive = () => {
+    if (!activePolygonIndex.current) return;
+
+    // set active index to null
+    activePolygonIndex.current = null;
+
+    // filter active polygons
+    let active_polygons = polygons.filter(
+      (polygon) => polygon.state === "active"
+    );
+    let inactive_polygons = polygons.filter(
+      (polygon) => polygon.state !== "active"
+    );
+
+    if (active_polygons.length < 1) return;
+
+    let active_polygon = active_polygons[0];
+    active_polygon.state = "inactive";
+
+    setPolygons([...inactive_polygons, active_polygon]);
+  };
+
   return isLoaded && typeof window !== "undefined" ? (
     <div
       className="map-container"
@@ -196,6 +222,7 @@ const MapComponent = ({ polygons, setPolygons }) => {
           streetViewControl: false,
           zoomControl: false,
           fullscreenControl: false,
+          clickableIcons: false,
         }}
       >
         <DrawingManager
@@ -204,22 +231,26 @@ const MapComponent = ({ polygons, setPolygons }) => {
           options={drawingManagerOptions}
         />
         {polygons.map((iterator) => (
-          <Polygon
-            key={iterator.id}
-            onLoad={(event) => onLoadPolygon(event, iterator.id)}
-            onMouseDown={() => onClickPolygon(iterator.id)}
-            onMouseUp={() => onEditPolygon(iterator.id)}
-            onDragEnd={() => onEditPolygon(iterator.id)}
-            options={{
-              fillColor: "#2060df",
-              strokeColor: iterator.state === "active" ? "#2060df" : "#ff33cf",
-              strokeWeight: iterator.state === "active" ? 3 : 2,
-              ...polygonOptions,
-            }}
-            paths={iterator.paths}
-            draggable
-            editable
-          />
+          <OutsideClickHandler
+            onOutsideClick={setPolygonsInactive}
+            disabled={!activePolygonIndex.current}
+          >
+            <Polygon
+              key={iterator.id}
+              onLoad={(event) => onLoadPolygon(event, iterator.id)}
+              onMouseDown={() => onClickPolygon(iterator.id)}
+              onMouseUp={() => onEditPolygon(iterator.id)}
+              onDragEnd={() => onEditPolygon(iterator.id)}
+              options={{
+                ...polygonOptions,
+                strokeColor:
+                  iterator.state === "inactive" ? "#E23DCB" : "#2060df",
+              }}
+              paths={iterator.paths}
+              draggable
+              editable
+            />
+          </OutsideClickHandler>
         ))}
 
         {/* Custom Drawing Buttons Group */}

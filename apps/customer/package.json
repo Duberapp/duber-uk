@@ -26,6 +26,7 @@
     "axios": "^1.1.3",
     "crypto-js": "^4.1.1",
     "downloadjs": "^1.4.7",
+    "duber-maps": "workspace:*",
     "lottie-react": "^2.3.1",
     "mapbox-gl": "^2.10.0",
     "next": "12.3.1",
@@ -40,13 +41,13 @@
     "react-hot-toast": "^2.4.0",
     "react-lottie": "^1.2.3",
     "react-microsoft-clarity": "^1.1.2",
+    "react-outside-click-handler": "^1.3.0",
     "react-redux": "^8.0.4",
     "react-to-pdf": "0.0.14",
     "rlayers": "^1.4.7",
     "stripe": "^10.15.0",
     "tailwind-scrollbar": "^2.1.0",
     "ui": "workspace:*",
-    "duber-maps": "workspace:*",
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {
