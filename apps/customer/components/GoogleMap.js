@@ -5,7 +5,7 @@ import {
   Polygon,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { TrashIcon, HandRaisedIcon } from "@heroicons/react/24/outline";
 import {
   Button,
   ToggleGroup,
@@ -17,11 +17,12 @@ import {
 } from "ui";
 import { PolygonAreaCalculator } from "duber-maps";
 import OutsideClickHandler from "react-outside-click-handler";
+import Image from "next/image";
 
 const libraries = ["places", "drawing"];
 const mapTypes = ["roadmap", "satellite"];
 
-const MapComponent = ({ polygons, setPolygons }) => {
+const MapComponent = ({ polygons, setPolygons, mapState, onSaveArea }) => {
   const mapRef = useRef();
   const polygonRefs = useRef([]);
   const activePolygonIndex = useRef();
@@ -58,8 +59,8 @@ const MapComponent = ({ polygons, setPolygons }) => {
   }, [activePolygonIndex.current]);
 
   const defaultCenter = {
-    lat: 28.626137,
-    lng: 79.821603,
+    lat: 54.237933,
+    lng: -2.369669,
   };
   const [center, setCenter] = useState(defaultCenter);
 
@@ -214,7 +215,7 @@ const MapComponent = ({ polygons, setPolygons }) => {
       }}
     >
       <GoogleMap
-        zoom={15}
+        zoom={6}
         center={center}
         onLoad={onLoadMap}
         mapContainerStyle={containerStyle}
@@ -227,11 +228,13 @@ const MapComponent = ({ polygons, setPolygons }) => {
           clickableIcons: false,
         }}
       >
-        <DrawingManager
-          ref={drawingManagerRef}
-          onOverlayComplete={onOverlayComplete}
-          options={drawingManagerOptions}
-        />
+        {mapState !== "static" && (
+          <DrawingManager
+            ref={drawingManagerRef}
+            onOverlayComplete={onOverlayComplete}
+            options={drawingManagerOptions}
+          />
+        )}
         {polygons.map((iterator) => (
           <OutsideClickHandler
             onOutsideClick={setPolygonsInactive}
@@ -255,14 +258,70 @@ const MapComponent = ({ polygons, setPolygons }) => {
           </OutsideClickHandler>
         ))}
 
+        {/* Duber logo - Static & Dynamic */}
+        <div className="absolute top-5 right-5">
+          <Image
+            src="/assets/Duber logo.svg"
+            alt="logo"
+            width={128}
+            height={35}
+          />
+        </div>
+
+        {/* Save Area Button */}
+        {mapState !== "static" && (
+          <div className="absolute bottom-5 w-full flex items-center justify-center">
+            <Button
+              variant={"teal"}
+              size={"xxl"}
+              className="normal-case font-semibold w-48"
+              onClick={onSaveArea}
+            >
+              Save Area
+            </Button>
+          </div>
+        )}
+
         {/* Custom Drawing Buttons Group */}
-        {drawingManagerRef.current && (
+        {mapState !== "static" && drawingManagerRef.current && (
           <div
             className="absolute top-5 left-5 flex flex-col gap-y-1"
             onMouseEnter={() => setOutsideClickDisabled(true)}
             onMouseLeave={() => setOutsideClickDisabled(false)}
           >
             <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    onClick={() =>
+                      drawingManagerRef.current.state.drawingManager.setDrawingMode(
+                        null
+                      )
+                    }
+                    variant={"white"}
+                    isIcon={true}
+                    icon={
+                      <HandRaisedIcon className="w-5 h-5 text-duber-navyBlue-dark" />
+                    }
+                    disabled={
+                      drawingManagerRef.current?.state.drawingManager
+                        ?.drawingMode === null
+                    }
+                    className={`shadow-xl border border-gray-300
+                      ${
+                        drawingManagerRef.current?.state.drawingManager
+                          .drawingMode === null
+                          ? "border-2 border-duber-skyBlue bg-duber-skyBlue-light"
+                          : ""
+                      }
+                    `}
+                  />
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>Pan Gesture</p>
+                </TooltipContent>
+              </Tooltip>
+
               <Tooltip>
                 <TooltipTrigger>
                   <Button
@@ -276,7 +335,18 @@ const MapComponent = ({ polygons, setPolygons }) => {
                         className="w-5 h-5"
                       />
                     }
-                    className="shadow-xl border border-gray-300"
+                    disabled={
+                      drawingManagerRef.current?.state.drawingManager
+                        ?.drawingMode === "polygon"
+                    }
+                    className={`shadow-xl border border-gray-300
+                      ${
+                        drawingManagerRef.current?.state.drawingManager
+                          .drawingMode === "polygon"
+                          ? "border-2 border-duber-skyBlue bg-duber-skyBlue-light"
+                          : ""
+                      }
+                    `}
                   />
                 </TooltipTrigger>
                 <TooltipContent side="right">
