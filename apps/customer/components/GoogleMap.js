@@ -27,6 +27,7 @@ const MapComponent = ({ polygons, setPolygons }) => {
   const activePolygonIndex = useRef();
   const drawingManagerRef = useRef();
   const [mapType, setMapType] = useState(mapTypes[0]);
+  const [outsideClickDisabled, setOutsideClickDisabled] = useState(false);
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyBkjmJZuDnGRocwQ4aJIz8VYnmuDmQ3IPs",
@@ -127,6 +128,7 @@ const MapComponent = ({ polygons, setPolygons }) => {
     const filtered = polygons.filter(
       (polygon) => polygon.id !== activePolygonIndex.current
     );
+
     setPolygons(filtered);
   };
 
@@ -233,7 +235,7 @@ const MapComponent = ({ polygons, setPolygons }) => {
         {polygons.map((iterator) => (
           <OutsideClickHandler
             onOutsideClick={setPolygonsInactive}
-            disabled={!activePolygonIndex.current}
+            disabled={!activePolygonIndex.current || outsideClickDisabled}
           >
             <Polygon
               key={iterator.id}
@@ -255,7 +257,11 @@ const MapComponent = ({ polygons, setPolygons }) => {
 
         {/* Custom Drawing Buttons Group */}
         {drawingManagerRef.current && (
-          <div className="absolute top-5 left-5 flex flex-col gap-y-1">
+          <div
+            className="absolute top-5 left-5 flex flex-col gap-y-1"
+            onMouseEnter={() => setOutsideClickDisabled(true)}
+            onMouseLeave={() => setOutsideClickDisabled(false)}
+          >
             <TooltipProvider delayDuration={0}>
               <Tooltip>
                 <TooltipTrigger>
