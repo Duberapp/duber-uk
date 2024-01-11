@@ -19,7 +19,11 @@ export default function GoogleAutocomplete({
     setValue,
     suggestions: { data, status, loading },
     clearSuggestions,
-  } = usePlacesAutocomplete();
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      componentRestrictions: { country: "UK" },
+    },
+  });
 
   const dispatch = useDispatch();
   const [isMobile, setIsMobile] = useState(false);
