@@ -20,11 +20,13 @@ import {
 import "react-datepicker/dist/react-datepicker.css";
 import { CalendarIcon, MapIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { mapTheme } from "../../CustomerDashboard_Components/UI/Map/mapStyles";
 import { setStyleIndex } from "../../../redux/mapSlice";
 import useLongPress from "../../../hooks/useLongPress";
 import GoogleAutocomplete from "../UI/GoogleAutocomplete";
+import GoogleMap from "../../GoogleMap";
+import { Button as DuberButton } from "ui";
 
 const DynamicMap = dynamic(() => import("../UI/Map/DynamicMap"), {
   loading: () => <Loading className={"h-[45vh]"} />,
@@ -50,10 +52,13 @@ const LocationDate = () => {
 
   // This used to capture the address search value for prevent the handle next
   const [searchCapture, setSearchCapture] = useState(mapState.address);
+  const [locationGeocode, setLocationGeocode] = useState(null);
 
   // This state used to toggle show state of map
   const [showMap, setShowMap] = useState(false);
   const [showOverlayMap, setShowOverlayMap] = useState(mapState.address !== "");
+
+  const [polygons, setPolygons] = useState([]);
 
   // ======================== LONG PRESS SETUP ========================
   const onLongPress = () => {
@@ -146,36 +151,33 @@ const LocationDate = () => {
   };
   // -------------------------------------
 
-  const handleAreaSave = () => {
-    setShowMap(false);
-    setShowOverlayMap(true);
+  const handleAreaSave = (payload, error) => {
+    if (!error) {
+      setLocationGeocode(payload.center);
+
+      setShowMap(false);
+      setShowOverlayMap(true);
+    } else {
+      toast(error);
+    }
   };
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <h2 className="sm:hidden block font-semibold text-navyBlue text-lg sm:mt-8 mt-6">
         Location &amp; Date
       </h2>
-      <div className="sm:mb-16 mb-5" />
+      <div className="sm:mb-6 mb-5" />
 
       {/* Error message */}
       {error && <ErrorMessage error={error} setError={setError} />}
       {/* ---------------------- */}
 
-      <div className="grid sm:grid-cols-5 grid-cols-1 sm:h-12 h-32 gap-x-5 sm:gap-y-5 gap-y-2">
-        <div className={`sm:col-span-3 grid-cols-1 relative`}>
+      <div className="grid sm:grid-cols-4 grid-cols-1 sm:h-12 h-32 gap-x-3 sm:gap-y-5 gap-y-2">
+        <div className={`sm:col-span-2 grid-cols-1 relative`}>
           <Input>
-            <GoogleAutocomplete
-              searchCapture={searchCapture}
-              setSearchCapture={setSearchCapture}
-            />
+            <GoogleAutocomplete setLocationGeocode={setLocationGeocode} />
           </Input>
-          {/* <Input>
-            <Autocomplete
-              searchCapture={searchCapture}
-              setSearchCapture={setSearchCapture}
-            />
-          </Input> */}
         </div>
 
         <div className={`sm:col-span-2 grid-cols-1`}>
@@ -196,53 +198,53 @@ const LocationDate = () => {
       {/* MAP COMPONENT */}
       {/* ============================================================================ */}
       {!showOverlayMap && (
-        <div
-          className={`w-full sm:h-[45vh] h-[35vh] rounded-md bg-primaryBlueLight sm:mt-8 mt-3 ${
-            mapState.address ? "cursor-pointer" : "cursor-not-allowed"
-          } flex items-center justify-center flex-col`}
-          onClick={(e) => {
-            e.preventDefault();
-            if (mapState.address) {
-              setShowMap(true);
-            }
-          }}
-          title={`${
-            mapState.address ? "Please select address before mark area" : ""
-          }`}
-        >
-          <MapIcon
-            className="text-primaryBlue"
-            width={60}
-            height={60}
-            strokeWidth={1}
-          />
+        <div className="mt-6 w-1/2 h-full relative flex items-center justify-center">
+          <div className="opacity-60 flex-1 h-full rounded-lg overflow-hidden">
+            <GoogleMap
+              polygons={polygons}
+              setPolygons={setPolygons}
+              staticMapType={"roadmap"}
+              mapState={"static"}
+            />
+          </div>
 
-          <p className="text-sm text-primaryBlue">Click to Draw Area</p>
+          <div className="absolute">
+            <DuberButton
+              variant={"default"}
+              onClick={(e) => {
+                e.preventDefault();
+                if (mapState.address) {
+                  setShowMap(true);
+                }
+              }}
+            >
+              Select a address first
+            </DuberButton>
+          </div>
         </div>
       )}
 
       {showMap && (
-        <div className="w-full h-full bg-black fixed top-0 left-0 ">
-          <DynamicMap
-            mapStyle={mapStyle}
-            handleMapStyle={handleMapStyle}
-            className="h-full"
-            onSave={handleAreaSave}
+        <div className="fixed w-full h-screen overflow-y-hidden bg-black top-0 left-0">
+          <GoogleMap
+            polygons={polygons}
+            setPolygons={setPolygons}
+            mapState={"dynamic"}
+            location={locationGeocode}
+            onCloseMap={() => setShowMap(false)}
+            onSaveArea={handleAreaSave}
           />
         </div>
       )}
 
       {!isMobile && showOverlayMap && !showMap && (
-        <div
-          className="w-full sm:h-[45vh] h-[35vh] z-[100] rounded-md bg-transparent hover:bg-primaryBlueLight mt-8 cursor-pointer flex items-center justify-center flex-col"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowMap(true);
-          }}
-        >
-          <StaticMap
-            mapStyle={mapStyle}
-            className="opacity-100 hover:opacity-50 cursor-pointer"
+        <div className="relative mt-6 w-1/2 h-full flex items-center justify-center rounded-lg overflow-hidden">
+          <GoogleMap
+            polygons={polygons}
+            setPolygons={setPolygons}
+            mapState={"static"}
+            staticMapType={"roadmap"}
+            location={locationGeocode}
           />
         </div>
       )}

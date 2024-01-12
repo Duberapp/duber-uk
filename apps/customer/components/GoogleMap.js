@@ -24,6 +24,8 @@ import {
 } from "duber-maps";
 import OutsideClickHandler from "react-outside-click-handler";
 import Image from "next/image";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { Easing, Tween, update } from "@tweenjs/tween.js";
 
 const libraries = ["places", "drawing"];
 const mapTypes = ["roadmap", "satellite"];
@@ -35,6 +37,7 @@ const MapComponent = ({
   onSaveArea,
   location,
   staticMapType,
+  onCloseMap,
 }) => {
   const mapRef = useRef();
   const polygonRefs = useRef([]);
@@ -75,9 +78,46 @@ const MapComponent = ({
 
   // Listen to location -> change center status
   useEffect(() => {
-    mapRef.current?.setCenter(location);
-    mapRef.current?.setZoom(20);
-  }, [location]);
+    // mapRef.current?.moveCamera({
+    //   tilt: 0,
+    //   heading: 0,
+    //   zoom: 20,
+    //   center: location,
+    // });
+    // mapRef.current?.setZoom(20);
+    function initCameraMove() {
+      if (mapState === "static") {
+        mapRef.current?.setCenter(location);
+        mapRef.current?.setZoom(20);
+        return;
+      } else {
+        const cameraOptions = {
+          tilt: 0,
+          heading: 0,
+          zoom: 6,
+          center: location,
+        };
+
+        new Tween(cameraOptions) // Create a new tween that modifies 'cameraOptions'.
+          .to({ tilt: 0, heading: 0, zoom: 20 }, 5000) // Move to destination in 15 second.
+          .easing(Easing.Quadratic.Out) // Use an easing function to make the animation smooth.
+          .onUpdate(() => {
+            mapRef.current?.moveCamera(cameraOptions);
+          })
+          .start(); // Start the tween immediately.
+
+        // Setup the animation loop.
+        function animate(time) {
+          requestAnimationFrame(animate);
+          update(time);
+        }
+
+        requestAnimationFrame(animate);
+      }
+    }
+
+    initCameraMove();
+  }, [location, mapRef.current]);
 
   const defaultCenter = {
     lat: 54.237933,
@@ -257,6 +297,7 @@ const MapComponent = ({
           zoomControl: false,
           fullscreenControl: false,
           clickableIcons: false,
+          gestureHandling: mapState === "static" ? "none" : "auto",
         }}
       >
         {mapState !== "static" && (
@@ -266,38 +307,53 @@ const MapComponent = ({
             options={drawingManagerOptions}
           />
         )}
-        {polygons.map((iterator) => (
-          <OutsideClickHandler
-            onOutsideClick={setPolygonsInactive}
-            disabled={!activePolygonIndex.current || outsideClickDisabled}
-          >
-            <Polygon
-              key={iterator.id}
-              onLoad={(event) => onLoadPolygon(event, iterator.id)}
-              onMouseDown={() => onClickPolygon(iterator.id)}
-              onMouseUp={() => onEditPolygon(iterator.id)}
-              onDragEnd={() => onEditPolygon(iterator.id)}
-              options={{
-                ...polygonOptions,
-                strokeColor:
-                  iterator.state === "inactive" ? "#E23DCB" : "#2060df",
-              }}
-              paths={iterator.paths}
-              draggable
-              editable
-            />
-          </OutsideClickHandler>
-        ))}
+        {polygons &&
+          polygons.length > 0 &&
+          polygons.map((iterator) => (
+            <OutsideClickHandler
+              onOutsideClick={setPolygonsInactive}
+              disabled={!activePolygonIndex.current || outsideClickDisabled}
+            >
+              <Polygon
+                key={iterator.id}
+                onLoad={(event) => onLoadPolygon(event, iterator.id)}
+                onMouseDown={() => onClickPolygon(iterator.id)}
+                onMouseUp={() => onEditPolygon(iterator.id)}
+                onDragEnd={() => onEditPolygon(iterator.id)}
+                options={{
+                  ...polygonOptions,
+                  strokeColor:
+                    iterator.state === "inactive" ? "#E23DCB" : "#2060df",
+                  clickable: mapState === "static" ? false : true,
+                  draggable: mapState === "static" ? false : true,
+                  editable: mapState === "static" ? false : true,
+                }}
+                paths={iterator.paths}
+                draggable={mapState === "static" ? false : true}
+                editable={mapState === "static" ? false : true}
+              />
+            </OutsideClickHandler>
+          ))}
 
         {/* Duber logo - Static & Dynamic */}
-        <div className="absolute top-5 right-5">
-          <Image
-            src="/assets/Duber logo.svg"
-            alt="logo"
-            width={128}
-            height={35}
-          />
-        </div>
+        {mapState !== "static" && (
+          <div className="absolute top-5 right-5 flex items-center gap-x-3">
+            <Image
+              src="/assets/Duber logo.svg"
+              alt="logo"
+              width={128}
+              height={35}
+            />
+
+            <Button
+              variant={"outline"}
+              className="w-8 h-8"
+              isIcon
+              icon={<XMarkIcon className="w-5 h-5 text-duber-navyBlue-dark" />}
+              onClick={onCloseMap}
+            />
+          </div>
+        )}
 
         {/* Save Area Button */}
         {mapState !== "static" && (

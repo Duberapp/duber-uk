@@ -8,11 +8,7 @@ import { Loading, TextField } from "ui";
 import { LoadingSpinner } from "../";
 import { setAddress } from "../../../redux/mapSlice";
 
-export default function GoogleAutocomplete({
-  searchCapture,
-  setSearchCapture,
-  setLocationGeocode,
-}) {
+export default function GoogleAutocomplete({ setLocationGeocode }) {
   const {
     ready,
     value,
@@ -62,7 +58,6 @@ export default function GoogleAutocomplete({
       setValue(place, false);
 
       const geoCodes = await getCoordinates(place);
-      // console.log(geoCodes);
 
       // Write codes for set center
       setLocationGeocode(geoCodes);

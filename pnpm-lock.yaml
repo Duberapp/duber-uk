@@ -56,6 +56,9 @@ importers:
       '@turf/area':
         specifier: ^6.5.0
         version: 6.5.0
+      '@tweenjs/tween.js':
+        specifier: ^21.0.0
+        version: 21.0.0
       '@userback/react':
         specifier: ^0.3.0
         version: 0.3.1(react-dom@18.2.0)(react@18.2.0)
@@ -5036,6 +5039,10 @@ packages:
     resolution: {integrity: sha512-RrArvtsV0vdsCBegoBtOalgdSOfkBrTJ07VkpiCnq/491W67hnMWmDu7e6Ztw0C3WldRYTXkg3SumfdzZxLBHA==}
     dependencies:
       '@turf/helpers': 6.5.0
+    dev: false
+
+  /@tweenjs/tween.js@21.0.0:
+    resolution: {integrity: sha512-qVfOiFh0U8ZSkLgA6tf7kj2MciqRbSCWaJZRwftVO7UbtVDNsZAXpWXqvCDtIefvjC83UJB+vHTDOGm5ibXjEA==}
     dev: false
 
   /@types/aria-query@5.0.1:

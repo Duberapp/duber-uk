@@ -8,7 +8,6 @@ import { Button } from "ui";
 const TestMap = () => {
   const [polygons, setPolygons] = useState([]);
   const [mapState, setMapState] = useState("dynamic");
-  const [searchCapture, setSearchCapture] = useState(mapState.address);
   const [locationGeocode, setLocationGeocode] = useState(null);
 
   const { isLoaded, loadError } = useLoadScript({
@@ -22,11 +21,7 @@ const TestMap = () => {
         <>
           <div className="py-2 w-2/3">
             <Input>
-              <GoogleAutocomplete
-                searchCapture={searchCapture}
-                setSearchCapture={setSearchCapture}
-                setLocationGeocode={setLocationGeocode}
-              />
+              <GoogleAutocomplete setLocationGeocode={setLocationGeocode} />
             </Input>
           </div>
           <br />
