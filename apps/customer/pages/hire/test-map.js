@@ -3,6 +3,7 @@ import { useLoadScript } from "@react-google-maps/api";
 import GoogleMap from "../../components/GoogleMap";
 import { Input } from "../../components/CustomerDashboard_Components";
 import GoogleAutocomplete from "../../components/CustomerDashboard_Components/UI/GoogleAutocomplete";
+import { Button } from "ui";
 
 const TestMap = () => {
   const [polygons, setPolygons] = useState([]);
@@ -30,12 +31,39 @@ const TestMap = () => {
           </div>
           <br />
 
+          <div className="w-96 border border-gray-500 rounded-lg p-5 shadow-lg">
+            <h1 className="font-semibold text-xl text-duber-navyBlue">
+              {polygons.length < 1 ? (
+                <span className="">No Polygons yet</span>
+              ) : (
+                <span>
+                  <span className="mr-2">Polygon Area : </span>
+                  {polygons[0].area}
+                  <span className="ml-1">
+                    {polygons[0].areaType === "squareMeters"
+                      ? "m"
+                      : polygons[0].areaType === "squareKilometers"
+                      ? "Km"
+                      : ""}
+                  </span>
+                  <sup>2</sup>
+                </span>
+              )}
+            </h1>
+          </div>
+
+          <br />
+
           <div className="w-2/3 h-[85vh]">
             <GoogleMap
               polygons={polygons}
               setPolygons={setPolygons}
               mapState={mapState}
-              onSaveArea={() => console.log("Area Saved")}
+              onSaveArea={(payload, error) => {
+                if (!error) {
+                  setLocationGeocode(payload.center);
+                }
+              }}
               location={locationGeocode}
             />
           </div>

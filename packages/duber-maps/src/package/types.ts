@@ -12,3 +12,10 @@ export interface MapPolygon {
   paths: google.maps.LatLngLiteral[],
   state: 'active' | 'inactive'
 }
+
+
+interface MapData {
+  center: google.maps.LatLngLiteral,
+  zoom: number,
+  polygon: MapPolygon
+}

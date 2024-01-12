@@ -15,7 +15,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "ui";
-import { PolygonAreaCalculator } from "duber-maps";
+import {
+  PolygonAreaCalculator,
+  containerStyle,
+  drawingManagerOptions,
+  polygonOptions,
+  getPolygonCenter,
+} from "duber-maps";
 import OutsideClickHandler from "react-outside-click-handler";
 import Image from "next/image";
 
@@ -28,12 +34,15 @@ const MapComponent = ({
   mapState,
   onSaveArea,
   location,
+  staticMapType,
 }) => {
   const mapRef = useRef();
   const polygonRefs = useRef([]);
   const activePolygonIndex = useRef();
   const drawingManagerRef = useRef();
-  const [mapType, setMapType] = useState(mapTypes[0]);
+  const [mapType, setMapType] = useState(
+    staticMapType ? staticMapType : mapTypes[0]
+  );
   const [outsideClickDisabled, setOutsideClickDisabled] = useState(false);
 
   const { isLoaded, loadError } = useJsApiLoader({
@@ -75,25 +84,6 @@ const MapComponent = ({
     lng: -2.369669,
   };
   const [center, setCenter] = useState(defaultCenter);
-
-  const containerStyle = {
-    width: "100%",
-    height: "100%",
-  };
-
-  const polygonOptions = {
-    fillColor: "#2060df",
-    strokeColor: "#2060df",
-    strokeWeight: 4,
-    fillOpacity: 0.3,
-    draggable: true,
-    editable: true,
-  };
-
-  const drawingManagerOptions = {
-    polygonOptions: polygonOptions,
-    drawingControl: false,
-  };
 
   const onLoadMap = (map) => {
     mapRef.current = map;
@@ -216,6 +206,35 @@ const MapComponent = ({
     setPolygons([...inactive_polygons, active_polygon]);
   };
 
+  const handleSaveArea = () => {
+    try {
+      if (polygons.length < 1)
+        throw new Error("Please select area to continue");
+
+      let polygon = polygons[0];
+
+      // Get map center
+      let { centerLatitude, centerLongitude } = getPolygonCenter(polygon.paths);
+
+      // Get map zoom
+      let mapCurrentZoom = mapRef.current.zoom;
+
+      /**
+       * Create and Pass MapData payload for save on DB
+       * Depending on MapData type of duber-maps/types
+       */
+      let mapDataPayload = {
+        center: { lat: centerLatitude, lng: centerLongitude },
+        zoom: mapCurrentZoom,
+        polygon: polygon,
+      };
+
+      onSaveArea(mapDataPayload, null);
+    } catch (err) {
+      onSaveArea(null, err.message);
+    }
+  };
+
   return isLoaded && typeof window !== "undefined" ? (
     <div
       className="map-container"
@@ -287,7 +306,7 @@ const MapComponent = ({
               variant={"teal"}
               size={"xxl"}
               className="normal-case font-semibold w-48"
-              onClick={onSaveArea}
+              onClick={handleSaveArea}
             >
               Save Area
             </Button>
@@ -387,7 +406,7 @@ const MapComponent = ({
         )}
 
         {/* Map type controllers */}
-        {mapRef.current && (
+        {!staticMapType && mapRef.current && (
           <div className="absolute bottom-5 right-5 shadow-lg">
             <ToggleGroup
               type="single"
