@@ -37,6 +37,7 @@ const MapComponent = ({
   location,
   staticMapType,
   onCloseMap,
+  mapOptions,
 }) => {
   const mapRef = useRef();
   const polygonRefs = useRef([]);
@@ -260,6 +261,7 @@ const MapComponent = ({
           fullscreenControl: false,
           clickableIcons: false,
           gestureHandling: mapState === "static" ? "none" : "auto",
+          ...mapOptions,
         }}
       >
         {mapState !== "static" && (

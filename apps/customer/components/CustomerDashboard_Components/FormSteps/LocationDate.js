@@ -254,6 +254,7 @@ const LocationDate = () => {
                 location={locationGeocode}
                 onCloseMap={() => setShowMap(false)}
                 onSaveArea={handleAreaSave}
+                mapOptions={{ gestureHandling: "greedy" }}
               />
             </div>
           )}
