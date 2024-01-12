@@ -173,7 +173,7 @@ const LocationDate = () => {
       {error && <ErrorMessage error={error} setError={setError} />}
       {/* ---------------------- */}
 
-      <div className="grid sm:grid-cols-4 grid-cols-1 sm:h-12 h-32 gap-x-3 sm:gap-y-5 gap-y-2">
+      {/* <div className="grid sm:grid-cols-4 grid-cols-1 sm:h-12 h-32 gap-x-3 sm:gap-y-5 gap-y-2">
         <div className={`sm:col-span-2 grid-cols-1 relative`}>
           <Input>
             <GoogleAutocomplete setLocationGeocode={setLocationGeocode} />
@@ -192,73 +192,110 @@ const LocationDate = () => {
             </div>
           </Input>
         </div>
+      </div> */}
+
+      <div className="flex flex-1 h-full flex-col relative ">
+        {/* Row 01 */}
+        <div className="flex items-center sm:h-12 h-32 gap-x-3">
+          <Input>
+            <GoogleAutocomplete setLocationGeocode={setLocationGeocode} />
+          </Input>
+
+          <Input onClick={handleClickDatePicker}>
+            <div className="w-full  flex items-center justify-between">
+              {!isMobile ? (
+                <DatePicker_Desktop />
+              ) : (
+                orderState.startDate || "Select a Date"
+              )}
+              <CalendarIcon className="text-primaryBlue w-5 h-5" />
+            </div>
+          </Input>
+        </div>
+
+        {/* Row 2 */}
+        <div className="mt-3 flex items-center gap-x-3 w-full h-full relative">
+          {/* ============================================================================ */}
+          {/* MAP COMPONENT */}
+          {/* ============================================================================ */}
+          {!showOverlayMap && (
+            <div className="flex-1 w-full h-full relative flex items-center justify-center">
+              <div className="opacity-60 flex-1 h-full rounded-lg overflow-hidden">
+                <GoogleMap
+                  polygons={polygons}
+                  setPolygons={setPolygons}
+                  staticMapType={"roadmap"}
+                  mapState={"static"}
+                />
+              </div>
+
+              <div className="absolute">
+                <DuberButton
+                  variant={"default"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (mapState.address) {
+                      setShowMap(true);
+                    }
+                  }}
+                >
+                  Select a address first
+                </DuberButton>
+              </div>
+            </div>
+          )}
+
+          {showMap && (
+            <div className="fixed w-full h-screen overflow-y-hidden bg-black top-0 left-0">
+              <GoogleMap
+                polygons={polygons}
+                setPolygons={setPolygons}
+                mapState={"dynamic"}
+                location={locationGeocode}
+                onCloseMap={() => setShowMap(false)}
+                onSaveArea={handleAreaSave}
+              />
+            </div>
+          )}
+
+          {!isMobile && showOverlayMap && !showMap && (
+            <div className="relative border border-duber-skyBlue-light shadow-md flex-1 w-full h-full flex items-center justify-center rounded-lg overflow-hidden">
+              <GoogleMap
+                polygons={polygons}
+                setPolygons={setPolygons}
+                mapState={"static"}
+                staticMapType={"roadmap"}
+                location={locationGeocode}
+              />
+
+              <DuberButton
+                variant={"default"}
+                className="absolute bottom-2 right-2"
+                onClick={() => setShowMap(true)}
+              >
+                Edit
+              </DuberButton>
+            </div>
+          )}
+
+          {isMobile && showOverlayMap && !showMap && (
+            <div className="relative">
+              <div
+                className=" w-full absolute sm:h-[45vh] h-[35vh] z-[1000] opacity-50 rounded-md bg-primaryBlueLight  flex items-center justify-center flex-col"
+                {...longPressEvent}
+              ></div>
+              <StaticMap
+                mapStyle={mapStyle}
+                className="cursor-pointer h-[35vh]"
+              />
+            </div>
+          )}
+          {/* ============================================================================ */}
+
+          {/* Row 2 -> Col 2 */}
+          <div className="flex-1 w-full">Col 2</div>
+        </div>
       </div>
-
-      {/* ============================================================================ */}
-      {/* MAP COMPONENT */}
-      {/* ============================================================================ */}
-      {!showOverlayMap && (
-        <div className="mt-6 w-1/2 h-full relative flex items-center justify-center">
-          <div className="opacity-60 flex-1 h-full rounded-lg overflow-hidden">
-            <GoogleMap
-              polygons={polygons}
-              setPolygons={setPolygons}
-              staticMapType={"roadmap"}
-              mapState={"static"}
-            />
-          </div>
-
-          <div className="absolute">
-            <DuberButton
-              variant={"default"}
-              onClick={(e) => {
-                e.preventDefault();
-                if (mapState.address) {
-                  setShowMap(true);
-                }
-              }}
-            >
-              Select a address first
-            </DuberButton>
-          </div>
-        </div>
-      )}
-
-      {showMap && (
-        <div className="fixed w-full h-screen overflow-y-hidden bg-black top-0 left-0">
-          <GoogleMap
-            polygons={polygons}
-            setPolygons={setPolygons}
-            mapState={"dynamic"}
-            location={locationGeocode}
-            onCloseMap={() => setShowMap(false)}
-            onSaveArea={handleAreaSave}
-          />
-        </div>
-      )}
-
-      {!isMobile && showOverlayMap && !showMap && (
-        <div className="relative mt-6 w-1/2 h-full flex items-center justify-center rounded-lg overflow-hidden">
-          <GoogleMap
-            polygons={polygons}
-            setPolygons={setPolygons}
-            mapState={"static"}
-            staticMapType={"roadmap"}
-            location={locationGeocode}
-          />
-        </div>
-      )}
-
-      {isMobile && showOverlayMap && !showMap && (
-        <div className="mt-8 relative">
-          <div
-            className=" w-full absolute sm:h-[45vh] h-[35vh] z-[1000] opacity-50 rounded-md bg-primaryBlueLight  flex items-center justify-center flex-col"
-            {...longPressEvent}
-          ></div>
-          <StaticMap mapStyle={mapStyle} className="cursor-pointer h-[35vh]" />
-        </div>
-      )}
-      {/* ============================================================================ */}
 
       <div className="mt-5 flex items-center">
         <MobilePriceBar />

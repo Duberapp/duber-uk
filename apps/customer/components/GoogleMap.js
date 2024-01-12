@@ -25,7 +25,6 @@ import {
 import OutsideClickHandler from "react-outside-click-handler";
 import Image from "next/image";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Easing, Tween, update } from "@tweenjs/tween.js";
 
 const libraries = ["places", "drawing"];
 const mapTypes = ["roadmap", "satellite"];
@@ -78,45 +77,8 @@ const MapComponent = ({
 
   // Listen to location -> change center status
   useEffect(() => {
-    // mapRef.current?.moveCamera({
-    //   tilt: 0,
-    //   heading: 0,
-    //   zoom: 20,
-    //   center: location,
-    // });
-    // mapRef.current?.setZoom(20);
-    function initCameraMove() {
-      if (mapState === "static") {
-        mapRef.current?.setCenter(location);
-        mapRef.current?.setZoom(20);
-        return;
-      } else {
-        const cameraOptions = {
-          tilt: 0,
-          heading: 0,
-          zoom: 6,
-          center: location,
-        };
-
-        new Tween(cameraOptions) // Create a new tween that modifies 'cameraOptions'.
-          .to({ tilt: 0, heading: 0, zoom: 20 }, 5000) // Move to destination in 15 second.
-          .easing(Easing.Quadratic.Out) // Use an easing function to make the animation smooth.
-          .onUpdate(() => {
-            mapRef.current?.moveCamera(cameraOptions);
-          })
-          .start(); // Start the tween immediately.
-
-        // Setup the animation loop.
-        function animate(time) {
-          requestAnimationFrame(animate);
-          update(time);
-        }
-
-        requestAnimationFrame(animate);
-      }
-    }
-
-    initCameraMove();
+    mapRef.current?.setCenter(location);
+    mapRef.current?.setZoom(20);
   }, [location, mapRef.current]);
 
   const defaultCenter = {
