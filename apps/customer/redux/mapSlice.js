@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   polygon: undefined,
   address: "",
-  area: 0,
+  area: null,
+  areaType: "squareMeters",
   price: 0,
   center: [-2.369669, 54.237933],
   zoom: 5,
@@ -22,6 +23,9 @@ const mapSlice = createSlice({
     },
     setArea: (state, action) => {
       state.area = action.payload;
+    },
+    setAreaType: (state, action) => {
+      state.areaType = action.payload;
     },
     setPrice: (state, action) => {
       state.price = action.payload;
@@ -42,6 +46,7 @@ const mapSlice = createSlice({
 export const {
   setPolygon,
   setArea,
+  setAreaType,
   setAddress,
   setPrice,
   setCenter,

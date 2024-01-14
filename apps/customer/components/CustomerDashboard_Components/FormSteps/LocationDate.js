@@ -5,6 +5,8 @@ import {
   completeStep,
   setActiveStep,
   switchToUpdateMode,
+  setTimeOption,
+  setTimeSlotRedux,
 } from "../../../redux/createOrderSlice";
 import {
   Loading,
@@ -22,11 +24,12 @@ import { CalendarIcon, MapIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import { mapTheme } from "../../CustomerDashboard_Components/UI/Map/mapStyles";
-import { setStyleIndex } from "../../../redux/mapSlice";
+import { setArea, setAreaType, setStyleIndex } from "../../../redux/mapSlice";
 import useLongPress from "../../../hooks/useLongPress";
 import GoogleAutocomplete from "../UI/GoogleAutocomplete";
 import GoogleMap from "../../GoogleMap";
-import { Button as DuberButton } from "ui";
+import { Button as DuberButton, ArrivalTimeCard } from "ui";
+import { TimeOptions } from "global-constants";
 
 const DynamicMap = dynamic(() => import("../UI/Map/DynamicMap"), {
   loading: () => <Loading className={"h-[45vh]"} />,
@@ -59,6 +62,16 @@ const LocationDate = () => {
   const [showOverlayMap, setShowOverlayMap] = useState(mapState.address !== "");
 
   const [polygons, setPolygons] = useState([]);
+  const [activeTimeOption, setActiveTimeOption] = useState(null);
+  const [timeSlot, setTimeSlot] = useState(null);
+
+  // ================= Time Slot and Time Option Context =================
+  useEffect(() => {
+    if (activeTimeOption) {
+      dispatch(setTimeSlotRedux(timeSlot));
+      dispatch(setTimeOption(activeTimeOption.slug));
+    }
+  }, [activeTimeOption, timeSlot]);
 
   // ======================== LONG PRESS SETUP ========================
   const onLongPress = () => {
@@ -73,6 +86,7 @@ const LocationDate = () => {
     shouldPreventDefault: true,
     delay: 500,
   };
+
   const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
   // ===================================================================
 
@@ -93,16 +107,6 @@ const LocationDate = () => {
   const handleClickDatePicker = (e) => {
     if (isMobile) {
       setShowMobileModel(true);
-    }
-  };
-
-  const handleMapStyle = () => {
-    if (mapStyle.sattelite == true) {
-      setMapStyle(mapTheme[0]);
-      dispatch(setStyleIndex(0));
-    } else {
-      setMapStyle(mapTheme[1]);
-      dispatch(setStyleIndex(1));
     }
   };
 
@@ -155,9 +159,13 @@ const LocationDate = () => {
     if (!error) {
       setLocationGeocode(payload.center);
 
+      dispatch(setArea(payload.polygon.area));
+      dispatch(setAreaType(payload.polygon.areaType));
+
       setShowMap(false);
       setShowOverlayMap(true);
     } else {
+      console.log(error);
       toast(error);
     }
   };
@@ -172,27 +180,6 @@ const LocationDate = () => {
       {/* Error message */}
       {error && <ErrorMessage error={error} setError={setError} />}
       {/* ---------------------- */}
-
-      {/* <div className="grid sm:grid-cols-4 grid-cols-1 sm:h-12 h-32 gap-x-3 sm:gap-y-5 gap-y-2">
-        <div className={`sm:col-span-2 grid-cols-1 relative`}>
-          <Input>
-            <GoogleAutocomplete setLocationGeocode={setLocationGeocode} />
-          </Input>
-        </div>
-
-        <div className={`sm:col-span-2 grid-cols-1`}>
-          <Input onClick={handleClickDatePicker}>
-            <div className="w-full  flex items-center justify-between">
-              {!isMobile ? (
-                <DatePicker_Desktop />
-              ) : (
-                orderState.startDate || "Select a Date"
-              )}
-              <CalendarIcon className="text-primaryBlue w-5 h-5" />
-            </div>
-          </Input>
-        </div>
-      </div> */}
 
       <div className="flex flex-1 h-full flex-col relative ">
         {/* Row 01 */}
@@ -294,7 +281,23 @@ const LocationDate = () => {
           {/* ============================================================================ */}
 
           {/* Row 2 -> Col 2 */}
-          <div className="flex-1 w-full">Col 2</div>
+          <div className="flex-1 h-full flex flex-col w-full">
+            <h2 className="text-duber-navyBlue-dark font-semibold text-base mb-2.5">
+              Arrival Time
+            </h2>
+
+            <div className="flex-1 h-full flex flex-col justify-between gap-y-3">
+              {TimeOptions.sort((a, b) => (a.id = b.id)).map((obj) => (
+                <ArrivalTimeCard
+                  slug={obj.slug}
+                  activeOption={activeTimeOption}
+                  setActiveOption={setActiveTimeOption}
+                  timeSlot={timeSlot}
+                  setTimeSlot={setTimeSlot}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 

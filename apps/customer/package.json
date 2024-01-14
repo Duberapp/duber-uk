@@ -48,6 +48,7 @@
     "stripe": "^10.15.0",
     "tailwind-scrollbar": "^2.1.0",
     "ui": "workspace:*",
+    "global-constants": "workspace:*",
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {

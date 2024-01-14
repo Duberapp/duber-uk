@@ -20,7 +20,7 @@ const OrderSidebar = () => {
           <p className="text-base text-white">Booking Overview</p>
         </div>
         <div className="flex-1 flex flex-col gap-y-4">
-          {mapState.address && <LocationCard />}
+          {mapState.address && mapState.area && <LocationCard />}
 
           {orderState.startDate && <DateCard />}
 

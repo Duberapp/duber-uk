@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setActiveStep } from "../../../redux/createOrderSlice";
+import { TimeOptions } from "global-constants";
 
 const sharedStyles_card = `w-full rounded-lg flex items-center justify-between max-h-24 overflow-hidden`;
 const sharedStyles_titleArea = `flex flex-col gap-y-0.5 basis-2/3 ml-3`;
@@ -41,7 +42,19 @@ export const LocationCard = () => {
         <p className="text-white text-sm font-semibold">
           {mapState.area ? (
             <span>
-              {mapState.area} m<sup>2</sup>
+              {mapState.area}
+              {mapState.areaType === "squareMeters" && (
+                <span>
+                  {" "}
+                  m<sup>2</sup>
+                </span>
+              )}
+              {mapState.areaType === "squareKilometers" && (
+                <span>
+                  {" "}
+                  Km<sup>2</sup>
+                </span>
+              )}
             </span>
           ) : (
             ""
@@ -61,6 +74,17 @@ export const LocationCard = () => {
 
 export const DateCard = () => {
   const orderState = useSelector((state) => state.createOrder);
+  const [timeOption, setTimeOption] = useState(null);
+
+  useEffect(() => {
+    if (orderState.timeOption) {
+      const timeOpt = TimeOptions.filter(
+        (obj) => obj.slug === orderState.timeOption
+      )[0];
+
+      setTimeOption(timeOpt);
+    }
+  }, [orderState.timeOption, orderState.timeSlot]);
 
   return (
     <div className={`bg-[#2263DF] ${sharedStyles_card}`}>
@@ -68,6 +92,11 @@ export const DateCard = () => {
       <div className={sharedStyles_titleArea}>
         <p className="text-white sm:text-sm text-base font-semibold">
           {orderState.startDate}
+        </p>
+        <p className="text-white text-xs font-normal">
+          {timeOption && timeOption.slug !== "choose"
+            ? `${timeOption.name}`
+            : orderState.timeSlot}
         </p>
 
         <ChangeButton activeToID={1} />

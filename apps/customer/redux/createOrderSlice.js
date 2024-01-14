@@ -26,6 +26,9 @@ const initialState = {
   step3_UpdateMode: false,
 
   storagePlan: {},
+
+  timeOption: null,
+  timeSlot: null,
 };
 
 const createOrderSlice = createSlice({
@@ -80,6 +83,14 @@ const createOrderSlice = createSlice({
     setPilotExpertise: (state, action) => {
       state.expertise = action.payload;
     },
+
+    setTimeOption: (state, action) => {
+      state.timeOption = action.payload;
+    },
+
+    setTimeSlotRedux: (state, action) => {
+      state.timeSlot = action.payload;
+    },
   },
 });
 
@@ -94,6 +105,8 @@ export const {
   setAuthUserId,
   setStoragePlan,
   setPilotExpertise,
+  setTimeOption,
+  setTimeSlotRedux,
 } = createOrderSlice.actions;
 
 export default createOrderSlice.reducer;
