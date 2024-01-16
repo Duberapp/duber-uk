@@ -7,10 +7,11 @@ type ArrivalTimeCardProps = {
   activeOption: TimeOptionType | null,
   setActiveOption: Dispatch<SetStateAction<TimeOptionType>>,
   timeSlot: TimeSlot | null,
-  setTimeSlot: Dispatch<SetStateAction<TimeSlot | null>>
+  setTimeSlot: Dispatch<SetStateAction<TimeSlot | null>>,
+  handleSetPrice: (price: number) => void;
 }
 
-export default function ArrivalTimeCard({ slug, activeOption, setActiveOption, setTimeSlot, timeSlot }: ArrivalTimeCardProps) {
+export default function ArrivalTimeCard({ slug, activeOption, setActiveOption, setTimeSlot, timeSlot, handleSetPrice }: ArrivalTimeCardProps) {
   const timeOption = TimeOptions.filter(obj => obj.slug === slug)[0]
   const isActive = activeOption && activeOption.slug === timeOption.slug
 
@@ -20,13 +21,15 @@ export default function ArrivalTimeCard({ slug, activeOption, setActiveOption, s
     if (timeOption.slug === 'choose') return;
 
     setTimeSlot(null);
-    setActiveOption(timeOption)
+    setActiveOption(timeOption);
+    handleSetPrice(timeOption.price)
   }
 
   const handleChooseTimeSlot = (slot: TimeSlot) => {
     const chooseOption = TimeOptions.filter(obj => obj.slug === 'choose')[0];
     setTimeSlot(slot)
     setActiveOption(chooseOption);
+    handleSetPrice(chooseOption.price)
   }
 
   return (

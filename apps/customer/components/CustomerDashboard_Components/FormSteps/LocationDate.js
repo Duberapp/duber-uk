@@ -24,12 +24,13 @@ import { CalendarIcon, MapIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import { mapTheme } from "../../CustomerDashboard_Components/UI/Map/mapStyles";
-import { setArea, setAreaType, setStyleIndex } from "../../../redux/mapSlice";
+import { setArea, setAreaType, setPrice } from "../../../redux/mapSlice";
 import useLongPress from "../../../hooks/useLongPress";
 import GoogleAutocomplete from "../UI/GoogleAutocomplete";
 import GoogleMap from "../../GoogleMap";
 import { Button as DuberButton, ArrivalTimeCard } from "ui";
 import { TimeOptions } from "global-constants";
+import calculatePrice from "../../../utils/priceCalculation";
 
 const DynamicMap = dynamic(() => import("../UI/Map/DynamicMap"), {
   loading: () => <Loading className={"h-[45vh]"} />,
@@ -64,6 +65,18 @@ const LocationDate = () => {
   const [polygons, setPolygons] = useState([]);
   const [activeTimeOption, setActiveTimeOption] = useState(null);
   const [timeSlot, setTimeSlot] = useState(null);
+  const [priceList, setPriceList] = useState([]);
+
+  // ================= Price List listner =================
+  useEffect(() => {
+    if (priceList.length > 0) {
+      let totalCost = 0;
+
+      priceList.map((priceObj) => (totalCost += priceObj.price));
+
+      dispatch(setPrice(totalCost));
+    }
+  }, [priceList]);
 
   // ================= Time Slot and Time Option Context =================
   useEffect(() => {
@@ -162,12 +175,29 @@ const LocationDate = () => {
       dispatch(setArea(payload.polygon.area));
       dispatch(setAreaType(payload.polygon.areaType));
 
+      let calculatedCost = calculatePrice(payload.polygon.area);
+      setPriceList((prevList) => [
+        ...prevList,
+        { price: calculatedCost, priceType: "area-cost" },
+      ]);
+
       setShowMap(false);
       setShowOverlayMap(true);
     } else {
       console.log(error);
       toast(error);
     }
+  };
+
+  const handleSetArrivalCost = (arrivalOption) => {
+    const filteredPriceList = priceList.filter(
+      (priceObj) => priceObj.priceType !== "arrival-cost"
+    );
+
+    setPriceList((prevList) => [
+      ...filteredPriceList,
+      { price: arrivalOption.price, priceType: "arrival-cost" },
+    ]);
   };
 
   return (
@@ -294,6 +324,7 @@ const LocationDate = () => {
                   setActiveOption={setActiveTimeOption}
                   timeSlot={timeSlot}
                   setTimeSlot={setTimeSlot}
+                  handleSetPrice={() => handleSetArrivalCost(obj)}
                 />
               ))}
             </div>
