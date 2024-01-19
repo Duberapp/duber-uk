@@ -14,6 +14,8 @@ import { expertisesList, expertisesList_mobile } from "../expertiseList";
 import { plans } from "../storagePlans";
 import { useRouter } from "next/router";
 import { setPrice } from "../../../redux/mapSlice";
+import { PilotExpertises } from "global-constants";
+import { ExpertiseCard } from "ui";
 
 // Sample Data
 const capture_formats = [
@@ -39,6 +41,10 @@ const Options = () => {
   const [flightDetailLength, setFlightDetailLength] = useState(0);
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const [error, setError] = useState(null);
+
+  const [selectedExpertise, setSelectedExpertise] = useState(null);
+  const [selectedSubExpertise, setSelectedSubExpertise] = useState(null);
+
   const router = useRouter();
 
   const flightDetailsRef = useRef(null);
@@ -150,23 +156,44 @@ const Options = () => {
   }, [orderState.storagePlan]);
 
   return (
-    <div className="sm:mt-6 mt-6">
+    <div className="sm:mt-4 mt-4">
       {error && (
         <ErrorMessage error={error} setError={setError} className="mb-6" />
       )}
 
+      {/* Pilot Expertices */}
+      <h2 className="font-semibold text-navyBlue text-lg">
+        Preferred Pilot Expertise
+      </h2>
+      <div className="mt-3 flex gap-x-2">
+        {PilotExpertises.map((expertise) => (
+          <ExpertiseCard
+            key={expertise.id}
+            expertise={expertise.slug}
+            className="min-h-full"
+            selectedExpertise={selectedExpertise}
+            setSelectedExpertise={setSelectedExpertise}
+            selectedSubExpertise={selectedSubExpertise}
+            setSelectedSubExpertise={setSelectedSubExpertise}
+            timeSlot={orderState.timeSlot}
+            timeOption={orderState.timeOption}
+          />
+        ))}
+      </div>
+
       {/* Flight Details */}
-      <h2 className="font-semibold text-navyBlue text-lg">Flight Details</h2>
+      <h2 className="mt-4 font-semibold text-navyBlue text-lg">
+        Flight Details
+      </h2>
       <div className="mt-3 w-full grid sm:grid-cols-3 grid-cols-1 gap-x-3 gap-y-3 sm:h-fit  h-fit">
         <div
           ref={flightDetailsRef}
           className="sm:col-span-2 col-span-1 bg-primaryBlueLight rounded-md p-3"
         >
           <textarea
-            rows="3"
-            className="sm:text-sm text-base resize-none text-primaryBlue w-full bg-transparent placeholder:text-primaryBlue outline-none"
+            className="sm:text-xs text-base resize-none text-primaryBlue w-full bg-transparent placeholder:text-primaryBlue outline-none"
             placeholder="In a frew words tell us why you need the drone flight. (i.e “To inspect a
-                        leaking roof” or “to take photos &amp; videos at my wedding” )"
+              leaking roof” or “to take photos & videos at my wedding” )"
             value={flightDetail}
             onChange={(e) => {
               setFlightDetail(e.target.value);
@@ -175,10 +202,10 @@ const Options = () => {
           />
           <p
             className={`w-full text-right text-xs ${
-              flightDetailLength < 200 ? "text-primaryTeal" : "text-red-500"
+              flightDetailLength < 30 ? "text-primaryTeal" : "text-red-500"
             }`}
           >
-            {flightDetailLength}/200
+            {flightDetailLength}/30
           </p>
         </div>
 
@@ -209,77 +236,6 @@ const Options = () => {
         </div>
       </div>
 
-      {/* Drone Experience */}
-      <h2 className="sm:mt-7 mt-4 mb-3 font-semibold text-navyBlue text-lg">
-        Prefered Pilot Expertise
-      </h2>
-      <div ref={expertiseBorderRef}>
-        {/* Desktop View */}
-        <div className="sm:grid hidden sm:grid-cols-3 grid-cols-2 sm:grid-rows-1 grid-rows-2 gap-x-3 sm:gap-y-5 gap-y-4">
-          {expertisesList.map((item) => (
-            <OptionCard
-              key={item.id}
-              item={item}
-              expertise={expertise}
-              setExpertise={setExpertise}
-            />
-          ))}
-        </div>
-
-        {/* Mobile View */}
-        <div className="sm:hidden grid sm:grid-cols-3 grid-cols-2 sm:grid-rows-1 grid-rows-2 gap-x-3 sm:gap-y-5 gap-y-4">
-          {expertisesList_mobile.map((item) => (
-            <OptionCard
-              key={item.id}
-              item={item}
-              expertise={expertise}
-              setExpertise={setExpertise}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Storage Plan */}
-      <h2 className="sm:mt-7 mt-4 mb-3 font-semibold text-navyBlue text-lg">
-        Storage Plan{" "}
-        <span className="text-sm font-normal ml-1">{`(Expiry date to download data)`}</span>
-      </h2>
-      <div className="" ref={storagePlanRef}>
-        <div className="grid grid-cols-2  gap-x-3 gap-y-3">
-          {plans.map((item) => (
-            <div
-              key={item.id}
-              className={`justify-center cursor-pointer rounded-md 
-                ${
-                  storagePlanID === item.id
-                    ? "bg-primaryTealLight text-primaryTeal"
-                    : "bg-primaryBlueLight text-primaryBlue"
-                } 
-                flex items-center sm:justify-center justify-start sm:px-2 px-3 sm:h-16 h-16`}
-              onClick={() => {
-                setStoragePlanID(item.id);
-                dispatch(
-                  setStoragePlan({
-                    id: item.id,
-                    text: item.text,
-                  })
-                );
-                if (item.id === 2) {
-                  dispatch(setPrice(mapState.price + 10));
-                }
-
-                if (item.id === 1 && storagePlanID === 2) {
-                  dispatch(setPrice(mapState.price - 10));
-                }
-              }}
-            >
-              {item.icon}
-              <p className="sm:ml-2 ml-3 sm:text-xs text-xs">{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Next button container */}
       <div className="sm:mt-8 mt-5 flex items-center">
         <MobilePriceBar />
@@ -292,27 +248,3 @@ const Options = () => {
 };
 
 export default Options;
-
-const OptionCard = ({ item, expertise, setExpertise }, ref) => {
-  const dispatch = useDispatch();
-
-  return (
-    <div
-      key={item.id}
-      className={`${
-        item.id === 3 && "sm:col-span-1 col-span-2 justify-center"
-      } cursor-pointer rounded-md ${
-        expertise === item.slug
-          ? "bg-primaryTealLight text-primaryTeal"
-          : "bg-primaryBlueLight text-primaryBlue"
-      } flex items-center sm:justify-center justify-start sm:px-2 px-3 sm:h-16 h-14`}
-      onClick={() => {
-        setExpertise(item.slug);
-        dispatch(setPilotExpertise(item.slug));
-      }}
-    >
-      {item.icon}
-      <p className="sm:ml-2 ml-3 sm:text-xs text-sm">{item.text}</p>
-    </div>
-  );
-};

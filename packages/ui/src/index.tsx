@@ -12,6 +12,8 @@ export { default as PilotSkillCard } from "./components/custom/PilotExpertiseCar
 export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group"
 export * from "./components/ui/tooltip"
 
+// Customer -> Component Exports
+export { default as ExpertiseCard } from './components/custom/PilotExpertiseCard/ExpertiseCard'
 
 // Stripe -> Component Exports
 export { default as FillDetailsAlert } from "./components/custom/StripeComponents/FillDetailsAlert";

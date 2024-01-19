@@ -24,12 +24,17 @@ import { CalendarIcon, MapIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import { mapTheme } from "../../CustomerDashboard_Components/UI/Map/mapStyles";
-import { setArea, setAreaType, setPrice } from "../../../redux/mapSlice";
+import {
+  setArea,
+  setAreaType,
+  setPrice,
+  setPolygon,
+} from "../../../redux/mapSlice";
 import useLongPress from "../../../hooks/useLongPress";
 import GoogleAutocomplete from "../UI/GoogleAutocomplete";
 import GoogleMap from "../../GoogleMap";
 import { Button as DuberButton, ArrivalTimeCard } from "ui";
-import { TimeOptions } from "global-constants";
+import { TimeOptions, getDurationList } from "global-constants";
 import calculatePrice from "../../../utils/priceCalculation";
 
 const DynamicMap = dynamic(() => import("../UI/Map/DynamicMap"), {
@@ -54,8 +59,6 @@ const LocationDate = () => {
 
   const [error, setError] = useState(null);
 
-  // This used to capture the address search value for prevent the handle next
-  const [searchCapture, setSearchCapture] = useState(mapState.address);
   const [locationGeocode, setLocationGeocode] = useState(null);
 
   // This state used to toggle show state of map
@@ -128,7 +131,6 @@ const LocationDate = () => {
   const validateFields = () => {
     try {
       if (mapState.address === "") throw new Error("Address is required");
-      if (searchCapture === "") throw new Error("Address is required");
       if (orderState.startDate === null) throw new Error("Date is required");
       if (mapState.polygon === undefined)
         throw new Error("Please mark the area on map");
@@ -181,6 +183,7 @@ const LocationDate = () => {
         { price: calculatedCost, priceType: "area-cost" },
       ]);
 
+      dispatch(setPolygon(payload.polygon));
       setShowMap(false);
       setShowOverlayMap(true);
     } else {
