@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   MainLayout,
   StepNavigationBar,
@@ -14,6 +14,7 @@ import { Toaster } from "react-hot-toast";
 import Validating from "../../components/CustomerDashboard_Components/FormSteps/Validating";
 import { Loading } from "ui";
 import { useLoadScript } from "@react-google-maps/api";
+import { setPrice } from "../../redux/mapSlice";
 
 const Index = () => {
   const state = useSelector((state) => state.createOrder);
@@ -74,12 +75,26 @@ export default Index;
 
 const ActiveStep = () => {
   const state = useSelector((state) => state.createOrder);
+  const dispatch = useDispatch();
+  const [priceList, setPriceList] = useState([]);
+
+  // ================= Price List listner =================
+  useEffect(() => {
+    if (priceList.length > 0) {
+      let totalCost = 0;
+
+      priceList.map((priceObj) => (totalCost += priceObj.price));
+
+      dispatch(setPrice(totalCost));
+    }
+  }, [priceList]);
+  // ========================================================
 
   switch (state.active_step) {
     case 1:
-      return <LocationDate />;
+      return <LocationDate priceList={priceList} setPriceList={setPriceList} />;
     case 2:
-      return <Options />;
+      return <Options priceList={priceList} setPriceList={setPriceList} />;
     case 3:
       return <Contact />;
     case 4:

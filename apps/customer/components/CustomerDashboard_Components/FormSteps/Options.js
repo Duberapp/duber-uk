@@ -7,6 +7,7 @@ import {
   switchToUpdateMode,
   setStoragePlan,
   setPilotExpertise,
+  setExtendedDurationHours,
 } from "../../../redux/createOrderSlice";
 import { MobilePriceBar, Button, ErrorMessage } from "../";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -24,7 +25,7 @@ const capture_formats = [
   { id: 3, format: "Both (Video/Photo)" },
 ];
 
-const Options = () => {
+const Options = ({ priceList, setPriceList }) => {
   const dispatch = useDispatch();
   const orderState = useSelector((state) => state.createOrder);
   const mapState = useSelector((state) => state.map);
@@ -155,6 +156,31 @@ const Options = () => {
     setStoragePlanID(orderState.storagePlan.id);
   }, [orderState.storagePlan]);
 
+  const onChangeDuration = (duration) => {
+    // ----------------------- Handle Price change -----------------------
+    let durationPrice = 0;
+
+    // If duration price is 0, this following code will be reverted
+    if (duration.price !== (0 || "free")) {
+      durationPrice = duration.price;
+    }
+
+    // Change price
+    const filteredPriceList = priceList.filter(
+      (priceObj) => priceObj.priceType !== "extended-duration-cost"
+    );
+
+    setPriceList((prevList) => [
+      ...filteredPriceList,
+      { price: durationPrice, priceType: "extended-duration-cost" },
+    ]);
+
+    // ------------------- Handle redux state changes --------------------
+    duration.type !== "included"
+      ? dispatch(setExtendedDurationHours(duration.durationHours))
+      : dispatch(setExtendedDurationHours(0));
+  };
+
   return (
     <div className="sm:mt-4 mt-4">
       {error && (
@@ -166,6 +192,8 @@ const Options = () => {
         Preferred Pilot Expertise
       </h2>
       <div className="mt-3 flex gap-x-2">
+        {console.log(orderState.extendedDurationHours)}
+
         {PilotExpertises.map((expertise) => (
           <ExpertiseCard
             key={expertise.id}
@@ -177,6 +205,8 @@ const Options = () => {
             setSelectedSubExpertise={setSelectedSubExpertise}
             timeSlot={orderState.timeSlot}
             timeOption={orderState.timeOption}
+            onChangeDuration={onChangeDuration}
+            extendedDurationHours={orderState.extendedDurationHours}
           />
         ))}
       </div>

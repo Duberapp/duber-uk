@@ -29,6 +29,8 @@ const initialState = {
 
   timeOption: null,
   timeSlot: null,
+
+  extendedDurationHours: 0,
 };
 
 const createOrderSlice = createSlice({
@@ -91,6 +93,10 @@ const createOrderSlice = createSlice({
     setTimeSlotRedux: (state, action) => {
       state.timeSlot = action.payload;
     },
+
+    setExtendedDurationHours: (state, action) => {
+      state.extendedDurationHours = action.payload;
+    },
   },
 });
 
@@ -107,6 +113,7 @@ export const {
   setPilotExpertise,
   setTimeOption,
   setTimeSlotRedux,
+  setExtendedDurationHours,
 } = createOrderSlice.actions;
 
 export default createOrderSlice.reducer;

@@ -1,18 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { type DurationOption, durationList } from "global-constants";
 import Button from "../DuberButton";
 
 interface OrderDurationSelectorProps {
-  availableDurations: DurationOption[]
+  availableDurations: DurationOption[],
+  onSelectDuration: (duration: DurationOption) => void;
+  extendedDurationHours?: number,
 }
 
-export default function OrderDurationSelector({ availableDurations }: OrderDurationSelectorProps) {
+export default function OrderDurationSelector({ availableDurations, onSelectDuration, extendedDurationHours }: OrderDurationSelectorProps) {
+  const [activeExtendedDurationHours, setActiveExtendedDurationHours] = useState<DurationOption>()
+
+  useEffect(() => {
+    let filteredExtendedDuration = durationList.filter(duration => (duration.durationHours === extendedDurationHours && duration.type !== 'included'))
+
+    console.log(filteredExtendedDuration)
+    setActiveExtendedDurationHours(filteredExtendedDuration[0])
+  }, [extendedDurationHours])
+
+  console.log(activeExtendedDurationHours)
+
   return (
     <div className="grid grid-cols-4 grid-rows-2 w-full gap-1">
       {durationList.map(duration => (
         <Button
-          variant={duration.type === 'included' ? 'pink' : duration.type === 'extend' ? 'skyBlue' : 'default'}
+          variant={
+            duration.price === activeExtendedDurationHours?.price ? 'teal-dark'
+              : duration.type === 'included' ? 'pink'
+                : duration.type === 'extend' ? 'skyBlue'
+                  : 'default'
+          }
           disabled={!availableDurations.find(durationObj => durationObj.id === duration.id)}
+          onClick={() => onSelectDuration(duration)}
         >
           <div className="flex flex-col items-center justify-center whitespace-nowrap ">
             <p className="text-[10px] font-semibold">+{duration.durationHours}hr</p>

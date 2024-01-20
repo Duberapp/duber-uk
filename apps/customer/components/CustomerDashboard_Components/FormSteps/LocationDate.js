@@ -47,7 +47,7 @@ const StaticMap = dynamic(() => import("../UI/Map/StaticMap"), {
   ssr: false,
 });
 
-const LocationDate = () => {
+const LocationDate = ({ priceList, setPriceList }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const orderState = useSelector((state) => state.createOrder);
@@ -68,18 +68,6 @@ const LocationDate = () => {
   const [polygons, setPolygons] = useState([]);
   const [activeTimeOption, setActiveTimeOption] = useState(null);
   const [timeSlot, setTimeSlot] = useState(null);
-  const [priceList, setPriceList] = useState([]);
-
-  // ================= Price List listner =================
-  useEffect(() => {
-    if (priceList.length > 0) {
-      let totalCost = 0;
-
-      priceList.map((priceObj) => (totalCost += priceObj.price));
-
-      dispatch(setPrice(totalCost));
-    }
-  }, [priceList]);
 
   // ================= Time Slot and Time Option Context =================
   useEffect(() => {

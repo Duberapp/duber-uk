@@ -23,13 +23,13 @@ interface ExpertiseCardProps {
   setSelectedExpertise: Dispatch<SetStateAction<PilotExpertise | null>>,
   selectedSubExpertise: PilotSubExpertise | null,
   setSelectedSubExpertise: Dispatch<SetStateAction<PilotSubExpertise | null>>,
-  extendedDuration: DurationOption | null,
-  setExtendedDuration: Dispatch<SetStateAction<DurationOption | null>>,
   expertise: PilotExpertiseSlug,
   previewOnly?: boolean,
   className?: string,
   timeSlot?: TimeSlot,
-  timeOption?: TimeOptionSlug
+  timeOption?: TimeOptionSlug,
+  onChangeDuration: (duration: DurationOption) => void;
+  extendedDurationHours: number;
 }
 
 type SelectionPanel = 'sub-expertises' | 'duration';
@@ -41,11 +41,11 @@ export default function PilotExpertiseCard(
     setSelectedExpertise,
     selectedSubExpertise,
     setSelectedSubExpertise,
-    extendedDuration,
-    setExtendedDuration,
     className,
     timeOption,
-    timeSlot
+    timeSlot,
+    onChangeDuration,
+    extendedDurationHours
   }: ExpertiseCardProps
 ) {
   const [isSelected, setIsSelected] = useState<boolean>(false);
@@ -95,10 +95,6 @@ export default function PilotExpertiseCard(
     setSelectedSubExpertise(sub_expertise);
   }
 
-  const onClickDuration = (duration: DurationOption) => {
-    setExtendedDuration(duration);
-  }
-
   return (
     <Card
       className={`
@@ -133,7 +129,11 @@ export default function PilotExpertiseCard(
         </div>}
 
         {selectionPanel === 'duration' && <div className="flex flex-1 w-full mr-1">
-          <OrderDurationSelector availableDurations={availableDurations} />
+          <OrderDurationSelector
+            availableDurations={availableDurations}
+            extendedDurationHours={extendedDurationHours}
+            onSelectDuration={onChangeDuration}
+          />
         </div>}
 
         <div>

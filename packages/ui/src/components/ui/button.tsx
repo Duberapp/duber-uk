@@ -22,6 +22,9 @@ const buttonVariants = cva(
         teal:
           "bg-duber-teal text-white shadow hover:bg-duber-teal-dark",
 
+        "teal-dark":
+          "bg-duber-teal-dark text-white shadow hover:bg-duber-teal-dark",
+
         "teal-light":
           "bg-duber-teal-light text-duber-teal shadow",
 
