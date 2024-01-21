@@ -26,7 +26,7 @@ import { mapTheme } from "../../CustomerDashboard_Components/UI/Map/mapStyles";
 import {
   setArea,
   setAreaType,
-  setPolygon,
+  setPolygons,
   setCenter,
   setZoom,
 } from "../../../redux/mapSlice";
@@ -54,17 +54,13 @@ const LocationDate = ({ priceList, setPriceList }) => {
 
   const [error, setError] = useState(null);
 
-  const [locationGeocode, setLocationGeocode] = useState(null);
-
   // This state used to toggle show state of map
   const [showMap, setShowMap] = useState(false);
   const [showOverlayMap, setShowOverlayMap] = useState(mapState.address !== "");
 
-  const [polygons, setPolygons] = useState([]);
+  // const [polygons, setPolygons] = useState([]);
   const [activeTimeOption, setActiveTimeOption] = useState(null);
   const [timeSlot, setTimeSlot] = useState(null);
-
-  console.log(locationGeocode);
 
   // ================= Time Slot and Time Option Context =================
   useEffect(() => {
@@ -117,7 +113,7 @@ const LocationDate = ({ priceList, setPriceList }) => {
     try {
       if (mapState.address === "") throw new Error("Address is required");
       if (orderState.startDate === null) throw new Error("Date is required");
-      if (mapState.polygon === undefined)
+      if (mapState.polygons.length < 1)
         throw new Error("Please mark the area on map");
 
       setError(null);
@@ -157,7 +153,7 @@ const LocationDate = ({ priceList, setPriceList }) => {
 
   const handleAreaSave = (payload, error) => {
     if (!error) {
-      setLocationGeocode(payload.center);
+      dispatch(setCenter(payload.center));
 
       dispatch(setArea(payload.polygon.area));
       dispatch(setAreaType(payload.polygon.areaType));
@@ -168,7 +164,7 @@ const LocationDate = ({ priceList, setPriceList }) => {
         { price: calculatedCost, priceType: "area-cost" },
       ]);
 
-      dispatch(setPolygon(payload.polygon));
+      dispatch(setPolygons([payload.polygon]));
       setShowMap(false);
       setShowOverlayMap(true);
     } else {
@@ -188,6 +184,12 @@ const LocationDate = ({ priceList, setPriceList }) => {
     ]);
   };
 
+  // Redux States for Polygons
+  let polygons = mapState.polygons;
+  const setPolygonsHandler = (payload) => {
+    dispatch(setPolygons(payload));
+  };
+
   return (
     <div className="flex flex-col h-full">
       <h2 className="sm:hidden block font-semibold text-navyBlue text-lg sm:mt-8 mt-6">
@@ -203,7 +205,9 @@ const LocationDate = ({ priceList, setPriceList }) => {
         {/* Row 01 */}
         <div className="flex items-center sm:h-12 h-32 gap-x-3">
           <Input>
-            <GoogleAutocomplete setLocationGeocode={setLocationGeocode} />
+            <GoogleAutocomplete
+              setLocationGeocode={(geocode) => dispatch(setCenter(geocode))}
+            />
           </Input>
 
           <Input onClick={handleClickDatePicker}>
@@ -228,7 +232,7 @@ const LocationDate = ({ priceList, setPriceList }) => {
               <div className="opacity-60 flex-1 h-full rounded-lg overflow-hidden">
                 <GoogleMap
                   polygons={polygons}
-                  setPolygons={setPolygons}
+                  setPolygons={setPolygonsHandler}
                   staticMapType={"roadmap"}
                   mapState={"static"}
                 />
@@ -254,9 +258,9 @@ const LocationDate = ({ priceList, setPriceList }) => {
             <div className="fixed w-full h-screen overflow-y-hidden bg-black top-0 left-0">
               <GoogleMap
                 polygons={polygons}
-                setPolygons={setPolygons}
+                setPolygons={setPolygonsHandler}
                 mapState={"dynamic"}
-                location={locationGeocode}
+                location={mapState.center}
                 onCloseMap={() => setShowMap(false)}
                 onSaveArea={handleAreaSave}
                 mapOptions={{ gestureHandling: "greedy" }}
@@ -268,10 +272,10 @@ const LocationDate = ({ priceList, setPriceList }) => {
             <div className="relative border border-duber-skyBlue-light shadow-md flex-1 w-full h-full flex items-center justify-center rounded-lg overflow-hidden">
               <GoogleMap
                 polygons={polygons}
-                setPolygons={setPolygons}
+                setPolygons={setPolygonsHandler}
                 mapState={"static"}
                 staticMapType={"roadmap"}
-                location={locationGeocode}
+                location={mapState.center}
               />
 
               <DuberButton

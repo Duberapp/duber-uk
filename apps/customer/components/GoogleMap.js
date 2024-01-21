@@ -273,8 +273,9 @@ const MapComponent = ({
         )}
         {polygons &&
           polygons.length > 0 &&
-          polygons.map((iterator) => (
+          polygons.map((iterator, index) => (
             <OutsideClickHandler
+              key={index}
               onOutsideClick={setPolygonsInactive}
               disabled={!activePolygonIndex.current || outsideClickDisabled}
             >

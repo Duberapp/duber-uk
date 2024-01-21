@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  polygon: undefined,
+  polygons: [],
   address: "",
   area: null,
   areaType: "squareMeters",
@@ -15,8 +15,8 @@ const mapSlice = createSlice({
   name: "map",
   initialState,
   reducers: {
-    setPolygon: (state, action) => {
-      state.polygon = action.payload;
+    setPolygons: (state, action) => {
+      state.polygons = action.payload;
     },
     setAddress: (state, action) => {
       state.address = action.payload;
@@ -44,7 +44,7 @@ const mapSlice = createSlice({
 });
 
 export const {
-  setPolygon,
+  setPolygons,
   setArea,
   setAreaType,
   setAddress,
