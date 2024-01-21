@@ -8,6 +8,8 @@ import {
   setStoragePlan,
   setPilotExpertise,
   setExtendedDurationHours,
+  setTotalDurationHours,
+  setCaptureFormatRedux,
 } from "../../../redux/createOrderSlice";
 import { MobilePriceBar, Button, ErrorMessage } from "../";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -15,7 +17,7 @@ import { expertisesList, expertisesList_mobile } from "../expertiseList";
 import { plans } from "../storagePlans";
 import { useRouter } from "next/router";
 import { setPrice } from "../../../redux/mapSlice";
-import { PilotExpertises } from "global-constants";
+import { PilotExpertises, durationList } from "global-constants";
 import { ExpertiseCard } from "ui";
 
 // Sample Data
@@ -45,6 +47,9 @@ const Options = ({ priceList, setPriceList }) => {
 
   const [selectedExpertise, setSelectedExpertise] = useState(null);
   const [selectedSubExpertise, setSelectedSubExpertise] = useState(null);
+  const [durationsList, setDurationsList] = useState([
+    { type: "included", hours: 2 },
+  ]);
 
   const router = useRouter();
 
@@ -52,6 +57,24 @@ const Options = ({ priceList, setPriceList }) => {
   const captureFormatRef = useRef(null);
   const expertiseBorderRef = useRef(null);
   const storagePlanRef = useRef(null);
+
+  useEffect(() => {
+    selectedExpertise && dispatch(setPilotExpertise(selectedExpertise.title));
+  }, [selectedExpertise]);
+
+  useEffect(() => {
+    captureFormat && dispatch(setCaptureFormatRedux(captureFormat));
+  }, [captureFormat]);
+
+  useEffect(() => {
+    if (durationsList.length !== 0) {
+      let totalDurationHours = 0;
+
+      durationsList.map((duration) => (totalDurationHours += duration.hours));
+
+      dispatch(setTotalDurationHours(totalDurationHours));
+    }
+  }, [durationsList]);
 
   // Validation Function
   const validateData = () => {
@@ -179,6 +202,19 @@ const Options = ({ priceList, setPriceList }) => {
     duration.type !== "included"
       ? dispatch(setExtendedDurationHours(duration.durationHours))
       : dispatch(setExtendedDurationHours(0));
+
+    // Prevent single extended duration object inside durations array
+    const filteredList = durationsList.filter(
+      (durationObj) => durationObj.type !== "extend"
+    );
+    if (duration.type !== "included") {
+      setDurationsList((prevDurations) => [
+        ...filteredList,
+        { type: duration.type, hours: duration.durationHours },
+      ]);
+    } else {
+      setDurationsList((prevDurations) => [...filteredList]);
+    }
   };
 
   return (
@@ -192,8 +228,6 @@ const Options = ({ priceList, setPriceList }) => {
         Preferred Pilot Expertise
       </h2>
       <div className="mt-3 flex gap-x-2">
-        {console.log(orderState.extendedDurationHours)}
-
         {PilotExpertises.map((expertise) => (
           <ExpertiseCard
             key={expertise.id}

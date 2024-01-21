@@ -14,16 +14,14 @@ export default function OrderDurationSelector({ availableDurations, onSelectDura
   useEffect(() => {
     let filteredExtendedDuration = durationList.filter(duration => (duration.durationHours === extendedDurationHours && duration.type !== 'included'))
 
-    console.log(filteredExtendedDuration)
     setActiveExtendedDurationHours(filteredExtendedDuration[0])
   }, [extendedDurationHours])
-
-  console.log(activeExtendedDurationHours)
 
   return (
     <div className="grid grid-cols-4 grid-rows-2 w-full gap-1">
       {durationList.map(duration => (
         <Button
+          key={duration.id}
           variant={
             duration.price === activeExtendedDurationHours?.price ? 'teal-dark'
               : duration.type === 'included' ? 'pink'

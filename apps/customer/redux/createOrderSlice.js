@@ -31,6 +31,7 @@ const initialState = {
   timeSlot: null,
 
   extendedDurationHours: 0,
+  totalDuration: 2,
 };
 
 const createOrderSlice = createSlice({
@@ -97,6 +98,14 @@ const createOrderSlice = createSlice({
     setExtendedDurationHours: (state, action) => {
       state.extendedDurationHours = action.payload;
     },
+
+    setTotalDurationHours: (state, action) => {
+      state.totalDuration = action.payload;
+    },
+
+    setCaptureFormatRedux: (state, action) => {
+      state.captureFormat = action.payload;
+    },
   },
 });
 
@@ -114,6 +123,8 @@ export const {
   setTimeOption,
   setTimeSlotRedux,
   setExtendedDurationHours,
+  setTotalDurationHours,
+  setCaptureFormatRedux,
 } = createOrderSlice.actions;
 
 export default createOrderSlice.reducer;

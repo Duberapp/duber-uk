@@ -117,13 +117,14 @@ export const OptionsCard = () => {
     <div className={`bg-[#FF6666] ${sharedStyles_card}`}>
       {/* Text */}
       <div className={sharedStyles_titleArea}>
-        <p className="text-white sm:text-xs text-base font-semibold">
-          {orderState.captureFormat === "Both (Video/Photo)"
-            ? "Photos & Videos"
-            : orderState.captureFormat}
-        </p>
-        <p className="text-white sm:text-xs text-sm font-semibold">
+        <p className="text-white sm:text-sm text-sm font-semibold">
           {orderState.expertise}
+        </p>
+        <p className="text-white sm:text-xs text-base font-semibold">
+          {orderState.totalDuration}hrs
+          {orderState.captureFormat === "Both (Video/Photo)"
+            ? ", Photos & Videos"
+            : `, ${orderState.captureFormat}`}
         </p>
 
         <ChangeButton activeToID={2} />
