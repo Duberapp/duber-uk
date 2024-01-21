@@ -124,7 +124,9 @@ export const OptionsCard = () => {
           {orderState.totalDuration}hrs
           {orderState.captureFormat === "Both (Video/Photo)"
             ? ", Photos & Videos"
-            : `, ${orderState.captureFormat}`}
+            : orderState.captureFormat
+            ? `, ${orderState.captureFormat}`
+            : ""}
         </p>
 
         <ChangeButton activeToID={2} />
