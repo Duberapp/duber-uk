@@ -22,6 +22,8 @@ export default function GoogleAutocomplete({ setLocationGeocode }) {
   });
 
   const dispatch = useDispatch();
+  const mapState = useSelector((state) => state.map);
+
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileModel, setShowMobileModel] = useState(false);
   const [geoCoding, setGeocoding] = useState(false);

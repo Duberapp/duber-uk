@@ -12,7 +12,6 @@ import {
   Loading,
   Button,
   Input,
-  Autocomplete,
   DatePicker_Desktop,
   DatePicker_Mobile,
   Modal,
@@ -20,27 +19,23 @@ import {
   ErrorMessage,
 } from "../";
 import "react-datepicker/dist/react-datepicker.css";
-import { CalendarIcon, MapIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import { mapTheme } from "../../CustomerDashboard_Components/UI/Map/mapStyles";
 import {
   setArea,
   setAreaType,
-  setPrice,
   setPolygon,
+  setCenter,
+  setZoom,
 } from "../../../redux/mapSlice";
 import useLongPress from "../../../hooks/useLongPress";
 import GoogleAutocomplete from "../UI/GoogleAutocomplete";
 import GoogleMap from "../../GoogleMap";
 import { Button as DuberButton, ArrivalTimeCard } from "ui";
-import { TimeOptions, getDurationList } from "global-constants";
+import { TimeOptions } from "global-constants";
 import calculatePrice from "../../../utils/priceCalculation";
-
-const DynamicMap = dynamic(() => import("../UI/Map/DynamicMap"), {
-  loading: () => <Loading className={"h-[45vh]"} />,
-  ssr: false,
-});
 
 const StaticMap = dynamic(() => import("../UI/Map/StaticMap"), {
   loading: () => <Loading className={"h-[45vh]"} />,
@@ -68,6 +63,8 @@ const LocationDate = ({ priceList, setPriceList }) => {
   const [polygons, setPolygons] = useState([]);
   const [activeTimeOption, setActiveTimeOption] = useState(null);
   const [timeSlot, setTimeSlot] = useState(null);
+
+  console.log(locationGeocode);
 
   // ================= Time Slot and Time Option Context =================
   useEffect(() => {
