@@ -9,6 +9,8 @@ const initialState = {
   center: [-2.369669, 54.237933],
   zoom: 5,
   styleIndex: 0,
+
+  address_temp: "",
 };
 
 const mapSlice = createSlice({
@@ -40,6 +42,9 @@ const mapSlice = createSlice({
     setStyleIndex: (state, action) => {
       state.styleIndex = action.payload;
     },
+    setTempAddress: (state, action) => {
+      state.address_temp = action.payload;
+    },
   },
 });
 
@@ -52,6 +57,7 @@ export const {
   setCenter,
   setZoom,
   setStyleIndex,
+  setTempAddress,
 } = mapSlice.actions;
 
 export default mapSlice.reducer;

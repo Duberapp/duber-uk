@@ -6,7 +6,7 @@ import usePlacesAutocomplete, {
 } from "use-places-autocomplete";
 import { Loading, TextField } from "ui";
 import { LoadingSpinner } from "../";
-import { setAddress } from "../../../redux/mapSlice";
+import { setAddress, setTempAddress } from "../../../redux/mapSlice";
 
 export default function GoogleAutocomplete({ setLocationGeocode }) {
   const {
@@ -50,13 +50,16 @@ export default function GoogleAutocomplete({ setLocationGeocode }) {
   };
 
   const handleSearchValue = (e) => {
-    setValue(e.target.value);
+    dispatch(setTempAddress(e.target.value));
+    setValue(mapState.address_temp);
   };
 
   const handleClickItem = async (place) => {
     try {
       setGeocoding(true);
       clearSuggestions();
+
+      dispatch(setTempAddress(place));
       setValue(place, false);
 
       const geoCodes = await getCoordinates(place);
@@ -81,7 +84,7 @@ export default function GoogleAutocomplete({ setLocationGeocode }) {
           placeholder="Search Address"
           type="text"
           autoComplete="street-address"
-          value={value}
+          value={mapState.address_temp}
           onChange={handleSearchValue}
           onClick={() => isMobile && setShowMobileModel(true)}
           disabled={!ready}
