@@ -28,7 +28,7 @@ function durationValidatorAlgorithm(arrivalTimeOption: TimeOptionType, timeSlot?
   if (arrivalTimeOption.slug === 'choose' && timeSlot) {
     excluded_startTime = convertToCalculatableTimeSlot(timeSlot) + INCLUDED_DURATION_HOURS;
   } else {
-    excluded_startTime = arrivalTimeOption?.meta && (arrivalTimeOption.meta.from + INCLUDED_DURATION_HOURS);
+    excluded_startTime = arrivalTimeOption?.meta ? (arrivalTimeOption.meta.from + INCLUDED_DURATION_HOURS) : 0;
   }
 
   /**
