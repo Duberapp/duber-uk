@@ -6,7 +6,8 @@
 import { Dispatch, SetStateAction, useState, useRef, useEffect } from 'react'
 import {
   type PilotExpertise,
-  type PilotSubExpertise, PilotExpertises,
+  type PilotSubExpertise,
+  PilotExpertises,
   type PilotExpertiseSlug,
   type TimeSlot,
   type TimeOptionSlug,
@@ -19,10 +20,8 @@ import Button from "../DuberButton";
 import OrderDurationSelector from './OrderDurationSelector';
 
 interface ExpertiseCardProps {
-  selectedExpertise: PilotExpertise | null,
-  setSelectedExpertise: Dispatch<SetStateAction<PilotExpertise | null>>,
-  selectedSubExpertise: PilotSubExpertise | null,
-  setSelectedSubExpertise: Dispatch<SetStateAction<PilotSubExpertise | null>>,
+  selectedExpertise: PilotExpertiseSlug | null,
+  setSelectedExpertise: (expertise: PilotExpertise) => void,
   expertise: PilotExpertiseSlug,
   previewOnly?: boolean,
   className?: string,
@@ -39,8 +38,6 @@ export default function PilotExpertiseCard(
     expertise,
     selectedExpertise,
     setSelectedExpertise,
-    selectedSubExpertise,
-    setSelectedSubExpertise,
     className,
     timeOption,
     timeSlot,
@@ -60,11 +57,11 @@ export default function PilotExpertiseCard(
   useEffect(() => {
     if (selectedExpertise) {
       // Change selection panel view
-      selectedExpertise.slug === cardExpertise.slug && setSelectionPanel('duration')
-      selectedExpertise.slug !== cardExpertise.slug && setSelectionPanel('sub-expertises')
+      selectedExpertise === cardExpertise.slug && setSelectionPanel('duration')
+      selectedExpertise !== cardExpertise.slug && setSelectionPanel('sub-expertises')
 
       // Listen to is active effect
-      const isActiveExpertise = selectedExpertise.slug === cardExpertise.slug ? true : false;
+      const isActiveExpertise = selectedExpertise === cardExpertise.slug ? true : false;
       setIsSelected(isActiveExpertise)
     }
   }, [selectedExpertise])
@@ -90,19 +87,20 @@ export default function PilotExpertiseCard(
     }
   };
 
-  const onClickSubExpertise = (sub_expertise: PilotSubExpertise) => {
-    setSelectedExpertise(cardExpertise);
-    setSelectedSubExpertise(sub_expertise);
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    setSelectedExpertise(cardExpertise)
   }
 
   return (
     <Card
       className={`
         ${isSelected ? "bg-duber-teal-light" : "bg-duber-skyBlue-light"}
-        p-2 flex flex-col ${className}
+        p-2 flex flex-col cursor-pointer ${className}
       `}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
     >
       <video className='w-full min-h-32 rounded-xl' ref={videoRef} autoPlay={isHovered} loop muted >
         <source src={`/assets/${cardExpertise.mov_name}`} type='video/mp4' />
@@ -121,9 +119,9 @@ export default function PilotExpertiseCard(
             <Button
               key={subExp.id}
               size={'sm'}
-              onClick={() => onClickSubExpertise(subExp)}
-              variant={selectedSubExpertise?.slug === subExp.slug ? 'teal' : 'skyBlue'}
-              className='text-[10px] h-6 px-1 py-1'
+              onClick={() => null}
+              variant={"skyBlue"}
+              className='text-[10px] h-6 px-1 py-1 cursor-default'
             >{subExp.title}</Button>
           ))}
         </div>}

@@ -46,7 +46,6 @@ const Options = ({ priceList, setPriceList }) => {
   const [error, setError] = useState(null);
 
   const [selectedExpertise, setSelectedExpertise] = useState(null);
-  const [selectedSubExpertise, setSelectedSubExpertise] = useState(null);
   const [durationsList, setDurationsList] = useState([
     { type: "included", hours: 2 },
   ]);
@@ -57,10 +56,6 @@ const Options = ({ priceList, setPriceList }) => {
   const captureFormatRef = useRef(null);
   const expertiseBorderRef = useRef(null);
   const storagePlanRef = useRef(null);
-
-  useEffect(() => {
-    selectedExpertise && dispatch(setPilotExpertise(selectedExpertise.title));
-  }, [selectedExpertise]);
 
   useEffect(() => {
     captureFormat && dispatch(setCaptureFormatRedux(captureFormat));
@@ -233,10 +228,10 @@ const Options = ({ priceList, setPriceList }) => {
             key={expertise.id}
             expertise={expertise.slug}
             className="min-h-full"
-            selectedExpertise={selectedExpertise}
-            setSelectedExpertise={setSelectedExpertise}
-            selectedSubExpertise={selectedSubExpertise}
-            setSelectedSubExpertise={setSelectedSubExpertise}
+            selectedExpertise={orderState.expertise}
+            setSelectedExpertise={(expertise) => {
+              dispatch(setPilotExpertise(expertise.slug));
+            }}
             timeSlot={orderState.timeSlot}
             timeOption={orderState.timeOption}
             onChangeDuration={onChangeDuration}

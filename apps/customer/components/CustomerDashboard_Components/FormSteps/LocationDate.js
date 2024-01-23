@@ -307,15 +307,19 @@ const LocationDate = ({ priceList, setPriceList }) => {
             <h2 className="text-duber-navyBlue-dark font-semibold text-base mb-2.5">
               Arrival Time
             </h2>
-
             <div className="flex-1 h-full flex flex-col justify-between gap-y-3">
-              {TimeOptions.sort((a, b) => (a.id = b.id)).map((obj) => (
+              {TimeOptions.map((obj) => (
                 <ArrivalTimeCard
+                  key={obj.id}
                   slug={obj.slug}
-                  activeOption={activeTimeOption}
-                  setActiveOption={setActiveTimeOption}
-                  timeSlot={timeSlot}
-                  setTimeSlot={setTimeSlot}
+                  activeOption={orderState.timeOption}
+                  setActiveOption={(time_opt) => {
+                    dispatch(setTimeOption(time_opt.slug));
+                  }}
+                  timeSlot={orderState.timeSlot}
+                  setTimeSlot={(time_slot) =>
+                    dispatch(setTimeSlotRedux(time_slot))
+                  }
                   handleSetPrice={() => handleSetArrivalCost(obj)}
                 />
               ))}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setActiveStep } from "../../../redux/createOrderSlice";
-import { TimeOptions } from "global-constants";
+import { TimeOptions, PilotExpertises } from "global-constants";
 
 const sharedStyles_card = `w-full rounded-lg flex items-center justify-between max-h-24 overflow-hidden`;
 const sharedStyles_titleArea = `flex flex-col gap-y-0.5 basis-2/3 ml-3`;
@@ -118,7 +118,11 @@ export const OptionsCard = () => {
       {/* Text */}
       <div className={sharedStyles_titleArea}>
         <p className="text-white sm:text-sm text-sm font-semibold">
-          {orderState.expertise}
+          {
+            PilotExpertises.filter(
+              (exp) => exp.slug === orderState.expertise
+            )[0].title
+          }
         </p>
         <p className="text-white sm:text-xs text-base font-semibold">
           {orderState.totalDuration}hrs

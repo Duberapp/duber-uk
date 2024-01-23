@@ -4,8 +4,8 @@ import Button from "../../custom/DuberButton";
 
 type ArrivalTimeCardProps = {
   slug: TimeOptionSlug,
-  activeOption: TimeOptionType | null,
-  setActiveOption: Dispatch<SetStateAction<TimeOptionType>>,
+  activeOption: TimeOptionSlug | null,
+  setActiveOption: (time_option: TimeOptionType) => void,
   timeSlot: TimeSlot | null,
   setTimeSlot: Dispatch<SetStateAction<TimeSlot | null>>,
   handleSetPrice: (price: number) => void;
@@ -13,7 +13,7 @@ type ArrivalTimeCardProps = {
 
 export default function ArrivalTimeCard({ slug, activeOption, setActiveOption, setTimeSlot, timeSlot, handleSetPrice }: ArrivalTimeCardProps) {
   const timeOption = TimeOptions.filter(obj => obj.slug === slug)[0]
-  const isActive = activeOption && activeOption.slug === timeOption.slug
+  const isActive = activeOption === timeOption.slug
 
   const textColor = isActive ? 'text-duber-teal-dark' : 'text-duber-skyBlue'
 
