@@ -55,7 +55,6 @@ const createOrderSlice = createSlice({
       state.expertise = action.payload.expertise;
       state.customerNote = action.payload.customerNote;
       state.captureFormat = action.payload.captureFormat;
-      state.storagePlan = action.payload.storagePlan;
     },
 
     completeContact: (state, action) => {

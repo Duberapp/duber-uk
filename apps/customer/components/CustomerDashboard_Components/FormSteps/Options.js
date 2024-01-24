@@ -5,7 +5,6 @@ import {
   setActiveStep,
   completeOptions,
   switchToUpdateMode,
-  setStoragePlan,
   setPilotExpertise,
   setExtendedDurationHours,
   setTotalDurationHours,
@@ -13,11 +12,9 @@ import {
 } from "../../../redux/createOrderSlice";
 import { MobilePriceBar, Button, ErrorMessage } from "../";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { expertisesList, expertisesList_mobile } from "../expertiseList";
 import { plans } from "../storagePlans";
 import { useRouter } from "next/router";
-import { setPrice } from "../../../redux/mapSlice";
-import { PilotExpertises, durationList } from "global-constants";
+import { PilotExpertises } from "global-constants";
 import { ExpertiseCard } from "ui";
 
 // Sample Data
@@ -31,31 +28,22 @@ const Options = ({ priceList, setPriceList }) => {
   const dispatch = useDispatch();
   const orderState = useSelector((state) => state.createOrder);
   const mapState = useSelector((state) => state.map);
+  const expertise = orderState.expertise;
 
   const [flightDetail, setFlightDetail] = useState(orderState.customerNote);
   const [captureFormat, setCaptureFormat] = useState(orderState.captureFormat);
-  const [expertise, setExpertise] = useState(orderState.expertise);
-  const [storagePlanID, setStoragePlanID] = useState(
-    Object.keys(orderState.storagePlan).length === 0
-      ? null
-      : orderState.storagePlan.id
-  ); // Add context state later
 
   const [flightDetailLength, setFlightDetailLength] = useState(0);
   const [showFormatDropdown, setShowFormatDropdown] = useState(false);
   const [error, setError] = useState(null);
 
-  const [selectedExpertise, setSelectedExpertise] = useState(null);
   const [durationsList, setDurationsList] = useState([
     { type: "included", hours: 2 },
   ]);
 
-  const router = useRouter();
-
   const flightDetailsRef = useRef(null);
   const captureFormatRef = useRef(null);
   const expertiseBorderRef = useRef(null);
-  const storagePlanRef = useRef(null);
 
   useEffect(() => {
     captureFormat && dispatch(setCaptureFormatRedux(captureFormat));
@@ -77,7 +65,6 @@ const Options = ({ priceList, setPriceList }) => {
     const flightDetailsElem = flightDetailsRef.current;
     const captureFormatElem = captureFormatRef.current;
     const expertiseBorderElem = expertiseBorderRef.current;
-    const storagePlanElem = storagePlanRef.current;
 
     // Flight Details
     if (!flightDetail) {
@@ -89,15 +76,16 @@ const Options = ({ priceList, setPriceList }) => {
       flightDetailsElem.className =
         "sm:col-span-2 col-span-1 bg-primaryBlueLight rounded-md p-3";
 
-      if (flightDetailLength > 200) {
+      if (flightDetailLength > 30) {
         flightDetailsElem.className =
           "sm:col-span-2 col-span-1 bg-primaryBlueLight rounded-md p-3 placeholder:text-red-400 border border-red-400";
         validationError = new Error(
-          "Flight Details must be less than 200 words"
+          "Flight Details must be less than 30 words"
         );
-      } else
+      } else {
         flightDetailsElem.className =
           "sm:col-span-2 col-span-1 bg-primaryBlueLight rounded-md p-3";
+      }
     }
 
     // Capture format
@@ -111,18 +99,13 @@ const Options = ({ priceList, setPriceList }) => {
 
     // Pilot Expertise
     if (!expertise) {
-      expertiseBorderElem.className = "p-2 border border-red-500 rounded-md";
+      expertiseBorderElem.className =
+        "p-2 mt-3 border border-red-500 rounded-md flex gap-x-2";
       validationError = new Error("Pilot Expertise is required");
-    } else expertiseBorderElem.className = "";
-
-    // Storage plan id
-    if (!storagePlanID) {
-      storagePlanElem.className = "p-2 border border-red-400 rounded-md";
-      validationError = new Error("Please select a storage plan");
-    } else storagePlanElem.className = "";
+    } else expertiseBorderElem.className = "mt-3 flex gap-x-2";
 
     // Check all
-    if (!flightDetail && !captureFormat && !expertise && !storagePlanID) {
+    if (!flightDetail && !captureFormat && !expertise) {
       validationError = new Error("Please fill all required fields");
     }
 
@@ -138,19 +121,11 @@ const Options = ({ priceList, setPriceList }) => {
 
       setError(null);
 
-      let currentStoragePlan = plans.filter(
-        (plan) => plan.id === storagePlanID
-      );
-
       dispatch(
         completeOptions({
           expertise,
           customerNote: flightDetail,
           captureFormat,
-          storagePlan: {
-            id: storagePlanID,
-            text: currentStoragePlan[0].text,
-          },
         })
       );
 
@@ -168,11 +143,6 @@ const Options = ({ priceList, setPriceList }) => {
       setError(err.message);
     }
   };
-
-  useEffect(() => {
-    // console.log(orderState);
-    setStoragePlanID(orderState.storagePlan.id);
-  }, [orderState.storagePlan]);
 
   const onChangeDuration = (duration) => {
     // ----------------------- Handle Price change -----------------------
@@ -222,7 +192,7 @@ const Options = ({ priceList, setPriceList }) => {
       <h2 className="font-semibold text-navyBlue text-lg">
         Preferred Pilot Expertise
       </h2>
-      <div className="mt-3 flex gap-x-2">
+      <div ref={expertiseBorderRef} className="mt-3 flex gap-x-2">
         {PilotExpertises.map((expertise) => (
           <ExpertiseCard
             key={expertise.id}
