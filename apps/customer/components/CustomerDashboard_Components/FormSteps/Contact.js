@@ -94,7 +94,11 @@ const Contact = () => {
     } else setTitleErr(false);
 
     if (!sessionUser) {
-      if (orderState.storagePlan.id === 2 && !password) {
+      if (
+        Object.keys(orderState.storagePlan).length > 0 &&
+        orderState.storagePlan.id === 2 &&
+        !password
+      ) {
         passwordElem.className = errorStyle;
         validationError = true;
         setErrorMessage(
@@ -128,7 +132,6 @@ const Contact = () => {
       try {
         setLoadingUserData(true);
         if (!sessionUser) return;
-        console.log(sessionUser.id);
 
         const { data, error } = await selectUser(sessionUser.id);
         dispatch(setAuthUserId(sessionUser.id));

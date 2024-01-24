@@ -116,6 +116,9 @@ const LocationDate = ({ priceList, setPriceList }) => {
       if (mapState.polygons.length < 1)
         throw new Error("Please mark the area on map");
 
+      if (orderState.timeOption === null)
+        throw new Error("Arrival Time Option is required");
+
       setError(null);
       return false;
     } catch (err) {

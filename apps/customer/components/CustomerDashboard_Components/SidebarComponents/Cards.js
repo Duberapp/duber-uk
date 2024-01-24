@@ -180,8 +180,10 @@ export const ContactCard = () => {
             {orderState.firstName} {orderState.lastName}
           </p>
         )}
-        {orderState.email && (
-          <p className="text-white text-xs font-semibold">{orderState.email}</p>
+        {orderState.telNumber && (
+          <p className="text-white text-xs font-semibold">
+            {orderState.telNumber}
+          </p>
         )}
 
         <ChangeButton activeToID={3} />

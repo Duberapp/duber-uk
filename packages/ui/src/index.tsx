@@ -14,6 +14,7 @@ export * from "./components/ui/tooltip"
 
 // Customer -> Component Exports
 export { default as ExpertiseCard } from './components/custom/PilotExpertiseCard/ExpertiseCard'
+export { default as StoragePlanCard } from './components/custom/CustomerComponents/StoragePlanCard'
 
 // Stripe -> Component Exports
 export { default as FillDetailsAlert } from "./components/custom/StripeComponents/FillDetailsAlert";

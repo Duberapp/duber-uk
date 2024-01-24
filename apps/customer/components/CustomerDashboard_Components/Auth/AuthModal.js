@@ -9,6 +9,7 @@ const AuthModal = ({ className, setShow, setShowAuthModal }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [loginError, setLoginError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,9 +24,11 @@ const AuthModal = ({ className, setShow, setShowAuthModal }) => {
 
       // setSessionUser(data.user);
 
+      setLoginError("");
       setLoading(false);
       setShowAuthModal(false);
     } catch (err) {
+      setLoginError(err.message);
       setLoading(false);
     }
   };
@@ -47,6 +50,12 @@ const AuthModal = ({ className, setShow, setShowAuthModal }) => {
 
         <div className="my-3 sm:px-14 px-7">
           <p className="text-navyBlue text-lg font-semibold mb-5">{`Nice to see you again`}</p>
+
+          {loginError && (
+            <div className="my-2 bg-red-100 text-red-500 px-3 py-3 rounded-lg text-sm">
+              {loginError}
+            </div>
+          )}
 
           <LoginForm
             onSubmit={handleLogin}

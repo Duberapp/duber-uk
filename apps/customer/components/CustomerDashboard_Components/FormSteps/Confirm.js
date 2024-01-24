@@ -6,13 +6,14 @@ import {
   Button,
   ErrorMessage,
 } from "../../../components/CustomerDashboard_Components";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { plans } from "../storagePlans";
 import { setStoragePlan, setActiveStep } from "../../../redux/createOrderSlice";
 import { setPrice } from "../../../redux/mapSlice";
 import { successToast } from "../UI/Toast";
+import { StoragePlanCard } from "ui";
+import { storage_plans } from "global-constants";
 
 const Confirm = () => {
   const dispatch = useDispatch();
@@ -51,122 +52,23 @@ const Confirm = () => {
 
   return (
     <div className="grid md:grid-cols-12 grid-cols-1 gap-x-8">
-      <div className="md:col-span-8 col-span-12">
+      <div className="md:col-span-8 col-span-12 flex flex-col">
         {/* Content */}
-        <h2 className="sm:text-3xl text-2xl font-semibold text-navyBlue">
-          Confirm
-        </h2>
+        <h2 className="text-2xl font-semibold text-navyBlue">Storage Plan</h2>
 
         {error && (
           <ErrorMessage className={"mt-8"} error={error} setError={setError} />
         )}
-        <div className="sm:mt-5 mt-5 grid grid-cols-1 gap-y-7">
-          {/* Location step data */}
-          <StepCard
-            column_1={
-              <div>
-                <p className="text-sm text-primaryBlue font-medium">Location</p>
-                <p className="mt-1 text-xs text-primaryBlue font-normal">
-                  {mapState.address}
-                </p>
-                <p className="mt-3 text-sm text-primaryBlue font-medium">
-                  Date
-                </p>
-                <p className="mt-1 text-xs text-primaryBlue font-normal">
-                  {orderState.startDate}
-                </p>
-              </div>
-            }
-            column_2={
-              <div>
-                <p className="text-sm text-primaryBlue font-medium">Area</p>
-                <p className="mt-1 text-xs text-primaryBlue font-normal inline-flex">
-                  {mapState.area} &nbsp;{" "}
-                  <span className="sm:flex hidden">Squared Meters</span>{" "}
-                  <span className="sm:hidden block">
-                    {" "}
-                    m<sup>2</sup>
-                  </span>{" "}
-                </p>
-              </div>
-            }
-            onEditClick={() => {
-              dispatch(setActiveStep(1));
-              router.push("/hire");
-            }}
-          />
-
-          {/* Options step data */}
-          <StepCard
-            column_1={
-              <div>
-                <p className="text-sm text-primaryBlue font-medium">
-                  Capture Format
-                </p>
-                <p className="mt-1 text-xs text-primaryBlue font-normal">
-                  {orderState.captureFormat}
-                </p>
-                <p className="mt-3 text-sm text-primaryBlue font-medium">
-                  Pilot Prefered Expertises
-                </p>
-                <p className="mt-1 text-xs text-primaryBlue font-normal">
-                  {orderState.expertise}
-                </p>
-              </div>
-            }
-            column_2={
-              <div>
-                <p className="text-sm text-primaryBlue font-medium">
-                  Storage Plan
-                </p>
-                <p className="mt-1 text-xs text-primaryBlue font-normal">
-                  {orderState.storagePlan.text}
-                </p>
-              </div>
-            }
-            onEditClick={() => {
-              dispatch(setActiveStep(2));
-              router.push("/hire");
-            }}
-          />
-
-          {/* Contact step data */}
-          <StepCard
-            column_1={
-              <div>
-                <p className="text-sm text-primaryBlue font-medium">Name</p>
-                <p className="mt-1 text-xs text-primaryBlue font-normal">
-                  {orderState.firstName} {orderState.lastName}
-                </p>
-                <p className="mt-3 text-sm text-primaryBlue font-medium">
-                  Email
-                </p>
-                <p className="mt-1 text-xs text-primaryBlue font-normal">
-                  {orderState.email}
-                </p>
-              </div>
-            }
-            column_2={
-              <div>
-                <p className="text-sm text-primaryBlue font-medium">
-                  Telephone
-                </p>
-                <p className="mt-1 text-xs text-primaryBlue font-normal">
-                  {orderState.telNumber}
-                </p>
-                <p className="mt-3 text-sm text-primaryBlue font-medium">
-                  Company
-                </p>
-                <p className="mt-1 text-xs text-primaryBlue font-normal">
-                  {orderState.company}
-                </p>
-              </div>
-            }
-            onEditClick={() => {
-              dispatch(setActiveStep(3));
-              router.push("/hire");
-            }}
-          />
+        <div className="sm:mt-3 mt-5 flex-1 flex gap-x-3">
+          {storage_plans.map((plan) => (
+            <StoragePlanCard
+              key={plan.id}
+              storage_plan={plan}
+              className="flex-1"
+              selectedPlan={orderState.storagePlan}
+              handleSelect={() => dispatch(setStoragePlan(plan))}
+            />
+          ))}
         </div>
 
         <div className="flex sm:hidden mt-8">
@@ -245,7 +147,7 @@ const Confirm = () => {
         <div className="flex items-center mt-4">
           <Checkbox checked={confirmed} setChecked={setConfirmed} />
           <p className="text-black sm:text-base text-sm ml-4">
-            I have permission from the land/building owner & accept the{" "}
+            I accept thee{" "}
             <span className="font-semibold cursor-pointer">
               <Link href="/legal/TermsAndConditions">
                 Terms &amp; Conditions
@@ -281,18 +183,3 @@ const Confirm = () => {
 };
 
 export default Confirm;
-
-const StepCard = ({ column_1, column_2, onEditClick, col2_className }) => {
-  return (
-    <div className="bg-primaryBlueLight h-fit py-3 pb-5 px-5 rounded-md flex">
-      <div className="flex-1 ">{column_1}</div>
-      <div className={`${col2_className} flex-1 ml-6`}>{column_2}</div>
-      <div className="w-fit ml-4">
-        <PencilSquareIcon
-          onClick={onEditClick}
-          className="w-6 h-6 cursor-pointer text-primaryBlue"
-        />
-      </div>
-    </div>
-  );
-};
