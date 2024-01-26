@@ -2,22 +2,15 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setStoragePlan } from "../../../redux/createOrderSlice";
 import { setPrice } from "../../../redux/mapSlice";
-import { plans } from "../storagePlans";
-import { successToast } from "./Toast";
+import { storage_plans } from "global-constants";
 
 const SubscriptionAlertCard = () => {
   const dispatch = useDispatch();
   const mapState = useSelector((state) => state.map);
 
   const handleSwitchPlan = () => {
-    dispatch(
-      setStoragePlan({
-        id: plans[1].id,
-        text: plans[1].text,
-      })
-    );
+    dispatch(setStoragePlan(storage_plans[1]));
     dispatch(setPrice(mapState.price + 10));
-    successToast("Successfully Changed !");
   };
 
   return (

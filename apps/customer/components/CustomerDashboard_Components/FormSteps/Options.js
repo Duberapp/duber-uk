@@ -12,8 +12,6 @@ import {
 } from "../../../redux/createOrderSlice";
 import { MobilePriceBar, Button, ErrorMessage } from "../";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { plans } from "../storagePlans";
-import { useRouter } from "next/router";
 import { PilotExpertises } from "global-constants";
 import { ExpertiseCard } from "ui";
 

@@ -22,11 +22,11 @@ function StoragePlanCard({ className, storage_plan, handleSelect, selectedPlan }
           : storage_plan.slug === 'premium'
             ? `/assets/drone-2.svg`
             : ''
-        } alt='Drone Vector' className='w-40' />
+        } alt='Drone Vector' className='w-32' />
         <h1 className={`capitalize mt-6 font-semibold ${isSelected ? 'text-duber-teal-dark' : 'text-duber-skyBlue'} text-2xl`}>{storage_plan.slug}</h1>
       </div>
 
-      <div className="flex-1 flex flex-col gap-y-2 justify-between py-10">
+      <div className="flex-1 flex flex-col gap-y-4 pt-4">
         {storage_plan.features?.map(feature => (
           <div className="flex items-center gap-x-1">
             {storage_plan.slug === 'basic' && <ExclamationTriangleIcon strokeWidth={2} className={`w-5 h-5 ${isSelected ? 'text-duber-teal-dark' : 'text-duber-skyBlue'}`} />}

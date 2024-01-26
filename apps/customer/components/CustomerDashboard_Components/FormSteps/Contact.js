@@ -259,7 +259,10 @@ const Contact = () => {
                 </p>
                 <p
                   className="text-sm text-white underline cursor-pointer"
-                  onClick={() => logoutUser()}
+                  onClick={async () => {
+                    await logoutUser();
+                    dispatch(setAuthUserId(null));
+                  }}
                 >
                   Logout
                 </p>
