@@ -8,7 +8,13 @@ import { Loading, TextField } from "ui";
 import { LoadingSpinner } from "../";
 import { setAddress, setTempAddress } from "../../../redux/mapSlice";
 
-export default function GoogleAutocomplete({ setLocationGeocode }) {
+export default function GoogleAutocomplete({
+  setLocationGeocode,
+  setGlobalSuggestions,
+  setIsSuggestionsLoading,
+  setGlobalSuggestionsStatus,
+  selectedGlobalSuggestion,
+}) {
   const {
     ready,
     value,
@@ -27,6 +33,12 @@ export default function GoogleAutocomplete({ setLocationGeocode }) {
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileModel, setShowMobileModel] = useState(false);
   const [geoCoding, setGeocoding] = useState(false);
+
+  useEffect(() => {
+    setGlobalSuggestions(data);
+    setIsSuggestionsLoading(loading || geoCoding);
+    setGlobalSuggestionsStatus(status);
+  }, [data, status, loading, geoCoding]);
 
   // Initiate Device Type (Mobile or Not)
   useEffect(() => {
@@ -76,6 +88,12 @@ export default function GoogleAutocomplete({ setLocationGeocode }) {
     }
   };
 
+  useEffect(() => {
+    if (selectedGlobalSuggestion) {
+      handleClickItem(selectedGlobalSuggestion);
+    }
+  }, [selectedGlobalSuggestion]);
+
   return (
     <div className="relative">
       <div className="w-full flex items-center justify-between">
@@ -89,25 +107,37 @@ export default function GoogleAutocomplete({ setLocationGeocode }) {
           onClick={() => isMobile && setShowMobileModel(true)}
           disabled={!ready}
         />
-
-        {(loading || geoCoding) && (
-          <LoadingSpinner width={5} height={5} color="text-primaryBlue" />
-        )}
       </div>
+    </div>
+  );
+}
 
-      {status === "OK" && data.length !== 0 && (
-        <div className="absolute z-[400] ml-[-10px] mt-4 w-full px-3 py-3 bg-white rounded-md shadow-xl">
-          {data.map(({ description, place_id }) => (
-            <li
-              className="border-b-1 text-sm rounded-md text-[#2263DF] cusor-pointer p-3 list-none hover:bg-gray-100 cursor-pointer "
-              key={place_id}
-              onClick={() => handleClickItem(description)}
-            >
-              {description}
-            </li>
-          ))}
+export function GoogleAutocompleteModal({
+  suggestions,
+  setSelectedGlobalSuggestion,
+  loadingSuggestions,
+  className,
+}) {
+  return (
+    <div
+      className={`w-full h-full bg-duber-skyBlue-light rounded-md flex flex-col gap-y-1.5 p-3 ${className}`}
+    >
+      {loadingSuggestions && (
+        <div className="w-full h-full flex items-center justify-center">
+          <Loading className={"w-8 h-8"} />
         </div>
       )}
+
+      {!loadingSuggestions &&
+        suggestions.map(({ description, place_id }) => (
+          <div
+            key={place_id}
+            className="cursor-pointer text-duber-skyBlue text-base p-2 hover:bg-sky-500/10 duration-75 transition-all rounded-md"
+            onClick={() => setSelectedGlobalSuggestion(description)}
+          >
+            {description}
+          </div>
+        ))}
     </div>
   );
 }

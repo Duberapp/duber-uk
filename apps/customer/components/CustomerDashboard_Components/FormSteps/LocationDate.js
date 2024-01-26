@@ -31,7 +31,9 @@ import {
   setZoom,
 } from "../../../redux/mapSlice";
 import useLongPress from "../../../hooks/useLongPress";
-import GoogleAutocomplete from "../UI/GoogleAutocomplete";
+import GoogleAutocomplete, {
+  GoogleAutocompleteModal,
+} from "../UI/GoogleAutocomplete";
 import GoogleMap from "../../GoogleMap";
 import { Button as DuberButton, ArrivalTimeCard } from "ui";
 import { TimeOptions } from "global-constants";
@@ -61,6 +63,11 @@ const LocationDate = ({ priceList, setPriceList }) => {
   // const [polygons, setPolygons] = useState([]);
   const [activeTimeOption, setActiveTimeOption] = useState(null);
   const [timeSlot, setTimeSlot] = useState(null);
+  const [globalSuggestions, setGlobalSuggestions] = useState(null);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const [globalSuggestionsStatus, setGlobalSuggestionsStatus] = useState(null);
+  const [selectedGlobalSuggestion, setSelectedGlobalSuggestion] =
+    useState(null);
 
   // ================= Time Slot and Time Option Context =================
   useEffect(() => {
@@ -210,6 +217,10 @@ const LocationDate = ({ priceList, setPriceList }) => {
           <Input>
             <GoogleAutocomplete
               setLocationGeocode={(geocode) => dispatch(setCenter(geocode))}
+              setGlobalSuggestions={setGlobalSuggestions}
+              setIsSuggestionsLoading={setIsLoadingSuggestions}
+              setGlobalSuggestionsStatus={setGlobalSuggestionsStatus}
+              selectedGlobalSuggestion={selectedGlobalSuggestion}
             />
           </Input>
 
@@ -232,28 +243,44 @@ const LocationDate = ({ priceList, setPriceList }) => {
           {/* ============================================================================ */}
           {!showOverlayMap && (
             <div className="flex-1 w-full h-full relative flex items-center justify-center">
-              <div className="opacity-60 flex-1 h-full rounded-lg overflow-hidden">
-                <GoogleMap
-                  polygons={polygons}
-                  setPolygons={setPolygonsHandler}
-                  staticMapType={"roadmap"}
-                  mapState={"static"}
-                />
-              </div>
+              {globalSuggestionsStatus === "OK" &&
+              globalSuggestions.length !== 0 ? (
+                <>
+                  <GoogleAutocompleteModal
+                    suggestions={globalSuggestions}
+                    loadingSuggestions={isLoadingSuggestions}
+                    setSelectedGlobalSuggestion={setSelectedGlobalSuggestion}
+                  />
+                </>
+              ) : (
+                <>
+                  <div className="opacity-60 flex-1 h-full rounded-lg overflow-hidden">
+                    <GoogleMap
+                      polygons={polygons}
+                      setPolygons={setPolygonsHandler}
+                      staticMapType={"roadmap"}
+                      mapState={"static"}
+                      location={mapState.center}
+                    />
+                  </div>
 
-              <div className="absolute">
-                <DuberButton
-                  variant={"default"}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (mapState.address) {
-                      setShowMap(true);
-                    }
-                  }}
-                >
-                  Select a address first
-                </DuberButton>
-              </div>
+                  <div className="absolute">
+                    <DuberButton
+                      variant={"default"}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (mapState.address) {
+                          setShowMap(true);
+                        }
+                      }}
+                    >
+                      {!selectedGlobalSuggestion
+                        ? "Select a address first"
+                        : "Click to Draw"}
+                    </DuberButton>
+                  </div>
+                </>
+              )}
             </div>
           )}
 
