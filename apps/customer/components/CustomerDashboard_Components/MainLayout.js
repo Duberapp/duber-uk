@@ -2,8 +2,11 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { useSelector } from "react-redux";
 
 const MainLayout = ({ children }) => {
+  const orderState = useSelector((state) => state.createOrder);
+
   return (
     <div className="2xl:max-w-screen-xl lg:max-w-[69rem] container w-full h-full sm:mx-auto mx-0 lg:px-0 px-5 mb-10">
       <div className="mt-5 flex justify-between">
@@ -24,7 +27,11 @@ const MainLayout = ({ children }) => {
           </Link>
         </div>
       </div>
-      <div className="sm:mt-16 mt-7">{children}</div>
+      <div
+        className={`${orderState.active_step === 5 ? "mt-4" : "sm:mt-16 mt-7"}`}
+      >
+        {children}
+      </div>
     </div>
   );
 };

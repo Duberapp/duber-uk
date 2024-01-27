@@ -23,11 +23,11 @@ const Checkout = ({ clientSecret, checkoutData }) => {
     appearance,
   };
 
-  console.log(basePrice, vat);
-
   return (
-    <main className="">
-      <div className="lg:w-[50vw] md:w-[70vw] mx-auto w-full mb-6">
+    <main className="w-full flex items-center justify-center">
+      {/* =====================================================================================
+      ======================================  HIDDEN ====================================== */}
+      <div className="lg:w-[50vw] md:w-[70vw] mx-auto w-full mb-6 hidden">
         <div className="w-full rounded-md bg-primaryBlueLight px-4 py-5">
           <h2 className="w-full text-base text-primaryBlue mb-2">
             Order Summary
@@ -90,21 +90,73 @@ const Checkout = ({ clientSecret, checkoutData }) => {
           </div>
         </div>
       </div>
+      {/* =====================================================================================  */}
 
-      <div className="lg:w-[50vw] md:w-[70vw] w-full sm:px-16 px-5 pt-7 pb-14 mx-auto border border-gray-300 rounded-md">
-        {clientSecret !== "" && (
-          <Elements options={options} stripe={stripePromise}>
-            <CheckoutForm
-              orderID={orderData.id}
-              reciptEmail={orderEmail}
-              price={orderData.price}
-              firstName={orderState.firstName}
-              storagePlanID={orderState.storagePlan.id}
-              basePrice={basePrice}
-              vat={vat}
-            />
-          </Elements>
-        )}
+      <div className="lg:w-[50vw] md:w-[70vw] w-full">
+        {/* ====================================== NEW DESIGN ===================================  */}
+        <div className="w-full flex flex-col p-3 gap-y-3">
+          <h2 className="text-2xl font-semibold text-duber-navyBlue">
+            Payment Summary
+          </h2>
+
+          <div className="w-full flex gap-3">
+            {/* COL 1 */}
+            <div className="flex-1">
+              <h2 className="text-base font-semibold text-duber-navyBlue">
+                Deposit{" "}
+                <span className="text-[10px] text-duber-navyBlue">{`(includes subscription)`}</span>
+              </h2>
+
+              <div className="mt-2 w-full h-10 bg-duber-skyBlue-light rounded-md flex items-center justify-center gap-x-2">
+                <h2 className="font-semibold text-duber-skyBlue">
+                  {`£${basePrice}`}{" "}
+                  <span className="text-[10px] font-medium">{`(Ex VAT)`}</span>
+                </h2>
+                <h2 className="font-semibold text-duber-skyBlue">
+                  DUE: <span className="font-normal">Now</span>
+                </h2>
+              </div>
+            </div>
+
+            {/* COL 2 */}
+            <div className="flex-1">
+              <h2 className="text-base font-semibold text-duber-navyBlue">
+                Scheduled Payment*
+              </h2>
+
+              <div className="mt-2 w-full h-10 bg-duber-skyBlue-light rounded-md flex items-center justify-center gap-x-2">
+                <h2 className="font-semibold text-duber-skyBlue">
+                  {`£${orderData.price - basePrice}`}{" "}
+                  <span className="text-[10px] font-medium">{`(Ex VAT)`}</span>
+                </h2>
+                <h2 className="font-semibold text-duber-skyBlue">
+                  DUE: <span className="font-normal">15/11/2023</span>
+                </h2>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-[10px] text-duber-navyBlue">{`
+            *The scheduled payment will automatically be charged to the billing account used for the deposit. We do this to ensure our pilots are complying to our quality standards and in return providing you with a trustworthy service.
+          `}</p>
+        </div>
+        {/* =====================================================================================  */}
+
+        <div className="sm:px-16 px-5 pt-7 pb-14 mx-auto border border-gray-300 rounded-md">
+          {clientSecret !== "" && (
+            <Elements options={options} stripe={stripePromise}>
+              <CheckoutForm
+                orderID={orderData.id}
+                reciptEmail={orderEmail}
+                price={orderData.price}
+                firstName={orderState.firstName}
+                storagePlanID={orderState.storagePlan.id}
+                basePrice={basePrice}
+                vat={vat}
+              />
+            </Elements>
+          )}
+        </div>
       </div>
     </main>
   );

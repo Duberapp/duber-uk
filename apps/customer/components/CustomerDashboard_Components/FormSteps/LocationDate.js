@@ -165,7 +165,7 @@ const LocationDate = ({ priceList, setPriceList }) => {
     if (!error) {
       dispatch(setCenter(payload.center));
 
-      dispatch(setArea(payload.polygon.area));
+      dispatch(setArea(Math.floor(payload.polygon.area)));
       dispatch(setAreaType(payload.polygon.areaType));
 
       let calculatedCost = calculatePrice(payload.polygon.area);

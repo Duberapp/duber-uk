@@ -69,6 +69,7 @@ const Validating = () => {
         authUserId: orderState.authUserId,
         environment: process.env.NEXT_PUBLIC_ENVIRONMENT,
         storagePlan: orderState.storagePlan,
+        app_version: "v2",
       });
 
       if (error) throw new Error("Create order failed");
