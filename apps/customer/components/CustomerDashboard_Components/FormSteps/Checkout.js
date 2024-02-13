@@ -15,8 +15,15 @@ const appearance = {
 };
 
 const Checkout = ({ clientSecret, checkoutData }) => {
-  const { orderState, orderData, orderEmail, mapState, basePrice, vat } =
-    checkoutData;
+  const {
+    orderState,
+    orderData,
+    orderEmail,
+    mapState,
+    basePrice,
+    vat,
+    scheduledPaymentData,
+  } = checkoutData;
 
   const options = {
     clientSecret,
@@ -104,7 +111,9 @@ const Checkout = ({ clientSecret, checkoutData }) => {
             <div className="flex-1">
               <h2 className="text-base font-semibold text-duber-navyBlue">
                 Deposit{" "}
-                <span className="text-[10px] text-duber-navyBlue">{`(includes subscription)`}</span>
+                {orderState.storagePlan.slug === "premium" && (
+                  <span className="text-[10px] text-duber-navyBlue">{`(includes subscription)`}</span>
+                )}
               </h2>
 
               <div className="mt-2 w-full h-10 bg-duber-skyBlue-light rounded-md flex items-center justify-center gap-x-2">
@@ -126,11 +135,18 @@ const Checkout = ({ clientSecret, checkoutData }) => {
 
               <div className="mt-2 w-full h-10 bg-duber-skyBlue-light rounded-md flex items-center justify-center gap-x-2">
                 <h2 className="font-semibold text-duber-skyBlue">
-                  {`£${orderData.price - basePrice}`}{" "}
+                  {`£${scheduledPaymentData.exVat}`}{" "}
                   <span className="text-[10px] font-medium">{`(Ex VAT)`}</span>
                 </h2>
                 <h2 className="font-semibold text-duber-skyBlue">
-                  DUE: <span className="font-normal">15/11/2023</span>
+                  DUE:{" "}
+                  <span className="font-normal">
+                    {
+                      new Date(orderState.startDate)
+                        .toLocaleString()
+                        .split(", ")[0]
+                    }
+                  </span>
                 </h2>
               </div>
             </div>

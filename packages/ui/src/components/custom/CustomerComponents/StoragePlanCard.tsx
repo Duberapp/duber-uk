@@ -1,8 +1,11 @@
 import React from 'react'
 import { type StoragePlanType } from "global-constants";
 import { Card } from "../../ui/card";
-import { ExclamationTriangleIcon, BoltIcon } from "@heroicons/react/24/outline";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import {
+  AlertCircle as ExclamationTriangleIcon,
+  Zap as BoltIcon,
+  CheckCircle2 as CheckCircleIcon
+} from 'lucide-react';
 
 type StoragePlanCardProps = {
   storage_plan: StoragePlanType,

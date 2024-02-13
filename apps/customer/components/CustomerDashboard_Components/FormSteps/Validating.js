@@ -26,6 +26,7 @@ const Validating = () => {
   const [orderEmail, setOrderEmail] = useState(null);
   const [paymentData, setPaymentData] = useState(null);
   const [basePrice, setBasePrice] = useState(100);
+  const [scheduledPaymentData, setScheduledPaymentData] = useState();
   const [vat, setVat] = useState(20);
   const [stripeClientSecret, setStripeClientSecret] = useState(null);
 
@@ -99,11 +100,30 @@ const Validating = () => {
     if (payment_data) {
       setVat(payment_data.VAT);
 
-      if (order_data.storagePlan.id == 2) {
+      if (order_data.storagePlan.slug === "premium") {
+        // set base price
         setBasePrice(payment_data.deposit.with_subscription);
-      } else if (order_data.storagePlan.id == 1) {
+      } else if (order_data.storagePlan.slug === "basic") {
+        // set base price
         setBasePrice(payment_data.deposit.without_subscription);
       }
+
+      // set scheduled price
+      let scheduled_price_payload = {
+        orderPrice: order_data.amount,
+        deposit: payment_data.deposit.without_subscription,
+        exVat: order_data.amount - payment_data.deposit.without_subscription,
+        Vat:
+          (order_data.amount - payment_data.deposit.without_subscription) *
+          (payment_data.VAT / 100),
+        incVat:
+          order_data.amount -
+          payment_data.deposit.without_subscription +
+          (order_data.amount - payment_data.deposit.without_subscription) *
+            (payment_data.VAT / 100),
+      };
+
+      setScheduledPaymentData(scheduled_price_payload);
     }
   };
 
@@ -122,7 +142,7 @@ const Validating = () => {
       },
       basePrice:
         order_data.storagePlanId == 2
-          ? _paymentData[0].deposit.with_subscription - 10 // price will be 100 instead of 110
+          ? _paymentData[0].deposit.with_subscription // MARKED_AS_CHANGED -> removed -10;
           : _paymentData[0].deposit.without_subscription,
       order_id: order_data.id,
       vat: _paymentData[0].VAT,
@@ -148,9 +168,9 @@ const Validating = () => {
       try {
         const _orderDataAll = await handleSubmitOrder();
 
-        await getPaymentData();
+        const __paymentData = await getPaymentData();
 
-        await preparePrices(paymentData, _orderDataAll);
+        await preparePrices(__paymentData, _orderDataAll);
 
         await initializePaymentIntent(_orderDataAll);
 
@@ -180,7 +200,7 @@ const Validating = () => {
   return (
     <>
       {!showCheckout ? (
-        <main className="w-full sm:h-full h-[80vh] flex items-center justify-center flex-col">
+        <main className="w-full sm:h-[80vh] h-[80vh] flex items-center justify-center flex-col">
           <div className="sm:w-72 w-60">
             <Lottie animationData={payment_animation} loop={true} />
           </div>
@@ -210,6 +230,7 @@ const Validating = () => {
             mapState,
             basePrice,
             vat,
+            scheduledPaymentData,
           }}
         />
       )}

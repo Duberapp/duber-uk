@@ -112,6 +112,12 @@ export default function CheckoutForm({
     setIsLoading(false);
   };
 
+  // console.log({
+  //   basePrice,
+  //   vat,
+  //   calculated: basePrice + basePrice * (vat / 100),
+  // });
+
   // Handle Payment Request On Trigger
 
   return (

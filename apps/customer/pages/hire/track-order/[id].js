@@ -8,12 +8,10 @@ import {
 } from "../../../components/CustomerDashboard_Components";
 import {
   StatusBadge,
-  TrackingBar,
   PilotCard,
 } from "../../../components/CustomerDashboard_Components/TrackingPage";
 import { fetchOrder, getPilotData } from "../../../config/supabaseFunctions";
 import { useRouter } from "next/router";
-
 import AWS from "aws-sdk";
 import {
   getS3Object_DownloadLink,
@@ -120,11 +118,11 @@ const TrackOrder = ({ data, pilot, error }) => {
           <TrackingMap mapData={data.mapData} className="mt-5" />
 
           {/* Tracking bar */}
-          <TrackingBar
+          {/* <TrackingBar
             className={"mt-8"}
             status={data.status}
             deliverables={data.deliverableURLs}
-          />
+          /> */}
 
           {/* ============ ONLY MOBILE ============ */}
           <div className="sm:hidden flex items-center justify-between mt-24">

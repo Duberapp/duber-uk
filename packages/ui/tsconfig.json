@@ -1,6 +1,10 @@
 {
   "extends": "../../packages/config/base.tsconfig.json",
-  "include": ["src", "src/components/custom/.tsx"],
+  "include": [
+    "src",
+    "src/components/custom/.tsx",
+    "src/stories/TrackingPage.stories.tsx"
+  ],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
     "rootDir": "src",
