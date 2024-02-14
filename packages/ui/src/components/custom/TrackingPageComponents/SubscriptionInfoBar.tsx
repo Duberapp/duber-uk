@@ -26,7 +26,7 @@ export default function SubscriptionInfoBar({ className, isPilotAssigned, expire
               </p>
             }
           </> : (
-            <h2 className='text-red-600 font-semibold text-center'>Booking has been cancelled</h2>
+            <h2 className='text-red-600 font-semibold text-center py-3'>Booking has been cancelled</h2>
           )}
         </div>
       )}
@@ -45,7 +45,7 @@ export default function SubscriptionInfoBar({ className, isPilotAssigned, expire
             </div>
           </div>
           :
-          <div className="flex-1 bg-teal-200 text-teal-600 font-semibold rounded-lg flex items-center justify-center h-full">
+          <div className="flex-1 py-3 bg-teal-200 text-teal-600 font-semibold rounded-lg flex items-center justify-center h-full">
             Premium Enabled: Lifetime Access
           </div>
         }

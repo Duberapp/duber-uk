@@ -17,7 +17,7 @@ const TestUI = () => {
           className="min-w-full"
           expireCountDown={12}
           handleBookingCancel={() => {}}
-          isBookingCancelled={false}
+          isBookingCancelled={true}
           isPilotAssigned={false}
           isSubscriptionEnabled={false}
         />
