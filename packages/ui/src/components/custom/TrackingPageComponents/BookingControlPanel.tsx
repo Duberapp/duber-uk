@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState, useEffect } from 'react'
-import { type BookingControlPanelDataTypes, type PilotDataType } from './types'
+import { DeliverableType, type BookingControlPanelDataTypes, type PilotDataType } from './types'
 import Button from "../DuberButton";
 import { Phone, FileDown, FolderDown, Star } from "lucide-react";
 import { type PilotRateIssueType, pilotRateIssuesList, type RatingStatusType } from 'global-constants';
@@ -11,7 +11,10 @@ interface BookingControlPanelProps extends BookingControlPanelDataTypes {
   showCancelBookingPanel?: boolean,
   setShowCancelBookingPanel?: Dispatch<SetStateAction<boolean>>,
   handleCancelBooking?: handleCancelBooking,
-  deliverablesView?: boolean
+  deliverablesView?: boolean,
+  showSubscriptionView?: boolean,
+  setShowSubscriptionView?: Dispatch<SetStateAction<boolean>>,
+  SubscriptionComponent?: React.ReactNode[],
 }
 
 export default function BookingControlPanel({
@@ -24,7 +27,12 @@ export default function BookingControlPanel({
   cancellationReason,
   isBookingCancelled,
   isPilotAssigned,
-  pilotData
+  pilotData,
+  deliverablesList,
+  isDeliverablesExpired,
+  showSubscriptionView,
+  setShowSubscriptionView,
+  SubscriptionComponent
 }: BookingControlPanelProps) {
 
   return (
@@ -34,6 +42,7 @@ export default function BookingControlPanel({
           !showCancelBookingPanel &&
           !(isBookingCancelled && cancellationReason) &&
           !deliverablesView &&
+          !showSubscriptionView &&
           <PilotDetaisPanel isPilotAssigned={isPilotAssigned!} pilotData={pilotData!} />
         }
 
@@ -48,8 +57,19 @@ export default function BookingControlPanel({
           <ReasonForCancellationPanel reason={cancellationReason} />
         )}
 
-        {deliverablesView && (
-          <DeliverablesView pilotData={pilotData!} />
+        {(deliverablesView && !showSubscriptionView) && (
+          <DeliverablesView
+            pilotData={pilotData!}
+            deliverablesList={deliverablesList}
+            isDeliverablesExpired={isDeliverablesExpired!}
+            setShowSubscriptionView={setShowSubscriptionView!}
+          />
+        )}
+
+        {showSubscriptionView && (
+          <SubscriptionPanel className='w-full h-full p-2'>
+            {SubscriptionComponent}
+          </SubscriptionPanel>
         )}
       </div>
 
@@ -177,29 +197,63 @@ function PilotDetaisPanel({ isPilotAssigned, pilotData }: { isPilotAssigned: boo
   )
 }
 
-function DeliverablesView({ pilotData }: { pilotData: PilotDataType }) {
+interface DeliverableItemProps extends DeliverableType {
+  isDeliverablesExpired: boolean
+}
+
+function DeliverableItem({ id, link, name, thumbnail, isDeliverablesExpired }: DeliverableItemProps) {
+  link = isDeliverablesExpired ? '#' : link;
+
+  return (
+    <div key={id} className="w-full flex flex-col items-center">
+      <div className="w-full h-10 object-cover overflow-hidden rounded-md">
+        <img src={thumbnail} alt="" className='' />
+      </div>
+
+      <a href={link} className="mt-1 text-[10px] text-duber-navyBlue">{name}</a>
+    </div>
+  )
+}
+
+function DeliverablesView({ pilotData, deliverablesList, isDeliverablesExpired, setShowSubscriptionView }: {
+  pilotData: PilotDataType,
+  deliverablesList: DeliverableType[] | [] | undefined,
+  isDeliverablesExpired: boolean,
+  setShowSubscriptionView: Dispatch<SetStateAction<boolean>>
+}) {
   const [isIssuesShowing, setIsIssuesShowing] = useState<boolean>(false);
 
   return (
     <div className="w-full h-full flex flex-col gap-y-3 bg-gray-200 p-2.5">
-      <div className="flex items-center justify-between">
-        <h2 className='text-duber-navyBlue font-semibold text-lg'>Deliverables</h2>
-
-        <Button variant={'pink'} className='rounded-lg'>
-          <div className="flex items-center w-full gap-x-2">
-            <FolderDown className='w-5 h-5 text-white' strokeWidth={2} />
-            <p className='text-sm font-semibold text-white'>Download All</p>
-          </div>
-        </Button>
-      </div>
-
-      {/* Deliverable List */}
-      <div className={`flex-1 bg-gray-400 w-full grid grid-cols-3 gap-2 ${isIssuesShowing ? "max-h-[10rem]" : "max-h-[16rem]"} overflow-y-scroll`}>
-        {new Array(50).fill(undefined).map((_, index) =>
-          <div key={index} className="w-full h-10 bg-white rounded-lg">
-            deliverable Item
+      <div className='relative w-full h-full flex flex-col gap-y-3'>
+        {isDeliverablesExpired && (
+          <div className="absolute top-0 left-0 w-full h-full bg-[#ffffffab] flex items-center justify-center">
+            <Button variant={'skyBlue'} onClick={() => setShowSubscriptionView(true)}>
+              Recover Deliverables For £95
+            </Button>
           </div>
         )}
+
+        <div className="flex items-center justify-between">
+          <h2 className='text-duber-navyBlue font-semibold text-lg'>Deliverables</h2>
+
+          <Button variant={'pink'} className='rounded-lg' disabled={isDeliverablesExpired}>
+            <div className="flex items-center w-full gap-x-2">
+              <FolderDown className='w-5 h-5 text-white' strokeWidth={2} />
+              <p className='text-sm font-semibold text-white'>Download All</p>
+            </div>
+          </Button>
+        </div>
+
+        {/* Deliverable List */}
+        <div className={`flex-1 w-full grid grid-cols-3 gap-2 ${isIssuesShowing ? "max-h-[10rem]" : "max-h-[16rem]"} overflow-y-scroll`}>
+          {deliverablesList && deliverablesList.map((item) =>
+            <DeliverableItem
+              key={item.id} id={item.id} link={item.link} name={item.name} thumbnail={item.thumbnail}
+              isDeliverablesExpired={isDeliverablesExpired}
+            />
+          )}
+        </div>
       </div>
 
       {/* Rate Pilot */}
@@ -227,6 +281,7 @@ function PilotRatingCard({ pilotData, setIsIssuesShowing }: {
     } else {
       setShowIssuePanel(false);
       setIsIssuesShowing(false);
+      setRatingStatus(null)
 
       pilotRate === 2 ? setRatingStatus('Poor') :
         pilotRate === 3 ? setRatingStatus('Okay') :
@@ -316,6 +371,14 @@ function PilotRatingCard({ pilotData, setIsIssuesShowing }: {
           </div>}
         </div>
       </div>
+    </div>
+  )
+}
+
+function SubscriptionPanel({ className, children }: { className?: string, children?: React.ReactNode }) {
+  return (
+    <div className={`w-full h-full ${className}`}>
+      {children}
     </div>
   )
 }

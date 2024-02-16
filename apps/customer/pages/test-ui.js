@@ -10,6 +10,14 @@ import {
 const TestUI = () => {
   const [showCancelBookingPanel, setShowCancelBookingPanel] = useState(false);
   const [isBookingCancelled, setIsBookingCancelled] = useState(false);
+  const [showSubscriptionView, setShowSubscriptionView] = useState(false);
+
+  const deliverablesList = new Array(30).fill().map((_, index) => ({
+    id: index + 1,
+    name: "DJI_12322432.img",
+    thumbnail: "assets/deliver_thumbnail_test.jpg",
+    link: "#",
+  }));
 
   return (
     <div className="w-full h-screen flex items-center justify-center">
@@ -25,6 +33,8 @@ const TestUI = () => {
           isBookingCancelled={isBookingCancelled}
           isPilotAssigned={false}
           isSubscriptionEnabled={false}
+          showSubscriptionView={showSubscriptionView}
+          setShowSubscriptionView={setShowSubscriptionView}
         />
 
         <div className="flex flex-1 gap-x-2.5 min-w-full">
@@ -59,6 +69,23 @@ const TestUI = () => {
               },
             }}
             deliverablesView={true}
+            deliverablesList={deliverablesList}
+            isDeliverablesExpired={true}
+            showSubscriptionView={showSubscriptionView}
+            setShowSubscriptionView={setShowSubscriptionView}
+            SubscriptionComponent={
+              <div className="bg-white w-full rounded-lg h-full p-2">
+                <div className="w-full flex items-end justify-end mb-2">
+                  <p
+                    className="text-xs text-duber-skyBlue cursor-pointer hover:underline"
+                    onClick={() => setShowSubscriptionView(false)}
+                  >
+                    Close
+                  </p>
+                </div>
+                Subscription Card View
+              </div>
+            }
           />
         </div>
       </TrackingPageLayout>

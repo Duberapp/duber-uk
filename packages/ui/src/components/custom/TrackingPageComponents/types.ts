@@ -13,8 +13,8 @@ export type PilotDataType = {
   insuranceProof?: string
 }
 
-type DeliverableType = {
-  id: number,
+export type DeliverableType = {
+  id?: number,
   name: string,
   thumbnail: string,
   link: string,
@@ -28,6 +28,7 @@ export interface BookingControlPanelDataTypes {
   cancellationReason?: string,
   pilotData?: PilotDataType,
   isDeliverablesUploaded?: boolean,
+  isDeliverablesExpired?: boolean,
   deliverablesList?: DeliverableType[] | [],
   handleDownloadDeliverables?: () => void,
   handleRatePilot?: () => void,

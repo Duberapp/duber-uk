@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import Button from '../DuberButton'
 
 type SubscriptionBarProps = {
@@ -9,9 +9,20 @@ type SubscriptionBarProps = {
   handleBookingCancel: () => void,
   isPilotAssigned: boolean,
   handleSubscribe?: () => void,
+  showSubscriptionView?: boolean
+  setShowSubscriptionView?: Dispatch<SetStateAction<boolean>>
 }
 
-export default function SubscriptionInfoBar({ className, isPilotAssigned, expireCountDown, handleBookingCancel, isBookingCancelled, isSubscriptionEnabled }: SubscriptionBarProps) {
+export default function SubscriptionInfoBar({
+  className,
+  isPilotAssigned,
+  expireCountDown,
+  handleBookingCancel,
+  isBookingCancelled,
+  isSubscriptionEnabled,
+  setShowSubscriptionView,
+  showSubscriptionView
+}: SubscriptionBarProps) {
   return (
     <div className={`${className} flex items-center gap-x-2.5 h-16`}>
       {/* Expiring Alert */}
@@ -41,7 +52,11 @@ export default function SubscriptionInfoBar({ className, isPilotAssigned, expire
             </div>
 
             <div className="h-full  py-2">
-              <Button variant={'skyBlue'} className='text-xs h-full'>Premium £10/month</Button>
+              <Button
+                variant={'skyBlue'}
+                className='text-xs h-full'
+                onClick={() => setShowSubscriptionView && setShowSubscriptionView(true)}
+              >Premium £10/month</Button>
             </div>
           </div>
           :
