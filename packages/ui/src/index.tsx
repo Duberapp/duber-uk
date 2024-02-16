@@ -34,4 +34,4 @@ export { default as TrackingPageLayout } from './components/custom/TrackingPageC
 export { default as TrackingBar } from './components/custom/TrackingPageComponents/TrackingBar'
 export { default as SubscriptionInfoBar } from './components/custom/TrackingPageComponents/SubscriptionInfoBar'
 export { default as BookingDetails } from './components/custom/TrackingPageComponents/BookingDetails'
-export { default as MapContainer } from './components/custom/TrackingPageComponents/MapContainer'
+export { default as BookingControlPanel } from './components/custom/TrackingPageComponents/BookingControlPanel'

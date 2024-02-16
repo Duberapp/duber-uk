@@ -3,7 +3,7 @@ import TrackingPageLayout from './TrackingPageLayout'
 import TrackingBar, { type TrackingStatus } from './TrackingBar'
 import SubscriptionInfoBar from './SubscriptionInfoBar'
 import BookingDetails, { type OrderData } from './BookingDetails'
-import MapContainer from './MapContainer'
+import BookingControlPanel from './BookingControlPanel'
 
 type ShowcaseComponentProps = {
   trackingStatus: TrackingStatus,
@@ -40,7 +40,9 @@ function TrackingPageShowcaseComponent({
           orderData={orderData}
         />
 
-        <MapContainer className="flex-1 bg-gray-100" />
+        <BookingControlPanel
+          className={`flex-1 bg-gray-100`}
+        />
       </div>
     </TrackingPageLayout>
   )

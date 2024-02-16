@@ -29,6 +29,7 @@ const buttonVariants = cva(
           "bg-duber-teal-light text-duber-teal shadow",
 
         pink: "bg-duber-pink text-white shadow hover:bg-duber-pink-dark",
+        "pink-outline": "border-2 border-duber-pink text-duber-pink shadow",
 
         // Defaults by Shadcn UI
         primary:

@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   TrackingBar,
   SubscriptionInfoBar,
   TrackingPageLayout,
   BookingDetails,
-  MapContainer,
+  BookingControlPanel,
 } from "ui";
 
 const TestUI = () => {
+  const [showCancelBookingPanel, setShowCancelBookingPanel] = useState(false);
+  const [isBookingCancelled, setIsBookingCancelled] = useState(false);
+
   return (
     <div className="w-full h-screen flex items-center justify-center">
       <TrackingPageLayout>
@@ -16,8 +19,10 @@ const TestUI = () => {
         <SubscriptionInfoBar
           className="min-w-full"
           expireCountDown={12}
-          handleBookingCancel={() => {}}
-          isBookingCancelled={true}
+          handleBookingCancel={() =>
+            setShowCancelBookingPanel(!showCancelBookingPanel)
+          }
+          isBookingCancelled={isBookingCancelled}
           isPilotAssigned={false}
           isSubscriptionEnabled={false}
         />
@@ -37,7 +42,24 @@ const TestUI = () => {
             }}
           />
 
-          <MapContainer className="flex-1 bg-gray-100" />
+          <BookingControlPanel
+            className="flex-1 bg-gray-100"
+            MapComponent={<div className="w-full h-full bg-blue-300">Map</div>}
+            showCancelBookingPanel={showCancelBookingPanel}
+            setShowCancelBookingPanel={setShowCancelBookingPanel}
+            isPilotAssigned={true}
+            pilotData={{
+              contactNumber: "+94705848028",
+              name: "Jaime Harris",
+              pilotExpertise: "Building / Roof Inspection, Marketing",
+              droneEquipments: ["DJI Phantom 4 Pro", "DJI Mavic"],
+              CAA_Info: {
+                flyer_id: "SGG-4GSFG4-FS",
+                operator_id: "SGG-4GSFG4-FS",
+              },
+            }}
+            deliverablesView={true}
+          />
         </div>
       </TrackingPageLayout>
     </div>
