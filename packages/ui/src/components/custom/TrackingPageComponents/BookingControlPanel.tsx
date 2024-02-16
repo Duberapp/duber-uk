@@ -196,7 +196,7 @@ function DeliverablesView({ pilotData }: { pilotData: PilotDataType }) {
       {/* Deliverable List */}
       <div className={`flex-1 bg-gray-400 w-full grid grid-cols-3 gap-2 ${isIssuesShowing ? "max-h-[10rem]" : "max-h-[16rem]"} overflow-y-scroll`}>
         {new Array(50).fill(undefined).map((_, index) =>
-          <div className="w-full h-10 bg-white rounded-lg">
+          <div key={index} className="w-full h-10 bg-white rounded-lg">
             deliverable Item
           </div>
         )}
