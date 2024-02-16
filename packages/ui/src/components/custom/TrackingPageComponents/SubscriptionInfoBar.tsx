@@ -21,7 +21,6 @@ export default function SubscriptionInfoBar({
   isBookingCancelled,
   isSubscriptionEnabled,
   setShowSubscriptionView,
-  showSubscriptionView
 }: SubscriptionBarProps) {
   return (
     <div className={`${className} flex items-center gap-x-2.5 h-16`}>
