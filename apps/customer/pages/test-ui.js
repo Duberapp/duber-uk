@@ -57,7 +57,7 @@ const TestUI = () => {
             MapComponent={<div className="w-full h-full bg-blue-300">Map</div>}
             showCancelBookingPanel={showCancelBookingPanel}
             setShowCancelBookingPanel={setShowCancelBookingPanel}
-            isPilotAssigned={true}
+            isPilotAssigned={false}
             pilotData={{
               contactNumber: "+94705848028",
               name: "Jaime Harris",
@@ -68,9 +68,9 @@ const TestUI = () => {
                 operator_id: "SGG-4GSFG4-FS",
               },
             }}
-            deliverablesView={true}
+            deliverablesView={false}
             deliverablesList={deliverablesList}
-            isDeliverablesExpired={true}
+            isDeliverablesExpired={false}
             showSubscriptionView={showSubscriptionView}
             setShowSubscriptionView={setShowSubscriptionView}
             SubscriptionComponent={

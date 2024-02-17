@@ -5,7 +5,7 @@ type SubscriptionBarProps = {
   className: string,
   isSubscriptionEnabled: boolean,
   isBookingCancelled: boolean,
-  expireCountDown: number,
+  expireCountDown: number | string,
   handleBookingCancel: () => void,
   isPilotAssigned: boolean,
   handleSubscribe?: () => void,
@@ -28,7 +28,7 @@ export default function SubscriptionInfoBar({
       {(!isSubscriptionEnabled) && (
         <div className={`h-full rounded-lg px-3 flex-1 bg-red-200 flex items-center justify-around`}>
           {!isBookingCancelled ? <>
-            <p className={`text-red-600 flex-1 text-sm ${isPilotAssigned && 'text-center'}`}>Download Link Expering in : <span className='font-semibold'>{expireCountDown} Days</span></p>
+            <p className={`text-red-600 flex-1 text-sm ${isPilotAssigned && 'text-center'}`}>Download Link Expering in : <span className='font-semibold'>{expireCountDown}</span></p>
 
             {!isPilotAssigned &&
               <p className="text-red-600 underline cursor-pointer text-xs" onClick={handleBookingCancel}>

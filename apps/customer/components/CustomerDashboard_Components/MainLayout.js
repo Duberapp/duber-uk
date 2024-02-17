@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { useSelector } from "react-redux";
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({ children, TrackingPage }) => {
   const orderState = useSelector((state) => state.createOrder);
 
   return (
@@ -27,11 +27,17 @@ const MainLayout = ({ children }) => {
           </Link>
         </div>
       </div>
-      <div
-        className={`${orderState.active_step === 5 ? "mt-4" : "sm:mt-16 mt-7"}`}
-      >
-        {children}
-      </div>
+      {!TrackingPage ? (
+        <div
+          className={`${
+            orderState.active_step === 5 ? "mt-4" : "sm:mt-16 mt-7"
+          }`}
+        >
+          {children}
+        </div>
+      ) : (
+        <div className={`mt-1`}>{children}</div>
+      )}
     </div>
   );
 };

@@ -51,6 +51,10 @@ const Validating = () => {
 
     const customerID = await storeCustomer();
 
+    const includedDuration =
+      orderState.totalDuration - orderState.extendedDurationHours;
+    const extendDuration = orderState.extendedDurationHours;
+
     const __createOrder = async () => {
       const { data, error } = await createOrder({
         id: Math.floor(Math.random() * 10000000),
@@ -63,7 +67,7 @@ const Validating = () => {
         mapData: {
           center: mapState.center,
           zoom: mapState.zoom,
-          polygon: mapState.polygon,
+          polygon: mapState.polygons[0],
         },
         amount: mapState.price,
         customerID: customerID,
@@ -71,6 +75,8 @@ const Validating = () => {
         environment: process.env.NEXT_PUBLIC_ENVIRONMENT,
         storagePlan: orderState.storagePlan,
         app_version: "v2",
+        includedDuration,
+        extendDuration,
       });
 
       if (error) throw new Error("Create order failed");

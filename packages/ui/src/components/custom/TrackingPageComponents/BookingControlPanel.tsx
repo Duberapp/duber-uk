@@ -36,7 +36,7 @@ export default function BookingControlPanel({
 }: BookingControlPanelProps) {
 
   return (
-    <div className={`relative w-full h-full overflow-hidden flex flex-col rounded-lg ${className}`}>
+    <div className={`relative w-full h-full  overflow-hidden flex flex-col rounded-lg ${className}`}>
       <div className={`w-full flex-1 z-20 flex flex-col items-center justify-end ${deliverablesView ? "p-0" : 'p-2 h-full'}`}>
         {
           !showCancelBookingPanel &&
@@ -141,7 +141,7 @@ function PilotDetaisPanel({ isPilotAssigned, pilotData }: { isPilotAssigned: boo
   }
 
   return (
-    <div className="w-full bg-white rounded-lg flex flex-col p-3">
+    <div className="w-full bg-white rounded-lg shadow-lg flex flex-col p-3">
       {isPilotAssigned && <p
         className="text-right text-xs text-duber-skyBlue mb-2 cursor-pointer hover:underline"
         onClick={() => setShowMore(!showMore)}
@@ -149,7 +149,7 @@ function PilotDetaisPanel({ isPilotAssigned, pilotData }: { isPilotAssigned: boo
 
       <div className={`w-full flex justify-between items-center`}>
         <div className={`flex flex-1 gap-x-3 ${showMore ? "flex-row-reverse items-start justify-between" : "items-center"}`}>
-          <img src="assets/avatar.jpg" alt="" className='h-16 rounded-lg' />
+          <img src="/assets/avatar.jpg" alt="" className='h-16 rounded-lg' />
 
           <div className="">
             <h2 className='font-semibold text-base text-duber-navyBlue'>Pilot {showMore ? "Name" : "Assigned"}</h2>

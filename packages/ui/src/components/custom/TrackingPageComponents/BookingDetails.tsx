@@ -23,10 +23,11 @@ export interface OrderData {
 type Props = {
   className: string,
   AddToCalender?: React.ReactNode,
-  orderData?: OrderData
+  orderData?: OrderData,
+  handleDownloadReceipt?: () => void,
 }
 
-export default function BookingDetails({ className, AddToCalender, orderData }: Props) {
+export default function BookingDetails({ className, AddToCalender, orderData, handleDownloadReceipt }: Props) {
   const { address, arrivalTime, date, delivery_method, duration, expertise, bookingDescription } = orderData!;
 
   return (
@@ -38,7 +39,7 @@ export default function BookingDetails({ className, AddToCalender, orderData }: 
         </div>
       </div>
 
-      <div className=" flex flex-col gap-y-3">
+      <div className=" flex flex-1 flex-col gap-y-3">
         <BookDetailTab
           id="Address"
           text={address}
@@ -76,15 +77,22 @@ export default function BookingDetails({ className, AddToCalender, orderData }: 
         </div>
 
 
-        <BookDetailTab
-          icon={<InformationCircleIcon className='w-6 h-6 text-duber-skyBlue' strokeWidth={2} />}
-          id="Booking_Description"
-          text={bookingDescription}
-        />
+        <div className="flex-1">
+          <BookDetailTab
+            icon={<InformationCircleIcon className='w-6 h-6 text-duber-skyBlue' strokeWidth={2} />}
+            id="Booking_Description"
+            text={bookingDescription}
+          />
+        </div>
       </div>
 
       <div className="w-full">
-        <Button size={"lg"} variant={'teal'} className='w-full h-12 text-base font-semibold'>Download Receipt</Button>
+        <Button
+          size={"lg"}
+          variant={'teal'}
+          className='w-full h-12 text-base font-semibold'
+          onClick={handleDownloadReceipt}
+        >Download Receipt</Button>
       </div>
     </div>
   )
@@ -101,7 +109,7 @@ function BookDetailTab({ text, icon, variant, id }: BookDetailTabProps) {
   variant = variant ? variant : 'primary';
 
   return (
-    <Card className={`${variant === 'primary' ? 'bg-duber-skyBlue-light' : variant === 'danger' ? "bg-red-200" : ""} rounded-md w-full p-2.5 flex ${id === 'Booking_Description' ? "items-start" : "items-center"} gap-x-3`}>
+    <Card className={`${id === 'Booking_Description' && 'h-32 min-h-full'} ${variant === 'primary' ? 'bg-duber-skyBlue-light' : variant === 'danger' ? "bg-red-200" : ""} rounded-md w-full p-2.5 flex ${id === 'Booking_Description' ? "items-start" : "items-center"} gap-x-3`}>
       {icon && <div className={`${variant === 'danger' ? "text-destructive" : "text-duber-skyBlue"}`}>{icon}</div>}
 
       <p className={`${variant === 'danger' ? "text-destructive" : "text-duber-skyBlue"} text-sm flex-1 ${id === 'PilotExpertise' && 'whitespace-nowrap'}`}>{text}</p>
