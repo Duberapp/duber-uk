@@ -44,7 +44,6 @@ export default function PilotExpertiseCard(
     timeSlot,
     onChangeDuration,
     extendedDurationHours,
-    isMobile
   }: ExpertiseCardProps
 ) {
   const [isSelected, setIsSelected] = useState<boolean>(false);
