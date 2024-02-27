@@ -106,9 +106,9 @@ const TrackOrder = ({ data, pilot, error }) => {
             setShowSubscriptionView={setShowSubscriptionView}
           />
 
-          <div className="flex  gap-x-2.5 min-w-full">
+          <div className="flex sm:flex-row flex-col gap-x-2.5 min-w-full sm:mt-0 mt-12">
             <BookingDetails
-              className="flex-1"
+              className="sm:flex hidden flex-1"
               orderData={{
                 address: data.address,
                 arrivalTime: data.arrivalTime,
@@ -137,7 +137,7 @@ const TrackOrder = ({ data, pilot, error }) => {
             />
 
             <BookingControlPanel
-              className="flex-1 bg-gray-100"
+              className="flex-1 h-full bg-gray-100"
               MapComponent={
                 <>
                   {data.mapData?.polygon ? (

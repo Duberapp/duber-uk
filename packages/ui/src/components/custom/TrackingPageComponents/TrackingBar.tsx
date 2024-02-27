@@ -65,9 +65,11 @@ export default function TrackingBar({ className, deliverables, status }: Trackin
   }, []);
 
   return (
-    <div className={`${className} p-2.5 pb-8 w-full bg-duber-navyBlue rounded-xl shadow-md`}>
+    <div className={`${className} p-2.5 sm:pb-8 pb-4 w-full bg-duber-navyBlue rounded-xl shadow-md`}>
       <h2 className='text-white font-semibold text-xl'>Track Booking</h2>
-      <div className="w-full mt-2">
+
+      {/* Desktop Tracking Progress Bar */}
+      <div className="sm:flex hidden w-full mt-2">
         <div
           className={`h-10 sm:px-12 px-2 w-full flex items-center justify-around gap-x-1`}
         >
@@ -86,6 +88,65 @@ export default function TrackingBar({ className, deliverables, status }: Trackin
           <Dot text={"Uploading Files"} state={dot4State} />
         </div>
       </div>
+
+      {/* Mobile Tracking Progress Bar */}
+      <div className="sm:hidden flex mt-4 items-center justify-between px-1">
+        {status === 'Available' && (
+          <>
+            <p className="text-xs text-gray-100 font-light">Booked</p>
+            <p className="text-xs text-gray-100 font-light">Assign Pilot & Arrival Time</p>
+          </>
+        )}
+        {status === 'Live' && (
+          <>
+            <p className="text-xs text-gray-100 font-light">Assign Pilot & Arrival Time</p>
+            <p className="text-xs text-gray-100 font-light">Carring Out Flight</p>
+          </>
+        )}
+        {(status === 'Completed' || status === 'Uploaded') && (
+          <>
+            <p className="text-xs text-gray-100 font-light">Carring Out Flight</p>
+            <p className="text-xs text-gray-100 font-light">Uploading Files</p>
+          </>
+        )}
+      </div>
+
+      <div className="sm:hidden flex w-full">
+        <div
+          className={`h-10 sm:px-12 px-1 w-full flex items-center justify-around gap-x-1`}
+        >
+
+          {status === 'Available' && (
+            <>
+              <Dot text={"Booked"} state={dot1State} />
+
+              <Bar state={bar1State} />
+
+              <Dot text={"Assign Pilot & Arrival Time"} state={dot2State} />
+            </>
+          )}
+
+          {status === 'Live' && (
+            <>
+              <Dot text={"Assign Pilot & Arrival Time"} state={dot2State} />
+
+              <Bar state={bar2State} />
+
+              <Dot text={"Carring Out Flight"} state={dot3State} />
+            </>
+          )}
+
+          {(status === 'Completed' || status === 'Uploaded') && (
+            <>
+              <Dot text={"Carring Out Flight"} state={dot3State} />
+
+              <Bar state={bar3State} />
+
+              <Dot text={"Uploading Files"} state={dot4State} />
+            </>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
@@ -93,7 +154,7 @@ export default function TrackingBar({ className, deliverables, status }: Trackin
 const Dot = ({ text, state }: { text: string, state: ElementState }) => {
   return (
     <div className={`tracking-dot ${state === "completed" && "completed"}`}>
-      <p className="flex-1 absolute text-[10px] sm:whitespace-nowrap whitespace-normal text-center text-white sm:top-8 top-4">
+      <p className="sm:flex hidden flex-1 absolute text-[10px] whitespace-nowrap text-center text-white sm:top-8 -top-5">
         {text}
       </p>
     </div>

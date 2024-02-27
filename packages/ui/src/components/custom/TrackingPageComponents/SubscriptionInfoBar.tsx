@@ -23,16 +23,16 @@ export default function SubscriptionInfoBar({
   setShowSubscriptionView,
 }: SubscriptionBarProps) {
   return (
-    <div className={`${className} flex items-center gap-x-2.5 h-16`}>
+    <div className={`${className} flex sm:flex-row flex-col w-full items-center gap-x-2.5 gap-y-2.5 h-16`}>
       {/* Expiring Alert */}
       {(!isSubscriptionEnabled) && (
-        <div className={`h-full rounded-lg px-3 flex-1 bg-red-200 flex items-center justify-around`}>
+        <div className={`w-full rounded-lg px-3 h-full sm:py-0 py-4 flex-1 bg-red-200 flex items-center justify-around`}>
           {!isBookingCancelled ? <>
             <p className={`text-red-600 flex-1 text-sm ${isPilotAssigned && 'text-center'}`}>Download Link Expering in : <span className='font-semibold'>{expireCountDown}</span></p>
 
             {!isPilotAssigned &&
               <p className="text-red-600 underline cursor-pointer text-xs" onClick={handleBookingCancel}>
-                Cancel<br />Booking
+                Cancel<br className='sm:flex hidden' /> Booking
               </p>
             }
           </> : (
@@ -44,7 +44,7 @@ export default function SubscriptionInfoBar({
       {/* Premium Alert and Bar */}
       {!isBookingCancelled && <>
         {(!isSubscriptionEnabled) ?
-          <div className={`flex-1 pl-3 pr-2 bg-duber-navyBlue h-full rounded-lg flex items-center justify-between`}>
+          <div className={`w-full flex-1 pl-3 pr-2 bg-duber-navyBlue h-full rounded-lg flex items-center justify-between`}>
             <div className="">
               <h1 className='text-teal-400 font-semibold text-lg'>Don't Stress !</h1>
               <p className='text-teal-400 text-sm'>Get Lifetime Access Now</p>
