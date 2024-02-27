@@ -101,7 +101,7 @@ const Checkout = ({ clientSecret, checkoutData }) => {
 
       <div className="lg:w-[50vw] md:w-[70vw] w-full">
         {/* ====================================== NEW DESIGN ===================================  */}
-        <div className="w-full flex flex-col p-3 gap-y-3">
+        <div className="w-full flex flex-col sm:p-3 p-2 gap-y-3 sm:mb-0 mb-4">
           <h2 className="text-2xl font-semibold text-duber-navyBlue">
             Payment Summary
           </h2>
@@ -109,19 +109,19 @@ const Checkout = ({ clientSecret, checkoutData }) => {
           <div className="w-full flex gap-3">
             {/* COL 1 */}
             <div className="flex-1">
-              <h2 className="text-base font-semibold text-duber-navyBlue">
+              <h2 className="sm:text-base text-sm font-semibold text-duber-navyBlue sm:whitespace-normal whitespace-nowrap">
                 Deposit{" "}
                 {orderState.storagePlan.slug === "premium" && (
-                  <span className="text-[10px] text-duber-navyBlue">{`(includes subscription)`}</span>
+                  <span className="sm:text-[10px] text-[9px] text-duber-navyBlue">{`(includes subscription)`}</span>
                 )}
               </h2>
 
               <div className="mt-2 w-full h-10 bg-duber-skyBlue-light rounded-md flex items-center justify-center gap-x-2">
-                <h2 className="font-semibold text-duber-skyBlue">
+                <h2 className="font-semibold text-duber-skyBlue sm:text-base text-sm">
                   {`£${basePrice}`}{" "}
-                  <span className="text-[10px] font-medium">{`(Ex VAT)`}</span>
+                  <span className="sm:text-[10px] text-[9px] font-medium">{`(Ex VAT)`}</span>
                 </h2>
-                <h2 className="font-semibold text-duber-skyBlue">
+                <h2 className="font-semibold text-duber-skyBlue sm:text-base text-sm">
                   DUE: <span className="font-normal">Now</span>
                 </h2>
               </div>
@@ -129,23 +129,44 @@ const Checkout = ({ clientSecret, checkoutData }) => {
 
             {/* COL 2 */}
             <div className="flex-1">
-              <h2 className="text-base font-semibold text-duber-navyBlue">
+              <h2 className="sm:text-base text-sm font-semibold text-duber-navyBlue">
                 Scheduled Payment*
               </h2>
 
               <div className="mt-2 w-full h-10 bg-duber-skyBlue-light rounded-md flex items-center justify-center gap-x-2">
-                <h2 className="font-semibold text-duber-skyBlue">
+                <h2 className="font-semibold text-duber-skyBlue sm:text-base text-sm">
                   {`£${scheduledPaymentData.exVat}`}{" "}
-                  <span className="text-[10px] font-medium">{`(Ex VAT)`}</span>
+                  <span className="sm:text-[10px] text-[8px] font-medium">{`(Ex VAT)`}</span>
                 </h2>
-                <h2 className="font-semibold text-duber-skyBlue">
+                <h2 className="font-semibold text-duber-skyBlue sm:text-base text-xs flex items-center gap-x-1">
                   DUE:{" "}
-                  <span className="font-normal">
+                  <span className="sm:flex hidden font-normal">
                     {
                       new Date(orderState.startDate)
                         .toLocaleString()
                         .split(", ")[0]
                     }
+                  </span>
+                  <span className="sm:hidden flex font-normal text-[9px]">
+                    {
+                      new Date(orderState.startDate)
+                        .toLocaleString()
+                        .split(", ")[0]
+                        .split("/")[0]
+                    }
+                    {`/`}
+                    {
+                      new Date(orderState.startDate)
+                        .toLocaleString()
+                        .split(", ")[0]
+                        .split("/")[1]
+                    }
+                    {`/`}
+                    {new Date(orderState.startDate)
+                      .toLocaleString()
+                      .split(", ")[0]
+                      .split("/")[2]
+                      .slice(2)}
                   </span>
                 </h2>
               </div>

@@ -11,6 +11,7 @@ export { default as DatePicker } from "./components/custom/DatePicker";
 export { default as PilotSkillCard } from "./components/custom/PilotExpertiseCard/SkillCard";
 export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group"
 export * from "./components/ui/tooltip"
+export * from "./components/ui/carousel"
 
 // Customer -> Component Exports
 export { default as ExpertiseCard } from './components/custom/PilotExpertiseCard/ExpertiseCard'

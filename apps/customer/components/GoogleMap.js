@@ -24,7 +24,11 @@ import {
 } from "duber-maps";
 import OutsideClickHandler from "react-outside-click-handler";
 import Image from "next/image";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import {
+  XMarkIcon,
+  MapIcon,
+  GlobeEuropeAfricaIcon,
+} from "@heroicons/react/24/outline";
 
 const libraries = ["places", "drawing"];
 const mapTypes = ["roadmap", "satellite"];
@@ -322,7 +326,7 @@ const MapComponent = ({
 
         {/* Save Area Button */}
         {mapState !== "static" && (
-          <div className="absolute bottom-5 w-full flex items-center justify-center">
+          <div className="absolute sm:bottom-5 bottom-20 w-full flex items-center justify-center">
             <Button
               variant={"teal"}
               size={"xxl"}
@@ -422,24 +426,64 @@ const MapComponent = ({
                   <p>Delete Polygons</p>
                 </TooltipContent>
               </Tooltip>
+
+              <div className="mt-5 sm:hidden flex flex-col gap-y-1">
+                <Button
+                  onClick={() => onMapTypeChange(mapTypes[0])}
+                  variant={mapType === mapTypes[0] ? "teal" : "white"}
+                  isIcon={true}
+                  icon={
+                    <MapIcon
+                      className={`w-5 h-5 ${
+                        mapType === mapTypes[0] ? "text-white" : "text-gray-800"
+                      }`}
+                    />
+                  }
+                  className={`shadow-xl border border-gray-300
+                      ${
+                        mapType === mapTypes[0]
+                          ? "border-2 border-teal-600"
+                          : ""
+                      }
+                    `}
+                />
+
+                <Button
+                  onClick={() => onMapTypeChange(mapTypes[1])}
+                  variant={mapType === mapTypes[1] ? "teal" : "white"}
+                  isIcon={true}
+                  icon={
+                    <GlobeEuropeAfricaIcon
+                      className={`w-5 h-5 ${
+                        mapType === mapTypes[1] ? "text-white" : "text-gray-800"
+                      }`}
+                    />
+                  }
+                  className={`shadow-xl border border-gray-300
+                  ${mapType === mapTypes[1] ? "border-2 border-teal-600" : ""}
+                    `}
+                />
+              </div>
             </TooltipProvider>
           </div>
         )}
 
         {/* Map type controllers */}
         {!staticMapType && mapRef.current && (
-          <div className="absolute bottom-5 right-5 shadow-lg">
-            <ToggleGroup
-              type="single"
-              variant={"mapType"}
-              defaultValue={mapTypes[0]}
-              value={mapType}
-              onValueChange={onMapTypeChange}
-            >
-              <ToggleGroupItem value={mapTypes[0]}>Roadmap</ToggleGroupItem>
-              <ToggleGroupItem value={mapTypes[1]}>Satellite</ToggleGroupItem>
-            </ToggleGroup>
-          </div>
+          <>
+            <div className="absolute sm:flex hidden bottom-5 right-5 shadow-lg">
+              <ToggleGroup
+                type="single"
+                variant={"mapType"}
+                defaultValue={mapTypes[0]}
+                value={mapType}
+                onValueChange={onMapTypeChange}
+              >
+                <ToggleGroupItem value={mapTypes[0]}>Roadmap</ToggleGroupItem>
+                <ToggleGroupItem value={mapTypes[1]}>Satellite</ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          </>
         )}
       </GoogleMap>
     </div>

@@ -29,6 +29,7 @@ interface ExpertiseCardProps {
   timeOption?: TimeOptionSlug,
   onChangeDuration: (duration: DurationOption) => void;
   extendedDurationHours: number;
+  isMobile?: boolean
 }
 
 type SelectionPanel = 'sub-expertises' | 'duration';
@@ -42,7 +43,8 @@ export default function PilotExpertiseCard(
     timeOption,
     timeSlot,
     onChangeDuration,
-    extendedDurationHours
+    extendedDurationHours,
+    isMobile
   }: ExpertiseCardProps
 ) {
   const [isSelected, setIsSelected] = useState<boolean>(false);
@@ -100,6 +102,7 @@ export default function PilotExpertiseCard(
       `}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onLoad={() => console.log("Loaded")}
       onClick={handleClick}
     >
       <video className='w-full min-h-32 rounded-xl' ref={videoRef} autoPlay={isHovered} loop muted >

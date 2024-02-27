@@ -3,6 +3,7 @@ import { type TimeOptionSlug, TimeOptions, type TimeOptionType, type TimeSlot } 
 import Button from "../../custom/DuberButton";
 
 type ArrivalTimeCardProps = {
+  className?: string,
   slug: TimeOptionSlug,
   activeOption: TimeOptionSlug | null,
   setActiveOption: (time_option: TimeOptionType) => void,
@@ -11,7 +12,7 @@ type ArrivalTimeCardProps = {
   handleSetPrice: (price: number) => void;
 }
 
-export default function ArrivalTimeCard({ slug, activeOption, setActiveOption, setTimeSlot, timeSlot, handleSetPrice }: ArrivalTimeCardProps) {
+export default function ArrivalTimeCard({ className, slug, activeOption, setActiveOption, setTimeSlot, timeSlot, handleSetPrice }: ArrivalTimeCardProps) {
   const timeOption = TimeOptions.filter(obj => obj.slug === slug)[0]
   const isActive = activeOption === timeOption.slug
 
@@ -35,11 +36,12 @@ export default function ArrivalTimeCard({ slug, activeOption, setActiveOption, s
   return (
     <div
       onClick={() => timeOption.slug !== 'choose' && handleChooseOption(timeOption)}
-      className={`h-full w-full rounded-lg ${isActive ? 'bg-duber-teal-light' : 'bg-duber-skyBlue-light'} p-2.5 flex items-center justify-between ${timeOption.slug !== 'choose' && 'cursor-pointer'}`}
+      className={`${className} h-full w-full rounded-lg ${isActive ? 'bg-duber-teal-light' : 'bg-duber-skyBlue-light'} p-2.5 flex items-center justify-between ${timeOption.slug !== 'choose' && 'cursor-pointer'}`}
     >
       {/* ================= COL 1 ================= */}
       <div className="">
-        <h1 className={`${textColor} font-normal text-[14px]`}>{timeOption.name}</h1>
+        <h1 className={`${textColor} sm:font-normal font-medium text-[14px]`}>{timeOption.name}</h1>
+        {timeOption.slug !== 'choose' && <p className={`sm:hidden flex ${textColor} text-[9px]`}>{timeOption.timeRange}</p>}
 
         {timeOption.slug === 'choose' && <p className={`${textColor} text-xs`}>{timeOption.timeRange}</p>}
 
@@ -48,7 +50,7 @@ export default function ArrivalTimeCard({ slug, activeOption, setActiveOption, s
 
       {/* ================= COL 2 ================= */}
       <div className={`flex flex-col h-full ${timeOption.slug !== 'choose' ? 'justify-between' : 'justify-center'}  items-end`}>
-        {timeOption.slug !== 'choose' && <p className={`${textColor} text-xs`}>{timeOption.timeRange}</p>}
+        {timeOption.slug !== 'choose' && <p className={`sm:flex hidden ${textColor} text-xs`}>{timeOption.timeRange}</p>}
 
         {timeOption.slug === 'any_time' && <img src='/assets/leaf.png' alt='leaf' />}
 

@@ -68,6 +68,7 @@ const LocationDate = ({ priceList, setPriceList }) => {
   const [globalSuggestionsStatus, setGlobalSuggestionsStatus] = useState(null);
   const [selectedGlobalSuggestion, setSelectedGlobalSuggestion] =
     useState(null);
+  const [showAutocompleteModal, setShowAutocompleteModal] = useState(false);
 
   // ================= Time Slot and Time Option Context =================
   useEffect(() => {
@@ -211,9 +212,9 @@ const LocationDate = ({ priceList, setPriceList }) => {
       {error && <ErrorMessage error={error} setError={setError} />}
       {/* ---------------------- */}
 
-      <div className="flex flex-1 h-full flex-col relative ">
+      <div className="flex flex-1 h-full flex-col relative">
         {/* Row 01 */}
-        <div className="flex items-center sm:h-12 h-32 gap-x-3">
+        <div className="flex items-center sm:flex-row flex-col sm:h-12 h-12 gap-x-3">
           <Input>
             <GoogleAutocomplete
               setLocationGeocode={(geocode) => dispatch(setCenter(geocode))}
@@ -221,10 +222,11 @@ const LocationDate = ({ priceList, setPriceList }) => {
               setIsSuggestionsLoading={setIsLoadingSuggestions}
               setGlobalSuggestionsStatus={setGlobalSuggestionsStatus}
               selectedGlobalSuggestion={selectedGlobalSuggestion}
+              setSelectedGlobalSuggestion={setSelectedGlobalSuggestion}
             />
           </Input>
 
-          <Input onClick={handleClickDatePicker}>
+          <Input className={"sm:flex hidden"} onClick={handleClickDatePicker}>
             <div className="w-full  flex items-center justify-between">
               {!isMobile ? (
                 <DatePicker_Desktop />
@@ -237,7 +239,7 @@ const LocationDate = ({ priceList, setPriceList }) => {
         </div>
 
         {/* Row 2 */}
-        <div className="mt-3 flex items-center gap-x-3 w-full h-full relative">
+        <div className="mt-3 flex sm:flex-row flex-col items-center gap-x-3 w-full sm:h-full h-[25rem]  relative">
           {/* ============================================================================ */}
           {/* MAP COMPONENT */}
           {/* ============================================================================ */}
@@ -245,13 +247,13 @@ const LocationDate = ({ priceList, setPriceList }) => {
             <div className="flex-1 w-full h-full relative flex items-center justify-center">
               {globalSuggestionsStatus === "OK" &&
               globalSuggestions.length !== 0 ? (
-                <>
+                <div className="flex flex-1 h-full w-full">
                   <GoogleAutocompleteModal
                     suggestions={globalSuggestions}
                     loadingSuggestions={isLoadingSuggestions}
                     setSelectedGlobalSuggestion={setSelectedGlobalSuggestion}
                   />
-                </>
+                </div>
               ) : (
                 <>
                   <div className="opacity-60 flex-1 h-full rounded-lg overflow-hidden">
@@ -285,7 +287,7 @@ const LocationDate = ({ priceList, setPriceList }) => {
           )}
 
           {showMap && (
-            <div className="fixed w-full h-screen overflow-y-hidden bg-black top-0 left-0">
+            <div className="fixed w-full h-screen overflow-y-hidden  top-0 left-0">
               <GoogleMap
                 polygons={polygons}
                 setPolygons={setPolygonsHandler}
@@ -319,21 +321,28 @@ const LocationDate = ({ priceList, setPriceList }) => {
           )}
 
           {isMobile && showOverlayMap && !showMap && (
-            <div className="relative">
-              <div
-                className=" w-full absolute sm:h-[45vh] h-[35vh] z-[1000] opacity-50 rounded-md bg-primaryBlueLight  flex items-center justify-center flex-col"
-                {...longPressEvent}
-              ></div>
-              <StaticMap
-                mapStyle={mapStyle}
-                className="cursor-pointer h-[35vh]"
+            <div className="relative border border-duber-skyBlue-light shadow-md flex-1 w-full h-full flex items-center justify-center rounded-lg overflow-hidden">
+              <GoogleMap
+                polygons={polygons}
+                setPolygons={setPolygonsHandler}
+                mapState={"static"}
+                staticMapType={"roadmap"}
+                location={mapState.center}
               />
+
+              <DuberButton
+                variant={"default"}
+                className="absolute bottom-2 right-2"
+                onClick={() => setShowMap(true)}
+              >
+                Edit
+              </DuberButton>
             </div>
           )}
           {/* ============================================================================ */}
 
           {/* Row 2 -> Col 2 */}
-          <div className="flex-1 h-full flex flex-col w-full">
+          <div className="flex-1 h-full sm:flex hidden flex-col w-full">
             <h2 className="text-duber-navyBlue-dark font-semibold text-base mb-2.5">
               Arrival Time
             </h2>
@@ -356,19 +365,88 @@ const LocationDate = ({ priceList, setPriceList }) => {
             </div>
           </div>
         </div>
+
+        {isMobile && (
+          <>
+            <div className="sm:hidden flex w-full mt-3">
+              <Input onClick={handleClickDatePicker}>
+                <div className="w-full  flex items-center justify-between">
+                  {!isMobile ? (
+                    <DatePicker_Desktop />
+                  ) : (
+                    <div className="flex items-center gap-x-3">
+                      <span className="">
+                        {orderState.startDate || "Select a Date"}
+                      </span>
+                      {orderState.timeOption && (
+                        <span className="bg-duber-skyBlue px-3 rounded-md text-white text-xs py-1">
+                          {/* "any_time" | 'early' | 'afternoon' | 'choose' */}
+                          {orderState.timeOption === "any_time" && "Any Time"}
+                          {orderState.timeOption === "early" && "Early"}
+                          {orderState.timeOption === "afternoon" && "Afternoon"}
+
+                          {orderState.timeOption === "choose" &&
+                            orderState.timeSlot}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  <CalendarIcon className="text-primaryBlue w-5 h-5" />
+                </div>
+              </Input>
+            </div>
+
+            <div className="mt-5 flex items-center">
+              <MobilePriceBar />
+
+              <Button className="" onClick={handleNext}>
+                {orderState.step1_UpdateMode ? "Save" : "Next"}
+              </Button>
+            </div>
+          </>
+        )}
       </div>
 
-      <div className="mt-5 flex items-center">
-        <MobilePriceBar />
+      {!isMobile && (
+        <div className="sm:mt-5 mt-0 flex items-center">
+          <MobilePriceBar />
 
-        <Button className="" onClick={handleNext}>
-          {orderState.step1_UpdateMode ? "Save" : "Next"}
-        </Button>
-      </div>
+          <Button className="" onClick={handleNext}>
+            {orderState.step1_UpdateMode ? "Save" : "Next"}
+          </Button>
+        </div>
+      )}
 
       {showMobileModel && (
         <Modal>
-          <DatePicker_Mobile setShowMobileModel={setShowMobileModel} />
+          <DatePicker_Mobile
+            setShowMobileModel={setShowMobileModel}
+            arrivalTimeComponent={
+              <div className="px-5 mt-3">
+                <h2 className="font-semibold text-navyBlue text-xl">
+                  Arrival Time
+                </h2>
+                <div className="mt-2 grid grid-cols-3 gap-2">
+                  {TimeOptions.map((obj) => (
+                    <ArrivalTimeCard
+                      className={obj.slug === "choose" && "col-span-3"}
+                      key={obj.id}
+                      slug={obj.slug}
+                      activeOption={orderState.timeOption}
+                      setActiveOption={(time_opt) => {
+                        dispatch(setTimeOption(time_opt.slug));
+                      }}
+                      timeSlot={orderState.timeSlot}
+                      setTimeSlot={(time_slot) =>
+                        dispatch(setTimeSlotRedux(time_slot))
+                      }
+                      handleSetPrice={() => handleSetArrivalCost(obj)}
+                    />
+                  ))}
+                </div>
+              </div>
+            }
+          />
         </Modal>
       )}
     </div>

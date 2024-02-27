@@ -19,17 +19,46 @@ function StoragePlanCard({ className, storage_plan, handleSelect, selectedPlan }
 
   return (
     <Card onClick={handleSelect} className={`${!isSelected ? 'bg-duber-skyBlue-light' : 'bg-duber-teal-light'} cursor-pointer rounded-lg flex flex-col items-center p-1 ${className}`}>
-      <div className="flex items-center justify-center pt-8 pb-2.5 flex-col">
+      {/* Non-Mobile View - Header */}
+      <div className="sm:flex hidden sm:flex-col flex-row items-center justify-center sm:pt-8 pt-2 sm:pb-2.5 pb-2">
         <img src={storage_plan.slug === 'basic'
           ? `/assets/drone-1.svg`
           : storage_plan.slug === 'premium'
             ? `/assets/drone-2.svg`
             : ''
-        } alt='Drone Vector' className='w-32' />
+        } alt='Drone Vector' className='sm:w-32 w-20' />
         <h1 className={`capitalize mt-6 font-semibold ${isSelected ? 'text-duber-teal-dark' : 'text-duber-skyBlue'} text-2xl`}>{storage_plan.slug}</h1>
       </div>
 
-      <div className="flex-1 flex flex-col gap-y-4 pt-4">
+      {/* Mobile View - Header */}
+      <div className="sm:hidden flex flex-row items-center justify-between pt-2 pb-1 pl-2 w-full">
+        <div className="flex items-center gap-x-3 flex-1">
+          <img src={storage_plan.slug === 'basic'
+            ? `/assets/drone-1.svg`
+            : storage_plan.slug === 'premium'
+              ? `/assets/drone-2.svg`
+              : ''
+          } alt='Drone Vector' className='w-16' />
+          <h1 className={`capitalize font-semibold ${isSelected ? 'text-duber-teal-dark' : 'text-duber-skyBlue'} text-xl`}>{storage_plan.slug}</h1>
+        </div>
+
+        <div className="">
+          <p className={`text-base font-semibold ${isSelected ? 'text-duber-teal-dark' : 'text-duber-skyBlue'} flex-1 px-2.5`}>
+            {storage_plan.price === 'free'
+              ? 'Free'
+              : (
+                <>
+                  <span>{storage_plan.price}/</span>
+                  <span className='text-xs'>{`Month`}</span>
+                  <span className='text-xs'>{`(ex vat)`}</span>
+                </>
+              )}
+          </p>
+        </div>
+      </div>
+
+      {/* Non-Mobile - Features List */}
+      <div className="sm:flex hidden flex-1 flex-col sm:gap-y-4 gap-y-3 pt-4 pb-3">
         {storage_plan.features?.map(feature => (
           <div className="flex items-center gap-x-1">
             {storage_plan.slug === 'basic' && <ExclamationTriangleIcon strokeWidth={2} className={`w-5 h-5 ${isSelected ? 'text-duber-teal-dark' : 'text-duber-skyBlue'}`} />}
@@ -39,7 +68,22 @@ function StoragePlanCard({ className, storage_plan, handleSelect, selectedPlan }
         ))}
       </div>
 
-      <div className="w-full flex items-center gap-x-2 p-1.5">
+      {/* Mobile - Features List */}
+      <div className="sm:hidden flex items-end justify-between w-full px-3">
+        <div className="flex-1 flex flex-col gap-y-3 pt-4 pb-3">
+          {storage_plan.features?.map(feature => (
+            <div className="flex items-center gap-x-1">
+              {storage_plan.slug === 'basic' && <ExclamationTriangleIcon strokeWidth={2} className={`w-5 h-5 ${isSelected ? 'text-duber-teal-dark' : 'text-duber-skyBlue'}`} />}
+              {storage_plan.slug === 'premium' && <BoltIcon strokeWidth={2} className={`w-5 h-5 ${isSelected ? 'text-duber-teal-dark' : 'text-duber-skyBlue'}`} />}
+              <p className="text-[11px] font-semibold">{feature}</p>
+            </div>
+          ))}
+        </div>
+
+        <CheckCircleIcon className={`w-6 h-6 mb-3 ${isSelected ? 'text-duber-teal-dark' : 'text-gray-400/80'} `} />
+      </div>
+
+      <div className="w-full sm:flex hidden items-center gap-x-2 p-1.5">
         <p className={`text-2xl font-semibold ${isSelected ? 'text-duber-teal-dark' : 'text-duber-skyBlue'} flex-1 px-2.5`}>
           {storage_plan.price === 'free'
             ? 'Free'

@@ -46,6 +46,7 @@
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
+    "embla-carousel-react": "8.0.0-rc23",
     "global-constants": "workspace:*",
     "lottie-react": "^2.3.1",
     "lucide-react": "^0.294.0",

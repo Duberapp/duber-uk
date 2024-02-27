@@ -6,6 +6,7 @@ import {
   CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Input from "./Input";
 
@@ -24,7 +25,7 @@ const months = [
   "December",
 ];
 
-const DatePicker_Mobile = ({ setShowMobileModel }) => {
+const DatePicker_Mobile = ({ setShowMobileModel, arrivalTimeComponent }) => {
   const dispatch = useDispatch();
   const orderState = useSelector((state) => state.createOrder);
 
@@ -35,7 +36,7 @@ const DatePicker_Mobile = ({ setShowMobileModel }) => {
         inline
         onChange={(date) => {
           dispatch(setStartDate(date.toDateString()));
-          setShowMobileModel(false);
+          // setShowMobileModel(false);
         }}
         excludeDates={[new Date()]}
         minDate={new Date()}
@@ -50,12 +51,12 @@ const DatePicker_Mobile = ({ setShowMobileModel }) => {
             <div className="bg-white fixed top-0 left-0 w-[100vw] h-fit px-5 pt-6 pb-3 ">
               <div className="flex items-center">
                 <button
-                  className="w-12 h-12 flex items-center justify-center rounded-md mr-3 bg-skyBlue"
+                  className="w-12 h-12 flex items-center justify-center rounded-md mr-2 bg-skyBlue"
                   onClick={() => setShowMobileModel(false)}
                 >
                   <ChevronLeftIcon className="w-6 h-6 text-white" />
                 </button>
-                <Input className={"h-12"}>
+                <Input className={"h-12 flex-1"}>
                   <div className="w-full flex items-center justify-between">
                     <ChevronLeftIcon
                       onClick={decreaseMonth}
@@ -77,6 +78,8 @@ const DatePicker_Mobile = ({ setShowMobileModel }) => {
           );
         }}
       />
+
+      <div>{arrivalTimeComponent}</div>
     </div>
   );
 };

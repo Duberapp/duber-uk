@@ -27,6 +27,7 @@ const MainLayout = ({ children, TrackingPage }) => {
           </Link>
         </div>
       </div>
+
       {!TrackingPage ? (
         <div
           className={`${

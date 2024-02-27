@@ -13,7 +13,14 @@ import {
 import { MobilePriceBar, Button, ErrorMessage } from "../";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { PilotExpertises } from "global-constants";
-import { ExpertiseCard } from "ui";
+import {
+  ExpertiseCard,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "ui";
 
 // Sample Data
 const capture_formats = [
@@ -190,22 +197,47 @@ const Options = ({ priceList, setPriceList }) => {
       <h2 className="font-semibold text-navyBlue text-lg">
         Preferred Pilot Expertise
       </h2>
-      <div ref={expertiseBorderRef} className="mt-3 flex gap-x-2">
-        {PilotExpertises.map((expertise) => (
-          <ExpertiseCard
-            key={expertise.id}
-            expertise={expertise.slug}
-            className="min-h-full"
-            selectedExpertise={orderState.expertise}
-            setSelectedExpertise={(expertise) => {
-              dispatch(setPilotExpertise(expertise.slug));
-            }}
-            timeSlot={orderState.timeSlot}
-            timeOption={orderState.timeOption}
-            onChangeDuration={onChangeDuration}
-            extendedDurationHours={orderState.extendedDurationHours}
-          />
-        ))}
+      <div className="">
+        <div ref={expertiseBorderRef} className="sm:flex hidden mt-3 gap-x-2">
+          {PilotExpertises.map((expertise) => (
+            <ExpertiseCard
+              key={expertise.id}
+              expertise={expertise.slug}
+              className="min-h-full"
+              selectedExpertise={orderState.expertise}
+              setSelectedExpertise={(expertise) => {
+                dispatch(setPilotExpertise(expertise.slug));
+              }}
+              timeSlot={orderState.timeSlot}
+              timeOption={orderState.timeOption}
+              onChangeDuration={onChangeDuration}
+              extendedDurationHours={orderState.extendedDurationHours}
+            />
+          ))}
+        </div>
+
+        <div className="sm:hidden flex mt-3">
+          <Carousel className="w-full">
+            <CarouselContent>
+              {PilotExpertises.map((expertise) => (
+                <CarouselItem key={expertise.id}>
+                  <ExpertiseCard
+                    expertise={expertise.slug}
+                    className="min-h-full"
+                    selectedExpertise={orderState.expertise}
+                    setSelectedExpertise={(expertise) => {
+                      dispatch(setPilotExpertise(expertise.slug));
+                    }}
+                    timeSlot={orderState.timeSlot}
+                    timeOption={orderState.timeOption}
+                    onChangeDuration={onChangeDuration}
+                    extendedDurationHours={orderState.extendedDurationHours}
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </div>
       </div>
 
       {/* Flight Details */}
@@ -239,7 +271,7 @@ const Options = ({ priceList, setPriceList }) => {
         <div
           onClick={() => setShowFormatDropdown(!showFormatDropdown)}
           ref={captureFormatRef}
-          className="relative bg-primaryBlueLight rounded-md p-3 flex items-center sm:justify-center justify-between cursor-pointer"
+          className="sm:flex hidden relative bg-primaryBlueLight rounded-md p-3 items-center sm:justify-center justify-between cursor-pointer"
         >
           <p className="sm:text-sm text-base text-primaryBlue py-1">
             {captureFormat
@@ -260,6 +292,25 @@ const Options = ({ priceList, setPriceList }) => {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Mobile - Format Selector */}
+        <div className="sm:hidden flex items-center justify-between gap-x-3">
+          {capture_formats.map((format) => (
+            <div
+              key={format.id}
+              className={`
+                ${
+                  orderState.captureFormat === format.format
+                    ? "bg-duber-teal-light text-duber-teal"
+                    : "bg-duber-skyBlue-light text-duber-skyBlue"
+                } 
+                h-12 rounded-lg flex items-center justify-center w-full`}
+              onClick={() => setCaptureFormat(format.format)}
+            >
+              {format.id === 3 ? "Both" : format.format}
+            </div>
+          ))}
         </div>
       </div>
 

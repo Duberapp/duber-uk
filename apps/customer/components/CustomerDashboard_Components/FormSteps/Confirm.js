@@ -60,9 +60,12 @@ const Confirm = () => {
         {error && (
           <ErrorMessage className={"mt-8"} error={error} setError={setError} />
         )}
+
         <div
-          className={`sm:mt-3 mt-5 flex gap-x-3 ${
-            isAnyDisclaimer ? "flex-1" : "h-[425px]"
+          className={`sm:mt-3 mt-5 flex sm:flex-row flex-col gap-x-3 gap-y-4 ${
+            isAnyDisclaimer
+              ? "sm:flex-1 flex-none sm:h-auto h-[425px]"
+              : "sm:h-[26.5rem] h-[26rem]"
           }`}
         >
           {storage_plans.map((plan) => (
@@ -76,52 +79,17 @@ const Confirm = () => {
           ))}
         </div>
 
-        <div className="flex sm:hidden mt-8">
-          {Object.keys(orderState.storagePlan).length !== 0 &&
-            orderState.storagePlan.id == 1 && (
-              <div
-                className={`w-full ${
-                  !viewDisclaimer ? "p-3" : "py-2 px-3"
-                } bg-red-100 rounded-md`}
-                onClick={() => setViewDisclaimer(!viewDisclaimer)}
-              >
-                <p
-                  className={`text-red-400 ${
-                    viewDisclaimer ? "font-semibold" : "font-semibold"
-                  }`}
-                >
-                  {`Important Disclaimer`}{" "}
-                  {!viewDisclaimer && (
-                    <span className="text-sm font-normal">
-                      {" (Tap to read)"}
-                    </span>
-                  )}{" "}
-                </p>
-
-                {viewDisclaimer && (
-                  <>
-                    <p className="text-red-400 text-sm font-light">{`You have selected "1 Month Download Link", After 1 month from order date the files will be DELETED`}</p>
-
-                    <div
-                      onClick={handleSwitchPlan}
-                      className="cursor-pointer mt-3 mb-2 w-full rounded-md bg-primaryTealLight text-primaryTeal flex flex-col items-center justify-center py-3"
-                    >
-                      <p className="text-xs font-medium text-teal-500">{`Click to change to`}</p>
-                      <p className="text-xs font-medium  text-teal-500">{`Cloud Hosting (£10/month)`}</p>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
-        </div>
-
-        <p className="py-3 px-5 rounded-md bg-gray-200 mt-4 lg:hidden flex text-lg text-navyBlue font-semibold">
+        <p className="mt-8 py-3 px-5 rounded-md bg-gray-200 lg:hidden flex text-lg text-navyBlue font-semibold">
           TOTAL: &#163; {mapState.price}
         </p>
 
         {/* Desktop Disclaimer Container */}
         {isAnyDisclaimer && (
-          <div className="h-20 w-full my-2 flex items-center justify-center">
+          <div
+            className={`${
+              expandDesktopDisclaimer ? "sm:h-20 h-24" : "sm:h-20 h-16"
+            } w-full my-2 flex items-center justify-center`}
+          >
             {/* Desktop Disclaimer -> If basic plan selected */}
             {disclaimer__basicPlan && (
               <div
@@ -150,9 +118,39 @@ const Confirm = () => {
               </div>
             )}
 
+            {/* Mobile Disclaimer -> If basic plan selected */}
+            {disclaimer__basicPlan && (
+              <div
+                className={`${
+                  expandDesktopDisclaimer ? "mt-3" : "mt-0"
+                } sm:hidden flex flex-col w-full rounded-md bg-red-200 p-2 cursor-pointer`}
+                onClick={() =>
+                  setExpandDesktopDisclaimer(!expandDesktopDisclaimer)
+                }
+              >
+                <div className="w-full flex items-center justify-between">
+                  <h2 className="font-semibold text-red-500 pl-2 text-xs">{`Important Disclaimer (Click to Read)`}</h2>
+                  <div
+                    onClick={handleSwitchPlan}
+                    className="group bg-primaryTealLight hover:bg-teal-200 p-2 rounded-md transition-all duration-200"
+                  >
+                    <p className="text-teal-500 group-hover:text-teal-600 text-[10px]">{`Click to change to Cloud Hosting (£10/month)`}</p>
+                  </div>
+                </div>
+
+                <div>
+                  {expandDesktopDisclaimer && (
+                    <p className="text-[9px] pl-2 mt-3 text-red-400">
+                      {`You have selected "1 Month Download Link", After 1 month from order date the files will be DELETED`}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Desktop Disclaimer -> If premium plan selected && not signed in */}
             {disclaimer__authRequired && (
-              <div className="w-full bg-duber-navyBlue rounded-md min-h-10 flex items-center justify-between px-2 py-2">
+              <div className="sm:flex hidden w-full bg-duber-navyBlue rounded-md min-h-10 items-center justify-between px-2 py-2">
                 <p className="text-white font-semibold text-[14px]">
                   You must create or login to account for Premium
                 </p>
@@ -172,12 +170,30 @@ const Confirm = () => {
                 </DuberButton>
               </div>
             )}
+
+            {/* Mobile Disclaimer -> If premium plan selected && not signed in */}
+            {disclaimer__authRequired && (
+              <div
+                className="sm:hidden flex w-full bg-duber-navyBlue rounded-md h-14 items-center justify-between px-4 py-2"
+                onClick={() => {
+                  const activeTo = 3;
+
+                  if (orderState[`step${activeTo}_UpdateMode`]) {
+                    dispatch(setActiveStep(activeTo));
+                  }
+                }}
+              >
+                <p className="text-white font-semibold text-[13px]">
+                  Click to create or login to account for Premium
+                </p>
+              </div>
+            )}
           </div>
         )}
 
         <div>
           {/* -------- Submit --------- */}
-          <div className="flex items-center">
+          <div className="sm:mt-0 mt-3 flex items-center">
             <Checkbox checked={confirmed} setChecked={setConfirmed} />
             <p className="text-black sm:text-base text-sm ml-4">
               I accept thee{" "}
