@@ -105,11 +105,11 @@ interface BookDetailTabProps {
   variant?: 'primary' | 'danger',
 }
 
-function BookDetailTab({ text, icon, variant, id }: BookDetailTabProps) {
+export function BookDetailTab({ text, icon, variant, id }: BookDetailTabProps) {
   variant = variant ? variant : 'primary';
 
   return (
-    <Card className={`${id === 'Booking_Description' && 'h-32 min-h-full'} ${variant === 'primary' ? 'bg-duber-skyBlue-light' : variant === 'danger' ? "bg-red-200" : ""} rounded-md w-full p-2.5 flex ${id === 'Booking_Description' ? "items-start" : "items-center"} gap-x-3`}>
+    <Card className={`${id === 'Booking_Description' && 'sm:h-32 h-12 min-h-full'} ${variant === 'primary' ? 'bg-duber-skyBlue-light' : variant === 'danger' ? "bg-red-200" : ""} rounded-md w-full p-2.5 flex ${id === 'Booking_Description' ? "items-start" : "items-center"} gap-x-3`}>
       {icon && <div className={`${variant === 'danger' ? "text-destructive" : "text-duber-skyBlue"}`}>{icon}</div>}
 
       <p className={`${variant === 'danger' ? "text-destructive" : "text-duber-skyBlue"} text-sm flex-1 ${id === 'PilotExpertise' && 'whitespace-nowrap'}`}>{text}</p>

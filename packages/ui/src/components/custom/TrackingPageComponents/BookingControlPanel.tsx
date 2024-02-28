@@ -3,6 +3,8 @@ import { DeliverableType, type BookingControlPanelDataTypes, type PilotDataType 
 import Button from "../DuberButton";
 import { Phone, FileDown, FolderDown, Star } from "lucide-react";
 import { type PilotRateIssueType, pilotRateIssuesList, type RatingStatusType } from 'global-constants';
+import MobileBookingDetails from './MobileBookingDetails';
+import { OrderData } from './BookingDetails';
 
 type handleCancelBooking = () => void;
 
@@ -15,6 +17,9 @@ interface BookingControlPanelProps extends BookingControlPanelDataTypes {
   showSubscriptionView?: boolean,
   setShowSubscriptionView?: Dispatch<SetStateAction<boolean>>,
   SubscriptionComponent?: React.ReactNode[],
+  orderData?: OrderData,
+  showMobileBookingDetails?: boolean
+  setShowMobileBookingDetails?: Dispatch<SetStateAction<boolean>>
 }
 
 export default function BookingControlPanel({
@@ -32,17 +37,20 @@ export default function BookingControlPanel({
   isDeliverablesExpired,
   showSubscriptionView,
   setShowSubscriptionView,
-  SubscriptionComponent
+  SubscriptionComponent,
+  orderData,
+  showMobileBookingDetails,
+  setShowMobileBookingDetails
 }: BookingControlPanelProps) {
-
   return (
     <div className={`relative w-full h-full  overflow-hidden flex flex-col rounded-lg ${className}`}>
-      <div className={`w-full flex-1 z-20 flex flex-col items-center justify-end ${deliverablesView ? "p-0" : 'p-2 h-full'}`}>
+      <div className={`w-full flex-1 z-20 flex flex-col items-center sm:justify-end justify-between ${deliverablesView ? "p-0" : 'p-2 h-full'}`}>
         {
           !showCancelBookingPanel &&
           !(isBookingCancelled && cancellationReason) &&
           !deliverablesView &&
           !showSubscriptionView &&
+          !showMobileBookingDetails &&
           <PilotDetaisPanel isPilotAssigned={isPilotAssigned!} pilotData={pilotData!} />
         }
 
@@ -71,6 +79,13 @@ export default function BookingControlPanel({
             {SubscriptionComponent}
           </SubscriptionPanel>
         )}
+
+        <MobileBookingDetails
+          className='sm:hidden flex flex-col'
+          orderData={orderData}
+          showMobileBookingDetails={showMobileBookingDetails!}
+          setShowMobileBookingDetails={setShowMobileBookingDetails!}
+        />
       </div>
 
       <div className="absolute top-0 left-0 z-0 w-full h-full">

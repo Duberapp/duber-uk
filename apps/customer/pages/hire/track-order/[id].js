@@ -16,6 +16,7 @@ import {
   TrackingPageLayout,
   BookingDetails,
   BookingControlPanel,
+  Button,
 } from "ui";
 import { PilotExpertises } from "global-constants";
 import GoogleMap from "../../../components/GoogleMap";
@@ -76,6 +77,8 @@ const TrackOrder = ({ data, pilot, error }) => {
   const [showCancelBookingPanel, setShowCancelBookingPanel] = useState(false);
   const [isBookingCancelled, setIsBookingCancelled] = useState(false);
   const [showSubscriptionView, setShowSubscriptionView] = useState(false);
+  const [showMobileBookingDetails, setShowMobileBookingDetails] =
+    useState(false);
 
   const deliverablesList = new Array(30).fill().map((_, index) => ({
     id: index + 1,
@@ -85,9 +88,12 @@ const TrackOrder = ({ data, pilot, error }) => {
   }));
   // ================-----=================
 
+  const handleDownloadReceipt = () =>
+    window.open(`${data.invoiceURL}`, "_blank");
+
   return (
     <MainLayout TrackingPage={true}>
-      <div className="w-full h-screen flex items-center justify-center">
+      <div className="w-full sm:h-screen h-[90vh] flex items-center justify-center">
         <TrackingPageLayout>
           <TrackingBar className="min-w-full" status={data.status} />
 
@@ -106,7 +112,7 @@ const TrackOrder = ({ data, pilot, error }) => {
             setShowSubscriptionView={setShowSubscriptionView}
           />
 
-          <div className="flex sm:flex-row flex-col gap-x-2.5 min-w-full sm:mt-0 mt-12">
+          <div className="flex sm:flex-row flex-col gap-x-2.5 min-w-full sm:mt-0 mt-12 h-full">
             <BookingDetails
               className="sm:flex hidden flex-1"
               orderData={{
@@ -131,12 +137,12 @@ const TrackOrder = ({ data, pilot, error }) => {
                   }}
                 />
               }
-              handleDownloadReceipt={() =>
-                window.open(`${data.invoiceURL}`, "_blank")
-              }
+              handleDownloadReceipt={handleDownloadReceipt}
             />
 
             <BookingControlPanel
+              showMobileBookingDetails={showMobileBookingDetails}
+              setShowMobileBookingDetails={setShowMobileBookingDetails}
               className="flex-1 h-full bg-gray-100"
               MapComponent={
                 <>
@@ -174,7 +180,29 @@ const TrackOrder = ({ data, pilot, error }) => {
                   Subscription Card View
                 </div>
               }
+              orderData={{
+                address: data.address,
+                arrivalTime: data.arrivalTime,
+                date: formatDate(new Date(data.date)),
+                delivery_method: data.captureFormat,
+                duration: data.includedDuration + data.extendDuration,
+                expertise: PilotExpertises.filter(
+                  (exp) => exp.slug === data.pilotExpertize
+                )[0].title,
+                bookingDescription: data.customerNote,
+              }}
             />
+          </div>
+
+          <div className="sm:hidden flex w-full">
+            <Button
+              size={"lg"}
+              variant={"teal"}
+              className="w-full h-12 text-base font-semibold"
+              onClick={handleDownloadReceipt}
+            >
+              Download Receipt
+            </Button>
           </div>
         </TrackingPageLayout>
       </div>
