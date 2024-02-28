@@ -3,16 +3,16 @@ import Head from "next/head";
 import LandingLayout from "../components/LandingPage_Components/LandingLayout";
 import { allDronePilots } from "../config/supabaseFunctions";
 import DronePilotsMap from "../components/LandingPage_Components/UI/Map/DronePilotsMap";
-import {
-  Autocomplete,
-  Input,
-} from "../components/CustomerDashboard_Components";
+// import {
+//   Autocomplete,
+//   Input,
+// } from "../components/CustomerDashboard_Components";
 import Navbar from "../components/LandingPage_Components/UI/NavBar";
 import BottomFooter from "../components/LandingPage_Components/UI/BottomFooter";
 
 export default function DroneDirectory() {
   const [pilotData, setPilotData] = useState([]);
-  const [searchLocation, setSearchLocation] = useState("");
+  // const [searchLocation, setSearchLocation] = useState("");
 
   // Intialize pilot data
   useEffect(() => {
@@ -63,12 +63,12 @@ export default function DroneDirectory() {
                 </div>
                 {/* Search Input */}
                 <div className="mb-2">
-                  <Input>
+                  {/* <Input>
                     <Autocomplete
                       searchCapture={searchLocation}
                       setSearchCapture={setSearchLocation}
                     />
-                  </Input>
+                  </Input> */}
                 </div>
 
                 {/* Pilot List */}

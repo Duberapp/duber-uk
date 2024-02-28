@@ -22,7 +22,6 @@ export { default as ToggleButton } from "./UI/ToggleButton";
 export { default as DropdownSelector } from "./UI/DropdownSelector";
 export { default as ProgressBar } from "./UI/ProgressBar";
 
-export { default as DynamicMap } from "./UI/Map/DynamicMap";
 export { default as StaticMap } from "./UI/Map/StaticMap";
 export { default as TrackingMap } from "./UI/Map/TrackingMap";
 export { default as SubscriptionAlertCard } from "./UI/SubscriptionAlertCard";
