@@ -9,7 +9,6 @@ export { default as Contact } from "./FormSteps/Contact";
 export { default as Confirm } from "./FormSteps/Confirm";
 export { default as Button } from "./UI/Button";
 export { default as Input } from "./UI/Input";
-export { default as Autocomplete } from "./UI/Autocomplete";
 export { default as LogoLoading } from "./UI/LogoLoading";
 export { default as Modal } from "./UI/Modal";
 export { default as DatePicker_Desktop } from "./UI/DatePicker_Desktop";
