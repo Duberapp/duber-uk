@@ -25,6 +25,10 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
   const [loading, setLoading] = useState(false);
   const [includedDuration, setIncludedDuration] = useState(0);
 
+  const googleMapsKey =
+    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ||
+    "AIzaSyBkjmJZuDnGRocwQ4aJIz8VYnmuDmQ3IPs";
+
   useEffect(() => {
     const fetchActiveJob = async () => {
       try {
@@ -34,7 +38,7 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
 
         const { data: postalCodeData } = await axios({
           baseURL: "https://maps.googleapis.com/maps/api",
-          url: `/geocode/json?address=${data[0].address}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
+          url: `/geocode/json?address=${data[0].address}&key=${googleMapsKey}`,
           method: "GET",
         });
 
