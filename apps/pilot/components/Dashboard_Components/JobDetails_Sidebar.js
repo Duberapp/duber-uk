@@ -231,6 +231,16 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
                   {includedDuration + activeJob.extendDuration} hr
                 </p>
               </div>
+
+              {/* Job Brief */}
+              <div className="">
+                <h2 className="text-lg font-medium text-white">Job Brief</h2>
+                <p className="mt-1 text-xs text-white">
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  Dolore aut assumenda, recusandae numquam nihil atque
+                  temporibus quasi saepe adipisci,
+                </p>
+              </div>
             </div>
           </div>
         </JobDetailsSidebar>

@@ -8,10 +8,11 @@ interface JobCardProps {
   jobID: number,
   jobLocation: string,
   jobDate: string,
-  onClick: (jobId: number, preventRoute?: boolean) => void
+  onClick: (jobId: number, preventRoute?: boolean) => void,
+  isActive: boolean
 }
 
-export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClick }: JobCardProps) {
+export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClick, isActive }: JobCardProps) {
   const pilotExpertise: PilotExpertise | null = PilotExpertises.filter(exp => expertise === exp.slug)[0];
 
   const getJobLocation = (jobLocation: string) => {
@@ -45,7 +46,7 @@ export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClic
       </div>
 
       <div className="flex flex-col justify-center items-end flex-1">
-        <Button variant={"teal"} size={"xxl"} onClick={() => onClick(jobID)}>View</Button>
+        <Button variant={!isActive ? "teal" : "pink"} size={"xxl"} onClick={() => onClick(jobID)}>View</Button>
       </div>
     </Card>
   )

@@ -19,6 +19,7 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
   const user = useUser();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.currentUser.currentUser);
+  const activeJobID = useSelector((state) => state.activeJob.activeJob);
   const isHome = router.pathname === "/dashboard";
   const isMyJobs = router.pathname === "/dashboard/myJobs";
 
@@ -204,6 +205,7 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
                       jobLocation={item.address}
                       jobDate={item.date}
                       onClick={handleJobCardClick}
+                      isActive={activeJobID === item.JobID}
                     />
                   ))}
 
