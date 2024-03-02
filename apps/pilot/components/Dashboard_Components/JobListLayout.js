@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import JobCard from "./JobCard";
 import DropdownSelector from "./DropdownSelector";
 import { useSelector, useDispatch } from "react-redux";
 import { setActiveJob } from "../../redux/activeJobSlice";
@@ -13,6 +12,7 @@ import {
   selectPaymentData,
 } from "../../config/supabaseFunctions";
 import { BillingAlert } from "../../components";
+import { JobCard } from "ui";
 
 const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
   const router = useRouter();
@@ -38,24 +38,6 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
     { id: 3, label: "Completed" },
   ];
   const [activeFilter, setActiveFilter] = useState(filterItems[0]);
-  const [transferRate, setTransferRate] = useState("");
-
-  // Handle data initialization
-  useEffect(() => {
-    const getPaymentData = async () => {
-      try {
-        const { data, error } = await selectPaymentData();
-
-        if (error) throw error;
-
-        setTransferRate(data.length > 0 ? data[0].transferAmount_rate : 40);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    getPaymentData();
-  }, []);
 
   // Handle filter select
   useEffect(() => {
@@ -124,6 +106,23 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
       initializeUser();
     }
   }, [user]);
+
+  // Handle on Job Card View Clicks
+  const handleJobCardClick = (jobID, preventRoute) => {
+    dispatch(setActiveJob(jobID));
+
+    if (
+      typeof window !== "undefined" &&
+      data.status !== "Available" &&
+      !preventRoute
+    ) {
+      // Client-side-only code
+      let screenWidth = window.screen.width;
+      if (screenWidth < 1024) {
+        router.push(`/dashboard/myJobs/${jobID}`);
+      }
+    }
+  };
 
   return (
     <>
@@ -200,9 +199,11 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
                   availableList.length !== 0 &&
                   availableList.map((item) => (
                     <JobCard
-                      data={item}
-                      key={item.JobID}
-                      transferRate={transferRate}
+                      expertise={item.capability}
+                      jobID={item.JobID}
+                      jobLocation={item.address}
+                      jobDate={item.date}
+                      onClick={handleJobCardClick}
                     />
                   ))}
 
@@ -211,9 +212,11 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
                   myJobsList.length !== 0 &&
                   myJobsList.map((item) => (
                     <JobCard
-                      data={item}
-                      key={item.JobID}
-                      transferRate={transferRate}
+                      expertise={item.capability}
+                      jobID={item.JobID}
+                      jobLocation={item.address}
+                      jobDate={item.date}
+                      onClick={handleJobCardClick}
                     />
                   ))}
               </div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -18,7 +18,10 @@ import { setActiveJob } from "../../redux/activeJobSlice";
 import { setCurrentUser, setIsAdmin } from "../../redux/currentUser";
 import { setUserBilling } from "../../redux/userBillingSlice";
 import supabaseClient from "../../config/supabaseClient";
-import { getUserByEmail } from "../../config/supabaseFunctions";
+import {
+  getUserByEmail,
+  selectPaymentData,
+} from "../../config/supabaseFunctions";
 import { useUser, useSessionContext } from "@supabase/auth-helpers-react";
 import { getBankInformation } from "../../config/utilityFunctions";
 import StripeConnectButton from "../UI/StripeConnectButton";
@@ -38,6 +41,24 @@ const DashboardLayout = ({
   const currentUser = useSelector((state) => state.currentUser.currentUser);
   const isAdmin = useSelector((state) => state.currentUser.isAdmin);
   const { isLoading } = useSessionContext();
+  const [transferRate, setTransferRate] = useState("");
+
+  // Handle data initialization
+  useEffect(() => {
+    const getPaymentData = async () => {
+      try {
+        const { data, error } = await selectPaymentData();
+
+        if (error) throw error;
+
+        setTransferRate(data.length > 0 ? data[0].transferAmount_rate : 40);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getPaymentData();
+  }, []);
 
   useEffect(() => {
     if (!isLoading && session_user === null) router.push("/auth/login");
@@ -329,7 +350,10 @@ const DashboardLayout = ({
         {/* Job Details Drawer */}
         {(router.pathname === "/dashboard" ||
           router.pathname === "/dashboard/myJobs") && (
-          <JobDetails_Sidebar disableAccept={disableAccept} />
+          <JobDetails_Sidebar
+            disableAccept={disableAccept}
+            transferRate={transferRate}
+          />
         )}
       </div>
     </>

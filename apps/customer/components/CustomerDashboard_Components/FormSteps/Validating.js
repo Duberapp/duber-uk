@@ -30,6 +30,22 @@ const Validating = () => {
   const [vat, setVat] = useState(20);
   const [stripeClientSecret, setStripeClientSecret] = useState(null);
 
+  const getTimeOption = (time_option) => {
+    switch (time_option) {
+      case "any_time":
+        return "Any Time";
+      case "early":
+        return "Early";
+      case "afternoon":
+        return "Afternoon";
+      case "choose":
+        return "Choose a time slot";
+
+      default:
+        return "Choose a time slot";
+    }
+  };
+
   const handleSubmitOrder = async () => {
     let email;
 
@@ -77,8 +93,12 @@ const Validating = () => {
         app_version: "v2",
         includedDuration,
         extendDuration,
+        time_option: getTimeOption(orderState.timeOption),
+        arrivalTime:
+          orderState.timeOption === "choose" ? orderState.timeSlot : null,
       });
 
+      console.log(error);
       if (error) throw new Error("Create order failed");
 
       return data[0];

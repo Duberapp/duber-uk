@@ -87,6 +87,10 @@ export const getServerSideProps = async ({ query }) => {
       address: data[0].address,
       price: query.price,
       environment: data[0].environment,
+      app_version: "v2",
+      extendDuration: data[0].extendDuration,
+      time_option: data[0].time_option,
+      arrivalTime: data[0].arrivalTime,
     });
 
     // send email to customer

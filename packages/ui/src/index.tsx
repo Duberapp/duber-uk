@@ -27,7 +27,7 @@ export { default as ApplicationCard } from './components/custom/AdminComponents/
 
 // Dashboard -> Components Exports
 export { default as JobCard } from './components/custom/DashboardComponents/JobCard'
-export { InitialSidebar } from './components/custom/DashboardComponents/Sidebar'
+export { InitialSidebar, JobDetailsSidebar, SideBarLayout } from './components/custom/DashboardComponents/Sidebar'
 export { default as ArrivalTimeCard } from './components/custom/DashboardComponents/ArrivalTimeCard'
 
 // Tracking Page -> Components Exports

@@ -103,10 +103,10 @@ export const getUserDetails = async (email) => {
 };
 
 export const getJobListing = async () => {
-  const res = await supabase
-    .from("Jobs")
-    .select()
-    .match({ environment: process.env.NEXT_PUBLIC_ENVIRONMENT });
+  const res = await supabase.from("Jobs").select().match({
+    environment: process.env.NEXT_PUBLIC_ENVIRONMENT,
+    app_version: "v2",
+  });
 
   return res;
 };
@@ -143,7 +143,9 @@ export const getSingleJob = async (jobID) => {
             arrivalTime,
             amount,
             pilotID,
-            storagePlan
+            storagePlan,
+            time_option,
+            extendDuration
         `
     )
     .eq("id", jobID);
