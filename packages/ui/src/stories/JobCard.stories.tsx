@@ -19,7 +19,7 @@ const Template: StoryFn<typeof JobCard> = (args: any) => (
 
 export const Default: StoryFn<typeof JobCard> = Template.bind({})
 Default.args = {
-  expertise: "building_roof_inspection",
+  expertise: "marketing",
   jobID: 12345,
   jobLocation: "Portsmouth, UK",
   jobDate: "28/11/2023",
