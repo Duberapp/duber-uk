@@ -2,19 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AcceptJob_DetailsBar from "./AcceptJob_DetailsBar";
 import { useRouter } from "next/router";
-import MapComponent from "../MapComponent";
 import {
   getSingleJob,
   selectPaymentData,
 } from "../../config/supabaseFunctions";
 import { AddToCalender, LoadingSpinner } from "../../components";
-import { InitialSidebar, JobDetailsSidebar, SideBarLayout } from "ui";
+import { InitialSidebar, JobDetailsSidebar, SideBarLayout, Button } from "ui";
 import {
   PilotExpertises,
   TimeOptions,
 } from "../../../../packages/global-constants/src";
 import axios from "axios";
 import { MapPinIcon, Calendar, SunIcon, Clock4Icon } from "lucide-react";
+import GoogleMap from "../GoogleMap";
 
 const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
   const activeJobID = useSelector((state) => state.activeJob.activeJob);
@@ -180,7 +180,7 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
       ) : (
         <JobDetailsSidebar className="flex-col">
           <div className="w-full h-full flex-1 p-7 flex flex-col gap-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between ">
               <h2 className="text-duber-pink font-semibold">
                 £ {formatPrice(activeJob.amount)}
               </h2>
@@ -200,7 +200,7 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
               </h2>
             </div>
 
-            <div className="flex flex-col gap-y-2.5">
+            <div className="flex flex-1 flex-col gap-y-2.5">
               {/* Address */}
               <div className="flex items-center gap-x-2">
                 <MapPinIcon className="w-4 h-4 text-duber-teal" />
@@ -243,6 +243,36 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
                   {activeJob.customerNote}
                 </p>
               </div>
+            </div>
+
+            {/* Bottom Components */}
+            <div className="">
+              {/* Map Container */}
+              <div className="h-36 overflow-hidden rounded-md mb-2">
+                <GoogleMap
+                  polygons={[activeJob.mapData?.polygon]}
+                  staticMapType={"roadmap"}
+                  mapState={"static"}
+                  location={activeJob.mapData?.center}
+                  zoom={3}
+                  mapOptions={{
+                    gestureHandling: true,
+                  }}
+                  areaComponent={
+                    <h2 className="font-semibold text-sm text-black">
+                      {activeJob.area} m<sup>2</sup>
+                    </h2>
+                  }
+                />
+              </div>
+
+              <Button
+                variant={"skyBlue"}
+                size={"lg"}
+                className="w-full text-base h-11"
+              >
+                Accept Job
+              </Button>
             </div>
           </div>
         </JobDetailsSidebar>

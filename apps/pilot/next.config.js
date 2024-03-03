@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
-const withTM = require("next-transpile-modules")(["ui", "global-constants"]);
+const withTM = require("next-transpile-modules")([
+  "ui",
+  "global-constants",
+  "duber-maps",
+]);
 
 const nextConfig = withTM({
   reactStrictMode: true,
