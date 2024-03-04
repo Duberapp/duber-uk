@@ -34,7 +34,7 @@ export const convertToStandardDateFormat = (dateString: string): string => {
   const year = dateObj.getFullYear();
 
   // Function to add ordinal suffix to day
-  const addOrdinalSuffix = (day) => {
+  const addOrdinalSuffix = (day: number) => {
     if (day >= 11 && day <= 13) {
       return `${day}th`;
     }
