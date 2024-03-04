@@ -234,7 +234,8 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
                   size={"lg"}
                   className="w-full text-base h-11"
                   onClick={() =>
-                    router.push(`/dashboard/myJobs/${activeJob.id}`)
+                    // router.push(`/dashboard/myJobs/${activeJob.id}`)
+                    window.location.replace(`/dashboard/myJobs/${activeJob.id}`)
                   }
                 >
                   View Job

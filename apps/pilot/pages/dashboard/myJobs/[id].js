@@ -31,7 +31,7 @@ import {
 } from "../../../redux/uploadLogSlice";
 import { useUser, useSessionContext } from "@supabase/auth-helpers-react";
 import GoogleMap from "../../../components/GoogleMap";
-import { SingleJob_OverviewCard } from "ui";
+import { Loading, SingleJob_OverviewCard } from "ui";
 import { RouteIcon, PhoneIcon } from "lucide-react";
 import { convertToStandardDateFormat } from "../../../../../packages/global-constants/src";
 
@@ -532,17 +532,23 @@ const SinglePage = () => {
 
                 {/* Col 02 */}
                 <div className="flex-1 min-h-[300px] overflow-hidden rounded-md">
-                  <GoogleMap
-                    polygons={[currentJob.mapData.polygon]}
-                    staticMapType={"roadmap"}
-                    mapState={"static"}
-                    location={currentJob.mapData.center}
-                    areaComponent={
-                      <h2 className="font-semibold text-sm text-black">
-                        {currentJob.area} m<sup>2</sup>
-                      </h2>
-                    }
-                  />
+                  {currentJob.mapData.polygon ? (
+                    <GoogleMap
+                      polygons={[currentJob.mapData.polygon]}
+                      staticMapType={"roadmap"}
+                      mapState={"static"}
+                      location={currentJob.mapData.center}
+                      areaComponent={
+                        <h2 className="font-semibold text-sm text-black">
+                          {currentJob.area} m<sup>2</sup>
+                        </h2>
+                      }
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Loading className={"w-6 h-6 text-duber-navyBlue"} />
+                    </div>
+                  )}
                 </div>
 
                 {/* <p className="text-gray-400 sm:text-lg text-sm">
