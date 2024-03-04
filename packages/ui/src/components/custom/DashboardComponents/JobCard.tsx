@@ -1,4 +1,4 @@
-import { type PilotExpertise, type PilotExpertiseSlug, PilotExpertises } from 'global-constants'
+import { type PilotExpertise, type PilotExpertiseSlug, PilotExpertises, type JobStatusType } from 'global-constants'
 import { Card } from '../../ui/card'
 import Button from '../DuberButton'
 import { useEffect, useState } from 'react';
@@ -9,10 +9,11 @@ interface JobCardProps {
   jobLocation: string,
   jobDate: string,
   onClick: (jobId: number, preventRoute?: boolean) => void,
-  isActive: boolean
+  isActive: boolean,
+  jobStatus: JobStatusType
 }
 
-export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClick, isActive }: JobCardProps) {
+export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClick, isActive, jobStatus }: JobCardProps) {
   const pilotExpertise: PilotExpertise | null = PilotExpertises.filter(exp => expertise === exp.slug)[0];
 
   const getJobLocation = (jobLocation: string) => {
@@ -45,9 +46,27 @@ export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClic
         }</h2>
       </div>
 
-      <div className="flex flex-col justify-center items-end flex-1">
-        <Button variant={!isActive ? "teal" : "pink"} size={"xxl"} onClick={() => onClick(jobID)}>View</Button>
+      <div className="flex flex-col gap-y-1 justify-center items-end flex-1">
+        {jobStatus !== 'Available' && (
+          <StatusBadge status={jobStatus} />
+        )}
+        <Button
+          variant={!isActive ? "teal" : "pink"}
+          size={jobStatus === 'Available' ? "xxl" : "lg"}
+          onClick={() => onClick(jobID)}
+          className={jobStatus !== 'Available' ? "w-full" : ""}
+        >
+          View
+        </Button>
       </div>
     </Card>
+  )
+}
+
+export function StatusBadge({ status, className }: { status: JobStatusType, className?: string }) {
+  return (
+    <div className={`w-full rounded-md py-1 text-xs text-center ${className} ${status === 'Live' && 'bg-red-200 text-red-500'} ${status === 'Completed' && 'bg-duber-skyBlue-light text-duber-skyBlue'}`}>
+      {status}
+    </div>
   )
 }

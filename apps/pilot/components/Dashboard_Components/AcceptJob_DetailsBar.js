@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/router";
-import LoadingSpinner from "../UI/LoadingSpinner";
+import { Button } from "ui";
+import { TimeOptions } from "../../../../packages/global-constants/src";
+import successToast from "../UI/Toast/successToast";
 
 const AcceptJob_DetailsBar = ({
   jobID,
@@ -10,17 +12,34 @@ const AcceptJob_DetailsBar = ({
   customerFirstName,
   disableAccept,
   jobDate,
+  includedDuration,
+  extendedDuration,
+  timeOption,
+  arrivalTime,
 }) => {
   const router = useRouter();
-  const [arrivalTime, setArrivalTime] = useState(null);
   const currentUser = useSelector((state) => state.currentUser.currentUser);
   const serverBaseUrl = process.env.NEXT_PUBLIC_BACKEND_BASEURL;
   const [loading, setLoading] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState(
     typeof window !== "undefined" ? localStorage.getItem("expoPushToken") : null
   );
+  const [selectedArrivalTime, setSelectedArrivalTime] = useState("");
 
-  const handleAccept = async () => {
+  const availableTimeSlots = generateTimeSlots({
+    extendedDuration: extendedDuration,
+    includedDuration: includedDuration,
+    timeOption: timeOption,
+    arrivalTime: arrivalTime,
+  });
+
+  const [chooseTimePanel, setChooseTimePanel] = useState("");
+
+  const handleAccept = () => {
+    setChooseTimePanel(!chooseTimePanel);
+  };
+
+  const handleChooseTimeAndAcceptJob = async () => {
     try {
       setLoading(true);
 
@@ -31,7 +50,7 @@ const AcceptJob_DetailsBar = ({
         headers: {},
         data: {
           jobID: jobID,
-          arrivalTime: arrivalTime,
+          arrivalTime: selectedArrivalTime,
           pilotID: currentUser.id,
           clientEmail: customerEmail,
           clientName: customerFirstName,
@@ -55,7 +74,9 @@ const AcceptJob_DetailsBar = ({
         .catch((err) => console.log(err.message));
 
       setLoading(false);
-      if (data.success)
+      if (data.success) {
+        successToast(`Job #${jobID} Accepted`);
+
         router.push(
           {
             pathname: `/dashboard/myJobs/${jobID}`,
@@ -65,65 +86,133 @@ const AcceptJob_DetailsBar = ({
           },
           `/dashboard/myJobs/${jobID}`
         );
+      }
     } catch (err) {
       setLoading(false);
     }
   };
 
   return (
-    <div className="mt-7">
-      <div className="grid grid-cols-3 grid-rows-3 gap-x-5 gap-y-5">
-        {arrivalTimesList.map((time) => (
-          <button
-            key={time.id}
-            onClick={() => setArrivalTime(time.text)}
-            className={`${
-              arrivalTime === time.text ? "bg-primaryTeal" : "bg-primaryBlue"
-            } outline-none text-white h-12 rounded-md text-sm`}
-          >
-            {time.text}
-          </button>
-        ))}
-      </div>
-
-      {disableAccept && (
-        <p className="mt-4 text-xs text-red-500">
-          Please fill billing informations
-        </p>
-      )}
-
-      <button
-        className={`mt-5 ${
-          arrivalTime && !disableAccept
-            ? "bg-primaryTeal cursor-pointer"
-            : "bg-gray-400 cursor-not-allowed"
-        } rounded-md w-full md:w-fit lg:w-full h-16 md:px-3 flex items-center justify-center`}
+    <div className="">
+      <Button
         onClick={handleAccept}
-        disabled={!arrivalTime || loading || disableAccept}
+        variant={chooseTimePanel ? "pink" : "skyBlue"}
+        size={"lg"}
+        className="w-full text-base h-11"
+        isLoading={loading}
+        loadingText="Accepting Job..."
       >
-        {/* Accept Job */}
-        <p className="text-2xl text-center text-white uppercase font-medium">
-          {!loading ? (
-            "Accept Job"
-          ) : (
-            <LoadingSpinner width={5} height={5} color="white" />
-          )}
-        </p>
-      </button>
+        {chooseTimePanel ? "Choose start time" : "Accept Job"}
+      </Button>
+
+      {chooseTimePanel && (
+        <div className="mt-2 grid grid-cols-3 grid-rows-3 gap-2">
+          {availableTimeSlots.map((slot, index) => (
+            <Button
+              key={index}
+              variant={selectedArrivalTime === slot ? "pink" : "skyBlue"}
+              className={
+                availableTimeSlots.length === 1 && "col-span-3 row-span-3 h-24"
+              }
+              disabled={loading}
+              onClick={() => {
+                setSelectedArrivalTime(slot);
+                handleChooseTimeAndAcceptJob();
+              }}
+            >
+              {slot}
+            </Button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
 export default AcceptJob_DetailsBar;
 
-const arrivalTimesList = [
-  { id: 1, text: "8:00am" },
-  { id: 2, text: "9:00am" },
-  { id: 3, text: "10:00am" },
-  { id: 4, text: "11:00am" },
-  { id: 5, text: "12:00pm" },
-  { id: 6, text: "1:00pm" },
-  { id: 7, text: "2:00pm" },
-  { id: 8, text: "3:00pm" },
-  { id: 9, text: "4:00pm" },
-];
+const generateTimeSlots = ({
+  includedDuration,
+  extendedDuration,
+  timeOption,
+  arrivalTime,
+}) => {
+  const timeSlotList = TimeOptions.filter((opt) => opt.slug === "choose")[0]
+    .times;
+
+  const totalDuration = includedDuration + extendedDuration;
+  const timeOptionData = TimeOptions.filter(
+    (opt) => opt.name === timeOption
+  )[0];
+
+  function convertTo12HourTime(integer) {
+    // Ensure the input is within the valid range (1 to 24)
+    if (integer < 1 || integer > 24) {
+      return "Invalid input";
+    }
+
+    // Convert 24 to 12 for midnight
+    if (integer === 24) {
+      return "12am";
+    }
+
+    // Calculate the hour for other values
+    const hour12 = integer <= 12 ? integer : integer - 12;
+    // Determine if it's AM or PM
+    const period = integer < 12 ? "am" : "pm";
+
+    return hour12 + period;
+  }
+
+  function convertTo24HourTime(time) {
+    // Extract hour and period (am/pm) from the time string
+    const hour = parseInt(time);
+    const period = time.slice(-2);
+
+    // Convert 12am to 0 and handle 12pm as a special case
+    if (period === "am") {
+      if (hour === 12) {
+        return 0;
+      } else {
+        return hour;
+      }
+    } else {
+      // Handle pm
+      if (hour === 12) {
+        return 12;
+      } else {
+        return hour + 12;
+      }
+    }
+  }
+
+  let availableTimeSlots = [];
+
+  if (timeOption !== "Choose a time slot") {
+    const endTime = convertTo12HourTime(timeOptionData.meta.to);
+    const timeSlotIndex = timeSlotList.indexOf(endTime);
+
+    // filteredTimeSlots_raw -> based on time option, not on duration
+    const filteredTimeSlots_raw = timeSlotList.slice(0, timeSlotIndex + 1);
+
+    // filteredTimeSlots -> based on time option and duration
+    let filteredTimeSlots = [];
+
+    filteredTimeSlots_raw.forEach((filteredSlotItem) => {
+      const filteredSlotIn24 = convertTo24HourTime(filteredSlotItem);
+
+      // finalTime -> stands for final time slot added order duration
+      const finalTime = filteredSlotIn24 + totalDuration;
+
+      if (finalTime < 18) {
+        filteredTimeSlots.push(filteredSlotItem);
+      }
+    });
+
+    availableTimeSlots = filteredTimeSlots;
+  } else {
+    availableTimeSlots.push(arrivalTime);
+  }
+
+  return availableTimeSlots;
+};

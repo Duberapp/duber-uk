@@ -277,6 +277,7 @@ const MapComponent = ({
             options={drawingManagerOptions}
           />
         )}
+
         {polygons &&
           polygons.length > 0 &&
           polygons.map((iterator, index) => (

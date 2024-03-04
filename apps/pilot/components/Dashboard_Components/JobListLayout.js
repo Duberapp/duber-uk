@@ -206,6 +206,7 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
                       jobDate={item.date}
                       onClick={handleJobCardClick}
                       isActive={activeJobID === item.JobID}
+                      jobStatus={item.status}
                     />
                   ))}
 
@@ -219,6 +220,8 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
                       jobLocation={item.address}
                       jobDate={item.date}
                       onClick={handleJobCardClick}
+                      jobStatus={item.status}
+                      isActive={activeJobID === item.JobID}
                     />
                   ))}
               </div>

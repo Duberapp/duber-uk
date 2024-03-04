@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   DashboardLayout,
-  MapComponent,
   Mobile_SidebarHeader,
   FullScreenLoading,
   UploadedFileBadges,
@@ -19,6 +18,7 @@ import {
   getJobListingByPilotId,
   getSingleJob,
   getUserByEmail,
+  selectPaymentData,
 } from "../../../config/supabaseFunctions";
 import { Toaster } from "react-hot-toast";
 import { getPresignedUrl } from "../../../config/utilityFunctions";
@@ -30,6 +30,10 @@ import {
   updateProgress,
 } from "../../../redux/uploadLogSlice";
 import { useUser, useSessionContext } from "@supabase/auth-helpers-react";
+import GoogleMap from "../../../components/GoogleMap";
+import { SingleJob_OverviewCard } from "ui";
+import { RouteIcon, PhoneIcon } from "lucide-react";
+import { convertToStandardDateFormat } from "../../../../../packages/global-constants/src";
 
 const SinglePage = () => {
   const {
@@ -49,6 +53,8 @@ const SinglePage = () => {
   );
   const activeJobID = router.query.id;
   const [currentJob, setCurrentJob] = useState({});
+  const [transferRate, setTransferRate] = useState(0);
+  const [includedDuration, setIncludedDuration] = useState(0);
 
   // File Structures
   const [uploading, setUploading] = useState(null);
@@ -70,17 +76,24 @@ const SinglePage = () => {
     session,
   } = useSessionContext();
 
+  const getPaymentData = async () => {
+    try {
+      const { data, error } = await selectPaymentData();
+
+      if (error) throw error;
+
+      setTransferRate(data.length > 0 ? data[0].transferAmount_rate : 40);
+      setIncludedDuration(data.length > 0 ? data[0].includedDuration : 2);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // ========================== BASE CONFIGURATIONS ===============================
   // Fetch active job function -> this used in effect and time which needs to refetch data
   const fetchActiveJob = async () => {
     try {
       setLoading(true);
-
-      console.log({
-        isSessionLoading,
-        sessionError,
-        session,
-      });
 
       if (!isSessionLoading && session) {
         const { data, error } = await getSingleJob(activeJobID);
@@ -96,6 +109,8 @@ const SinglePage = () => {
             router.push("/dashboard");
           }
         }
+
+        await getPaymentData();
 
         setCurrentJob(data[0]);
         setLoading(false);
@@ -386,27 +401,11 @@ const SinglePage = () => {
             />
           }
         >
-          <div className="w-full h-full px-4 py-8">
+          <div className="w-full h-full px-4 py-3">
             {/* Header */}
             <div className="lg:flex hidden flex-1 h-fit items-center justify-between ">
-              <p className="text-black font-semibold text-2xl">
-                {currentJob.pilotExpertize}
-                <span className="ml-2 text-gray-300 font-normal">
-                  #{currentJob.id}
-                </span>
-                <button
-                  className={`w-32 ml-4 py-2 text-sm font-medium ${
-                    currentJob.status == "Live" && "bg-red-100 text-red-500"
-                  } ${
-                    currentJob.status == "Completed" &&
-                    "bg-blue-100 text-blue-500"
-                  } ${
-                    currentJob.status == "Available" &&
-                    "bg-green-100 text-green-500"
-                  } rounded-md`}
-                >
-                  {currentJob?.status}
-                </button>
+              <p className="text-duber-pink font-semibold text-lg">
+                #{currentJob.id}
               </p>
 
               <div className="flex items-center gap-2">
@@ -419,22 +418,134 @@ const SinglePage = () => {
               </div>
             </div>
 
-            {/* Content */}
-            <div className="mt-5 w-full h-full bg-white rounded-2xl">
-              {/* Map */}
-              <div className="lg:pt-6 pt-3 lg:mx-6 mx-3 shadow-lg rounded-2xl">
-                <MapComponent
-                  center={currentJob.mapData.center}
-                  zoom={currentJob.mapData.zoom}
-                  polygon={currentJob.mapData.polygon}
-                  area={currentJob.area}
-                  price={currentJob.amount}
-                  onlyAmount={currentJob.amount}
-                />
-              </div>
-              {/* --------------------- */}
-              <div className="lg:mx-12 mx-3 pt-9 grid lg:grid-cols-2 grid-cols-1 gap-x-8 gap-y-5">
-                <p className="text-gray-400 sm:text-lg text-sm">
+            {/* Job Details */}
+            <div className="mt-3 w-full h-full bg-white rounded-2xl">
+              {/* Job Details -> Content and Overview */}
+              <div className="flex flex-row gap-x-4 p-5">
+                {/* Col 01 */}
+                <div className="flex-1">
+                  <SingleJob_OverviewCard
+                    capability={currentJob.pilotExpertize}
+                    jobStatus={currentJob.status}
+                    jobValue={currentJob.amount}
+                    transferRate={transferRate}
+                  />
+
+                  {/* Details Section */}
+                  <div className="mt-3 w-full">
+                    <div className="flex item-center justify-between">
+                      <p className="font-semibold text-duber-navyBlue">
+                        Job Details
+                      </p>
+                      <AddToCalender
+                        data={{
+                          address: currentJob.address,
+                          id: currentJob.id,
+                          customerNotes: currentJob.customerNote,
+                          date: currentJob.date,
+                          arrivalTime: currentJob.date,
+                          style: "",
+                        }}
+                      />
+                    </div>
+
+                    <div className="mt-2 flex items-end justify-between">
+                      <div className="">
+                        <p className="text-xs text-gray-400">
+                          Location / Full Address
+                        </p>
+                        <p className="text-base text-duber-navyBlue">
+                          {currentJob.address}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-x-1">
+                        <RouteIcon
+                          className="w-4 h-4 text-skyBlue"
+                          strokeWidth={2}
+                        />
+                        <a
+                          className="text-sm underline text-skyBlue cursor-pointer"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={`https://www.google.com/maps/place/${currentJob.address}`}
+                        >
+                          Open in maps
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-400">Start Date</p>
+                      <p className="text-base text-duber-navyBlue">
+                        {convertToStandardDateFormat(currentJob.date)}
+                      </p>
+                    </div>
+
+                    <div className="mt-2 flex items-center">
+                      <div className="flex-1">
+                        <p className="text-xs text-gray-400">Arrival Time</p>
+                        <p className="text-base text-duber-navyBlue">
+                          {currentJob.arrivalTime}
+                        </p>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xs text-gray-400">Duration</p>
+                        <p className="text-base text-duber-navyBlue">
+                          {includedDuration + currentJob.extendDuration} Hours
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-2 flex items-end">
+                      <div className="flex-1">
+                        <p className="text-xs text-gray-400">Customers Name</p>
+                        <p className="text-base text-duber-navyBlue">
+                          {`${currentJob.customerID.title} ${currentJob.customerID.firstName} ${currentJob.customerID.lastName}`}
+                        </p>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xs text-gray-400">Company</p>
+                        <p className="text-base text-duber-navyBlue">
+                          {currentJob.customerID.companyName}
+                        </p>
+                      </div>
+                      <div className="flex-1 justify-end flex items-center gap-x-1">
+                        <PhoneIcon className="w-4 h-4 text-duber-skyBlue" />
+                        <a
+                          className="text-sm underline text-skyBlue cursor-pointer"
+                          href={`tel:${currentJob.customerID.phoneNumber}`}
+                        >
+                          Call Them
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-400">Job Brief</p>
+                      <p className="text-base text-duber-navyBlue">
+                        {currentJob.customerNote}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Col 02 */}
+                <div className="flex-1 min-h-[300px] overflow-hidden rounded-md">
+                  <GoogleMap
+                    polygons={[currentJob.mapData.polygon]}
+                    staticMapType={"roadmap"}
+                    mapState={"static"}
+                    location={currentJob.mapData.center}
+                    areaComponent={
+                      <h2 className="font-semibold text-sm text-black">
+                        {currentJob.area} m<sup>2</sup>
+                      </h2>
+                    }
+                  />
+                </div>
+
+                {/* <p className="text-gray-400 sm:text-lg text-sm">
                   {currentJob.address}
                 </p>
 
@@ -499,7 +610,7 @@ const SinglePage = () => {
                   <h2 className="sm:block hidden text-gray-600  font-semibold text-2xl">
                     Arrival Time {currentJob.arrivalTime}
                   </h2>
-                )}
+                )} */}
               </div>
 
               {/* File Upload */}

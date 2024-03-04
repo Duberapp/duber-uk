@@ -134,7 +134,8 @@ export const getSingleJob = async (jobID) => {
                 lastName,
                 email,
                 phoneNumber,
-                companyName
+                companyName,
+                title
             ),
             mapData,
             area,

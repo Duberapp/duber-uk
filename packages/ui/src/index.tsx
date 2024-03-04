@@ -29,6 +29,7 @@ export { default as ApplicationCard } from './components/custom/AdminComponents/
 export { default as JobCard } from './components/custom/DashboardComponents/JobCard'
 export { InitialSidebar, JobDetailsSidebar, SideBarLayout } from './components/custom/DashboardComponents/Sidebar'
 export { default as ArrivalTimeCard } from './components/custom/DashboardComponents/ArrivalTimeCard'
+export { default as SingleJob_OverviewCard } from './components/custom/DashboardComponents/SingleJob_OverviewCard'
 
 // Tracking Page -> Components Exports
 export { default as TrackingPageLayout } from './components/custom/TrackingPageComponents/TrackingPageLayout'

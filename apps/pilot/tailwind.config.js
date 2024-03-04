@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import sharedConfig from "ui/tailwind";
+import scrollbarPlugin from "tailwind-scrollbar";
+import twPlugin from "tw-elements/dist/plugin.cjs";
 
 const config = {
   ...sharedConfig,
@@ -9,10 +11,7 @@ const config = {
     "./node_modules/tw-elements/dist/js/**/*.js",
     "../../packages/*/**/*.{ts,tsx,html,stories.tsx}",
   ],
-  plugins: [
-    require("tailwind-scrollbar")({ nocompatible: true }),
-    require("tw-elements/dist/plugin"),
-  ],
+  plugins: [scrollbarPlugin({ nocompatible: true }), twPlugin],
 };
 
 export default config;

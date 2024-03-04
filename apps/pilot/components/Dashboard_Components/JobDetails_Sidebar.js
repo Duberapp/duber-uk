@@ -11,6 +11,8 @@ import { InitialSidebar, JobDetailsSidebar, SideBarLayout, Button } from "ui";
 import {
   PilotExpertises,
   TimeOptions,
+  calculatePilotJobValue,
+  convertToStandardDateFormat,
 } from "../../../../packages/global-constants/src";
 import axios from "axios";
 import { MapPinIcon, Calendar, SunIcon, Clock4Icon } from "lucide-react";
@@ -85,70 +87,6 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
     }
   }, [activeJobID]);
 
-  const formatPrice = (price) => {
-    return (price - 100) * (1 - transferRate / 100);
-  };
-
-  const formatDate = (dateString) => {
-    // Convert string to Date object
-    const dateObj = new Date(dateString);
-
-    // Define arrays for days and months
-    const daysOfWeek = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    const monthsOfYear = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    // Get day, month, and year from the date object
-    const dayOfWeek = daysOfWeek[dateObj.getDay()];
-    const dayOfMonth = dateObj.getDate();
-    const month = monthsOfYear[dateObj.getMonth()];
-    const year = dateObj.getFullYear();
-
-    // Function to add ordinal suffix to day
-    const addOrdinalSuffix = (day) => {
-      if (day >= 11 && day <= 13) {
-        return `${day}th`;
-      }
-      switch (day % 10) {
-        case 1:
-          return `${day}st`;
-        case 2:
-          return `${day}nd`;
-        case 3:
-          return `${day}rd`;
-        default:
-          return `${day}th`;
-      }
-    };
-
-    // Format the date string
-    const formattedDate = `${dayOfWeek}, ${addOrdinalSuffix(
-      dayOfMonth
-    )} ${month} ${year}`;
-
-    return formattedDate;
-  };
-
   const formatTimeOption = (time_option, arrivalTime) => {
     if (time_option === "Choose a time slot") {
       return arrivalTime;
@@ -172,17 +110,29 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
       ) : Object.keys(activeJob).length === 0 ? (
         // Initial Sidebar
         <InitialSidebar
-          title="Get started"
-          description="Accept a job and start earning."
+          title={
+            router.pathname === "/dashboard"
+              ? "Get started"
+              : router.pathname === "/dashboard/myJobs"
+              ? "View Jobs"
+              : ""
+          }
+          description={
+            router.pathname === "/dashboard"
+              ? "Accept a job and start earning."
+              : router.pathname === "/dashboard/myJobs"
+              ? "Look at the jobs you have accepted"
+              : ""
+          }
           img_1="/assets/sidebar_assets/halo_1.png"
           img_2="/assets/sidebar_assets/halo_2.png"
         />
       ) : (
         <JobDetailsSidebar className="flex-col">
-          <div className="w-full h-full flex-1 p-7 flex flex-col gap-y-4">
-            <div className="flex items-center justify-between ">
+          <div className="w-full h-full flex-1 p-7 flex flex-col gap-y-4 scrollbar-thin overflow-y-scroll scrollbar-thumb-sky-700 scrollbar-track-transparent">
+            <div className="flex items-center justify-between">
               <h2 className="text-duber-pink font-semibold">
-                £ {formatPrice(activeJob.amount)}
+                £ {calculatePilotJobValue(activeJob.amount, transferRate)}
               </h2>
               <h2 className="text-duber-pink font-normal">#{activeJob.id}</h2>
             </div>
@@ -213,7 +163,7 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
               <div className="flex items-center gap-x-2">
                 <Calendar className="w-4 h-4 text-duber-teal" />
                 <p className="text-duber-teal text-sm">
-                  {formatDate(activeJob.date)}
+                  {convertToStandardDateFormat(activeJob.date)}
                 </p>
               </div>
 
@@ -266,13 +216,30 @@ const JobDetails_Sidebar = ({ disableAccept, transferRate }) => {
                 />
               </div>
 
-              <Button
-                variant={"skyBlue"}
-                size={"lg"}
-                className="w-full text-base h-11"
-              >
-                Accept Job
-              </Button>
+              {activeJob.status === "Available" ? (
+                <AcceptJob_DetailsBar
+                  jobID={activeJob.id}
+                  customerEmail={activeJob.customerID.email}
+                  customerFirstName={activeJob.customerID.firstName}
+                  disableAccept={disableAccept}
+                  jobDate={activeJob.date}
+                  includedDuration={includedDuration}
+                  extendedDuration={activeJob.extendDuration}
+                  timeOption={activeJob.time_option}
+                  arrivalTime={activeJob.arrivalTime}
+                />
+              ) : (
+                <Button
+                  variant={"skyBlue"}
+                  size={"lg"}
+                  className="w-full text-base h-11"
+                  onClick={() =>
+                    router.push(`/dashboard/myJobs/${activeJob.id}`)
+                  }
+                >
+                  View Job
+                </Button>
+              )}
             </div>
           </div>
         </JobDetailsSidebar>

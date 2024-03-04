@@ -6,3 +6,5 @@ export interface StoragePlanType {
   features?: string[],
   price?: number | 'free'
 }
+
+export type JobStatusType = 'Available' | "Live" | "Completed" 

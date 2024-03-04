@@ -8,6 +8,8 @@ export * from './types/BookingFeedbackTypes'
 
 // Controller Exports
 export * from './controllers/durationControllers'
+export * from './controllers/paymentDataControllers'
+export * from './controllers/formattingControllers'
 
 // Data Exports
 export * from './data/durationData'
