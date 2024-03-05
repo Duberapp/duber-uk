@@ -39,7 +39,7 @@ const AcceptJob_DetailsBar = ({
     setChooseTimePanel(!chooseTimePanel);
   };
 
-  const handleChooseTimeAndAcceptJob = async () => {
+  const handleChooseTimeAndAcceptJob = async (time_slot) => {
     try {
       setLoading(true);
 
@@ -50,7 +50,7 @@ const AcceptJob_DetailsBar = ({
         headers: {},
         data: {
           jobID: jobID,
-          arrivalTime: selectedArrivalTime,
+          arrivalTime: time_slot,
           pilotID: currentUser.id,
           clientEmail: customerEmail,
           clientName: customerFirstName,
@@ -117,7 +117,7 @@ const AcceptJob_DetailsBar = ({
               disabled={loading}
               onClick={() => {
                 setSelectedArrivalTime(slot);
-                handleChooseTimeAndAcceptJob();
+                handleChooseTimeAndAcceptJob(slot);
               }}
             >
               {slot}
