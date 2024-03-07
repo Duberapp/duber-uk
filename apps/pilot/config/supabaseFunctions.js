@@ -146,7 +146,8 @@ export const getSingleJob = async (jobID) => {
             pilotID,
             storagePlan,
             time_option,
-            extendDuration
+            extendDuration,
+            captureFormat
         `
     )
     .eq("id", jobID);

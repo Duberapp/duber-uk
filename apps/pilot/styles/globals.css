@@ -53,10 +53,13 @@
     @apply p-2 text-sm bg-red-400 rounded-md text-white;
   }
   .dropzone {
-    @apply w-full flex flex-col items-center justify-center py-16 bg-gray-100 rounded-xl border-2 border-dashed border-gray-300;
+    @apply h-[18rem] rounded-md border-2 border-dashed border-duber-skyBlue bg-duber-skyBlue-light flex items-center justify-center overflow-y-scroll scrollbar-thin;
+  }
+  .dropzone.with-files {
+    @apply items-start justify-start p-3;
   }
   .dropzone.focused {
-    @apply border-2 border-blue-300;
+    @apply border-2 border-duber-skyBlue;
   }
   .dropzone.accept {
     @apply border-2 border-green-500;

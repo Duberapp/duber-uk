@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { Button } from "ui";
 import { TimeOptions } from "../../../../packages/global-constants/src";
 import successToast from "../UI/Toast/successToast";
+import errorToast from "../UI/Toast/errorToast";
 
 const AcceptJob_DetailsBar = ({
   jobID,
@@ -88,6 +89,7 @@ const AcceptJob_DetailsBar = ({
         );
       }
     } catch (err) {
+      errorToast(`Job accept failed !`);
       setLoading(false);
     }
   };

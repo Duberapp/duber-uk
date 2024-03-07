@@ -31,9 +31,19 @@ import {
 } from "../../../redux/uploadLogSlice";
 import { useUser, useSessionContext } from "@supabase/auth-helpers-react";
 import GoogleMap from "../../../components/GoogleMap";
-import { Loading, SingleJob_OverviewCard } from "ui";
-import { RouteIcon, PhoneIcon } from "lucide-react";
-import { convertToStandardDateFormat } from "../../../../../packages/global-constants/src";
+import {
+  Button,
+  JobCancellationModal,
+  Loading,
+  SingleJob_OverviewCard,
+} from "ui";
+import { RouteIcon, PhoneIcon, Star } from "lucide-react";
+import {
+  convertToStandardDateFormat,
+  getUploadCountdown,
+  isOrderCancellationEligible,
+  pilotRateIssuesList,
+} from "../../../../../packages/global-constants/src";
 
 const SinglePage = () => {
   const {
@@ -55,6 +65,15 @@ const SinglePage = () => {
   const [currentJob, setCurrentJob] = useState({});
   const [transferRate, setTransferRate] = useState(0);
   const [includedDuration, setIncludedDuration] = useState(0);
+  const [countdown, setCountdown] = useState({ text: null, state: null });
+  const [showCancellationModal, setShowCancellationModal] = useState(false);
+
+  // Rating Data
+  const [customerRatingData, setCustomerRatingData] = useState({
+    rate: 3,
+    rateState: "",
+    issue: "Late",
+  });
 
   // File Structures
   const [uploading, setUploading] = useState(null);
@@ -130,9 +149,9 @@ const SinglePage = () => {
   }, [isSessionLoading]);
 
   // Show toast
-  useEffect(() => {
-    if (!loading && showNotification) successToast(notificationText);
-  }, [loading]);
+  // useEffect(() => {
+  //   if (!loading && showNotification) successToast(notificationText);
+  // }, [loading]);
 
   // Navigation back button handler
   const handleBackNavigate = () => {
@@ -364,6 +383,23 @@ const SinglePage = () => {
     }
   };
 
+  // Initialize countdown component
+  useEffect(() => {
+    if (currentJob && includedDuration !== 0) {
+      const interval = setInterval(() => {
+        setCountdown(
+          getUploadCountdown(
+            currentJob.date,
+            currentJob.arrivalTime,
+            includedDuration + currentJob.extendDuration
+          )
+        );
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [currentJob, includedDuration]);
+
   return (
     <>
       {/* --------------Notification-------------- */}
@@ -419,7 +455,15 @@ const SinglePage = () => {
             </div>
 
             {/* Job Details */}
-            <div className="mt-3 w-full h-full bg-white rounded-2xl">
+            <div className="mt-3 w-full h-full bg-white rounded-2xl relative">
+              {showCancellationModal && (
+                <JobCancellationModal
+                  className="absolute top-0 left-0 z-[1]"
+                  onCancel={(data, error) => setShowCancellationModal(false)}
+                  handleClose={() => setShowCancellationModal(false)}
+                />
+              )}
+
               {/* Job Details -> Content and Overview */}
               <div className="flex flex-row gap-x-4 p-5">
                 {/* Col 01 */}
@@ -455,24 +499,30 @@ const SinglePage = () => {
                           Location / Full Address
                         </p>
                         <p className="text-base text-duber-navyBlue">
-                          {currentJob.address}
+                          {currentJob.status !== "Completed"
+                            ? currentJob.address
+                            : currentJob.address.split(",")[
+                                currentJob.address.split(",").length - 2
+                              ]}
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-x-1">
-                        <RouteIcon
-                          className="w-4 h-4 text-skyBlue"
-                          strokeWidth={2}
-                        />
-                        <a
-                          className="text-sm underline text-skyBlue cursor-pointer"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href={`https://www.google.com/maps/place/${currentJob.address}`}
-                        >
-                          Open in maps
-                        </a>
-                      </div>
+                      {currentJob.status !== "Completed" && (
+                        <div className="flex items-center gap-x-1">
+                          <RouteIcon
+                            className="w-4 h-4 text-skyBlue"
+                            strokeWidth={2}
+                          />
+                          <a
+                            className="text-sm underline text-skyBlue cursor-pointer"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={`https://www.google.com/maps/place/${currentJob.address}`}
+                          >
+                            Open in maps
+                          </a>
+                        </div>
+                      )}
                     </div>
 
                     <div className="mt-2">
@@ -497,29 +547,33 @@ const SinglePage = () => {
                       </div>
                     </div>
 
-                    <div className="mt-2 flex items-end">
-                      <div className="flex-1">
-                        <p className="text-xs text-gray-400">Customers Name</p>
-                        <p className="text-base text-duber-navyBlue">
-                          {`${currentJob.customerID.title} ${currentJob.customerID.firstName} ${currentJob.customerID.lastName}`}
-                        </p>
+                    {currentJob.status !== "Completed" && (
+                      <div className="mt-2 flex items-end">
+                        <div className="flex-1">
+                          <p className="text-xs text-gray-400">
+                            Customers Name
+                          </p>
+                          <p className="text-base text-duber-navyBlue">
+                            {`${currentJob.customerID.title} ${currentJob.customerID.firstName} ${currentJob.customerID.lastName}`}
+                          </p>
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs text-gray-400">Company</p>
+                          <p className="text-base text-duber-navyBlue">
+                            {currentJob.customerID.companyName}
+                          </p>
+                        </div>
+                        <div className="flex-1 justify-end flex items-center gap-x-1">
+                          <PhoneIcon className="w-4 h-4 text-duber-skyBlue" />
+                          <a
+                            className="text-sm underline text-skyBlue cursor-pointer"
+                            href={`tel:${currentJob.customerID.phoneNumber}`}
+                          >
+                            Call Them
+                          </a>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-xs text-gray-400">Company</p>
-                        <p className="text-base text-duber-navyBlue">
-                          {currentJob.customerID.companyName}
-                        </p>
-                      </div>
-                      <div className="flex-1 justify-end flex items-center gap-x-1">
-                        <PhoneIcon className="w-4 h-4 text-duber-skyBlue" />
-                        <a
-                          className="text-sm underline text-skyBlue cursor-pointer"
-                          href={`tel:${currentJob.customerID.phoneNumber}`}
-                        >
-                          Call Them
-                        </a>
-                      </div>
-                    </div>
+                    )}
 
                     <div className="mt-2">
                       <p className="text-xs text-gray-400">Job Brief</p>
@@ -550,127 +604,148 @@ const SinglePage = () => {
                     </div>
                   )}
                 </div>
+              </div>
 
-                {/* <p className="text-gray-400 sm:text-lg text-sm">
-                  {currentJob.address}
-                </p>
+              {currentJob.status !== "Completed" ? (
+                <div className="flex items-center justify-between px-5 mt-3">
+                  <p className="text-duber-navyBlue">
+                    <span className="font-medium">Requested File Format</span>
+                    {currentJob.captureFormat === "Both (Video/Photo)"
+                      ? " (Photos & Videos)"
+                      : ` (${currentJob.captureFormat})`}
+                  </p>
 
-                <p className="text-black text-lg">
-                  <span className="text-black font-semibold">Start Date:</span>{" "}
-                  {new Date(currentJob.date).toDateString()}
-                </p>
-
-                <div className="flex justify-start flex-col items-start">
-                  <h2 className="text-black sm:text-lg text-base font-semibold">
-                    Customer Notes:
-                  </h2>
-                  <h2 className="text-black sm:text-base text-sm">
-                    {currentJob.customerNote}
-                  </h2>
-                </div>
-
-                {currentJob.status !== "Completed" && (
-                  <div className="flex justify-center flex-col">
-                    <h2 className="text-black sm:text-lg text-base font-semibold">
-                      Customer Details:
-                    </h2>
-                    <p className="text-black mt-1 font-normal sm:text-base text-sm">
-                      <span className="font-semibold">Name: </span>
-                      {currentJob.customerID.firstName}{" "}
-                      {currentJob.customerID.lastName}
+                  <div className="flex items-center gap-x-3">
+                    <p className="text-duber-skyBlue underline hover:font-medium cursor-pointer">
+                      Retry All
                     </p>
-                    <p className="text-black mt-1 font-normal sm:text-base text-sm">
-                      <span className="font-semibold">Email Address: </span>
-                      {currentJob.customerID.email}
-                    </p>
-                    <p className="text-black mt-1 font-normal sm:text-base text-sm">
-                      <span className="font-semibold">Phone Number: </span>
-                      {currentJob.customerID.phoneNumber}
-                    </p>
-                    <p className="text-black mt-1 font-normal sm:text-base text-sm">
-                      <span className="font-semibold">Company: </span>
-                      {currentJob.customerID.companyName}
+                    <p
+                      className="text-red-400 underline hover:font-medium cursor-pointer"
+                      onClick={() => {
+                        if (typeof window !== "undefined") {
+                          window.location.reload();
+                        }
+                      }}
+                    >
+                      Cancel Upload
                     </p>
                   </div>
-                )}
-
-                <h2 className="text-black sm:text-lg text-sm font-semibold">
-                  {currentJob.status !== "Completed" && (
-                    <span className="sm:hidden inline-flex items-center">
-                      Arrival Time {currentJob.arrivalTime}
-                      <AddToCalender
-                        data={{
-                          address: currentJob.address,
-                          id: currentJob.id,
-                          customerNotes: currentJob.customerNote,
-                          date: currentJob.date,
-                          arrivalTime: currentJob.arrivalTime,
-                          style: "dropdown",
-                        }}
-                      />
-                    </span>
-                  )}
-                  {currentJob.status === "Live" && <p>Upload Deliverables</p>}
-                </h2>
-                {currentJob.status !== "Completed" && (
-                  <h2 className="sm:block hidden text-gray-600  font-semibold text-2xl">
-                    Arrival Time {currentJob.arrivalTime}
+                </div>
+              ) : (
+                <div className="mt-5 px-5">
+                  <h2 className="font-semibold text-duber-navyBlue text-lg">
+                    Customers Feeback
                   </h2>
-                )} */}
-              </div>
+
+                  <div className="max-w-fit mt-3">
+                    <p className="w-full text-end mb-2 text-duber-navyBlue font-semibold text-sm">
+                      Feedback Status
+                    </p>
+
+                    <div className="flex items-center gap-x-3">
+                      {new Array(5).fill(undefined).map((_, index) => {
+                        index += 1;
+                        let isFilled = index <= customerRatingData.rate;
+
+                        return (
+                          <Star
+                            fill={`${isFilled ? "#2f51b6" : "#b3d1ff"}`}
+                            strokeWidth={0}
+                            className="w-8 h-8"
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {customerRatingData.issue && (
+                    <div className="mt-4">
+                      <p className="text-xs text-duber-navyBlue">
+                        What was the issue ?
+                      </p>
+                      <div className="mt-1 flex items-center gap-x-2">
+                        {pilotRateIssuesList.map((issue) => (
+                          <div
+                            key={issue.id}
+                            className={`px-3 py-1 rounded-md ${
+                              customerRatingData.issue === issue.issue
+                                ? "bg-gray-500 text-white"
+                                : "text-gray-500 border border-gray-500"
+                            }`}
+                          >
+                            {issue.issue}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* File Upload */}
               {currentJob.status === "Live" && (
-                <div className="mt-5 sm:mx-12 mx-3">
-                  <section className="cursor-pointer mb-5">
-                    {!uploading && !completingJob && (
+                <div className="mt-3 px-5">
+                  {countdown.state === "available" ? (
+                    <section className="cursor-pointer mb-5">
                       <div
                         {...getRootProps({
-                          className: `dropzone ${isFocused && "focused"} ${
+                          className: `dropzone ${
+                            uploadedFiles.length !== 0 && "with-files"
+                          } ${isFocused && "focused"} ${
                             isDragAccept && "accept"
                           }`,
                         })}
                       >
                         <input {...getInputProps()} />
-                        <img
-                          src="/assets/folder.png"
-                          alt=""
-                          className="sm:w-20 w-14 mb-3"
-                        />
-                        <p className="sm:text-xl text-base text-slate-400">
-                          Drag &apos; Drop or Click to Upload
-                        </p>
+                        {uploadedFiles.length === 0 ? (
+                          <p className="text-base font-semibold text-duber-skyBlue">
+                            {`Drag & Drop or Select Files`}
+                          </p>
+                        ) : (
+                          <UploadedFileBadges
+                            uploadedFiles={uploadedFiles}
+                            handleReupload={reuploadFile}
+                          />
+                        )}
                       </div>
-                    )}
-
-                    {uploadedFiles.length !== 0 && (
-                      <aside className="mt-3 cursor-default">
-                        <h4 className="my-2 font-semibold">Files</h4>
-
-                        <UploadedFileBadges
-                          uploadedFiles={uploadedFiles}
-                          handleReupload={reuploadFile}
-                        />
-                      </aside>
-                    )}
-                  </section>
+                    </section>
+                  ) : countdown.state === "counting" ? (
+                    <div className="h-[18rem] mb-5 rounded-md border-2 border-dashed border-duber-skyBlue bg-duber-skyBlue-light flex items-center justify-center">
+                      <p className="font-semibold text-duber-skyBlue">
+                        {countdown.text}
+                      </p>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
 
                   {error && (
                     <p className="text-xs text-red-500 mb-2">{error}</p>
                   )}
 
-                  <button
-                    className={`${
-                      uploadedFiles.length === 0
-                        ? "disabled bg-gray-400"
-                        : "bg-teal-400"
-                    } w-full h-16 rounded-lg  text-white sm:text-xl text-base font-semibold`}
-                    onClick={triggerUploadProcess}
-                  >
-                    {uploading === null ? (
-                      "Upload files to complete job"
-                    ) : (
-                      <>
+                  {countdown.state === "counting" &&
+                    isOrderCancellationEligible(currentJob.date) && (
+                      <Button
+                        onClick={() => setShowCancellationModal(true)}
+                        size={"lg"}
+                        className="w-full h-14 bg-red-200 text-red-500 hover:bg-red-300 text-base"
+                      >
+                        Cancel Job
+                      </Button>
+                    )}
+
+                  {countdown.state === "available" && (
+                    <button
+                      className={`${
+                        uploadedFiles.length === 0
+                          ? "disabled bg-gray-400"
+                          : "bg-teal-400"
+                      } w-full h-16 rounded-lg  text-white sm:text-xl text-base font-semibold`}
+                      onClick={triggerUploadProcess}
+                    >
+                      {uploading === null ? (
+                        "Upload files to complete job"
+                      ) : (
                         <ProgressBar
                           height={16}
                           currentUploadedSize={currentUploadedSize}
@@ -680,22 +755,9 @@ const SinglePage = () => {
                           handleCompleteJob={handleCompleteJob}
                           isCompleting={completingJob}
                         />
-
-                        {!completingJob && (
-                          <p
-                            className="mt-3 text-xs text-gray-700 hover:text-black hover:underline"
-                            onClick={() => {
-                              if (typeof window !== "undefined") {
-                                window.location.reload();
-                              }
-                            }}
-                          >
-                            Cancel Upload
-                          </p>
-                        )}
-                      </>
-                    )}
-                  </button>
+                      )}
+                    </button>
+                  )}
                 </div>
               )}
             </div>

@@ -57,3 +57,18 @@ export const convertToStandardDateFormat = (dateString: string): string => {
 
   return formattedDate;
 };
+
+export function isOrderCancellationEligible(orderDate: Date): boolean {
+  const formattedOrderDate: Date = new Date(orderDate);
+  // Get the current date
+  const currentDate: Date = new Date();
+
+  // Calculate the difference in milliseconds between the order date and the current date
+  const timeDifference: number = formattedOrderDate.getTime() - currentDate.getTime();
+
+  // Convert milliseconds to days
+  const daysDifference: number = timeDifference / (1000 * 3600 * 24);
+
+  // Check if the pilot is eligible to cancel (1 day before the order date)
+  return daysDifference > 1;
+}

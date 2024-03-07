@@ -102,8 +102,8 @@ const ProgressBadge = ({ file, handleReupload }) => {
           ? "bg-red-500 cursor-pointer hover:bg-red-600"
           : badgeProgress > 99
           ? "bg-teal-500"
-          : "bg-gray-200"
-      }  h-6 relative rounded-full flex items-center`}
+          : "bg-slate-50"
+      }  h-7 relative rounded-md flex items-center`}
     >
       {/* Hint lable */}
       {isHintShow && (
@@ -115,7 +115,7 @@ const ProgressBadge = ({ file, handleReupload }) => {
       {badgeProgress < 100 && (
         <div
           style={{ width: `${badgeProgress}%` }}
-          className={`h-full absolute rounded-full bg-green-300 ${
+          className={`h-full absolute rounded-md bg-green-300 ${
             badgeProgress > 4 && "border border-green-400"
           } transition-all duration-300 ease-linear `}
         />
@@ -128,7 +128,7 @@ const ProgressBadge = ({ file, handleReupload }) => {
             ? "text-white"
             : badgeProgress > 50
             ? "text-green-700"
-            : "text-gray-600"
+            : "text-gray-900"
         } w-full h-full px-3 flex items-center justify-center`}
       >
         {isInvalid && (
