@@ -70,9 +70,8 @@ const SinglePage = () => {
 
   // Rating Data
   const [customerRatingData, setCustomerRatingData] = useState({
-    rate: 3,
-    rateState: "",
-    issue: "Late",
+    ratingScore: 3,
+    ratingReason: "Late",
   });
 
   // File Structures
@@ -639,13 +638,23 @@ const SinglePage = () => {
 
                   <div className="max-w-fit mt-3">
                     <p className="w-full text-end mb-2 text-duber-navyBlue font-semibold text-sm">
-                      Feedback Status
+                      {customerRatingData.ratingScore === 1
+                        ? "Terrible"
+                        : customerRatingData.ratingScore === 2
+                        ? "Poor"
+                        : customerRatingData.ratingScore === 3
+                        ? "Okay"
+                        : customerRatingData.ratingScore === 4
+                        ? "Good"
+                        : customerRatingData.ratingScore === 5
+                        ? "Excellent"
+                        : ""}
                     </p>
 
                     <div className="flex items-center gap-x-3">
                       {new Array(5).fill(undefined).map((_, index) => {
                         index += 1;
-                        let isFilled = index <= customerRatingData.rate;
+                        let isFilled = index <= customerRatingData.ratingScore;
 
                         return (
                           <Star
@@ -658,7 +667,7 @@ const SinglePage = () => {
                     </div>
                   </div>
 
-                  {customerRatingData.issue && (
+                  {customerRatingData.ratingReason && (
                     <div className="mt-4">
                       <p className="text-xs text-duber-navyBlue">
                         What was the issue ?
@@ -668,7 +677,7 @@ const SinglePage = () => {
                           <div
                             key={issue.id}
                             className={`px-3 py-1 rounded-md ${
-                              customerRatingData.issue === issue.issue
+                              customerRatingData.ratingReason === issue.issue
                                 ? "bg-gray-500 text-white"
                                 : "text-gray-500 border border-gray-500"
                             }`}
