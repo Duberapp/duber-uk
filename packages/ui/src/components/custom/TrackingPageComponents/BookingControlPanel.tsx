@@ -253,6 +253,9 @@ function DeliverablesView({ pilotData, deliverablesList, orderData, isDeliverabl
 }) {
   const [isIssuesShowing, setIsIssuesShowing] = useState<boolean>(false);
 
+  // TEMP
+  console.log(deliverablesList)
+
   return (
     <div className="w-full h-full flex flex-col gap-y-3 bg-gray-200 p-2.5">
       <div className='relative w-full h-full flex flex-col gap-y-3'>
