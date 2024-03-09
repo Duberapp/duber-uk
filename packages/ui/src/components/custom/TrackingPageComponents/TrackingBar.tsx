@@ -13,7 +13,7 @@ type TrackingBarProps = {
 type ElementState = 'completed' | 'active' | ""
 
 export default function TrackingBar({ className, deliverables, status }: TrackingBarProps) {
-  if (status === "Completed" && deliverables) {
+  if (status === "Completed" && deliverables !== null) {
     status = "Uploaded";
   }
 

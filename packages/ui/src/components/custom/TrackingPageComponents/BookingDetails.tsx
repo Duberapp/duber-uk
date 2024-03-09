@@ -11,13 +11,15 @@ import {
 import Button from '../DuberButton';
 
 export interface OrderData {
+  id?: number,
   address: string,
   date: string,
   arrivalTime: null | string,
   duration: number,
   expertise: PilotExpertiseTitle,
   delivery_method: string,
-  bookingDescription: string
+  bookingDescription: string,
+  customerID?: number
 }
 
 type Props = {

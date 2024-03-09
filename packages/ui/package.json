@@ -5,8 +5,7 @@
   "types": "./src/index.tsx",
   "license": "MIT",
   "files": [
-    "style/tailwind.config.ts",
-    "src/shared-data.ts"
+    "style/tailwind.config.ts"
   ],
   "exports": {
     ".": "./src/index.tsx",
@@ -42,6 +41,7 @@
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@storybook/react": "^7.1.1",
+    "@supabase/supabase-js": "^2.39.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",

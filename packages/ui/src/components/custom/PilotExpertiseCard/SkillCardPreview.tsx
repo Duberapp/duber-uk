@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import SkillCard from '../PilotExpertiseCard/SkillCard'
-import { PilotSkill, pilot_skills } from '../../../shared-data'
+import { PilotSkill, pilot_skills } from 'global-constants'
 
 interface SkillCardPreviewProps { }
 

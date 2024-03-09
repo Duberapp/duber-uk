@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setActiveJob } from "../../../redux/activeJobSlice";
 import {
   getJobListingByPilotId,
+  getJobRating,
   getSingleJob,
   getUserByEmail,
   selectPaymentData,
@@ -70,8 +71,8 @@ const SinglePage = () => {
 
   // Rating Data
   const [customerRatingData, setCustomerRatingData] = useState({
-    ratingScore: 3,
-    ratingReason: "Late",
+    ratingScore: 0,
+    ratingReason: null,
   });
 
   // File Structures
@@ -129,6 +130,18 @@ const SinglePage = () => {
         }
 
         await getPaymentData();
+
+        let { data: ratingData, error: ratingError } = await getJobRating(
+          data[0].id
+        );
+        if (!ratingError) {
+          ratingData = ratingData[0];
+
+          setCustomerRatingData({
+            ratingScore: parseInt(ratingData.ratingScore),
+            ratingReason: ratingData.ratingReason,
+          });
+        }
 
         setCurrentJob(data[0]);
         setLoading(false);

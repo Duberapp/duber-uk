@@ -1,17 +1,7 @@
-import { PilotSkill_Title } from "@/shared-data"
+import { PilotSkill_Title } from "global-constants"
+import { Tables } from "global-constants/src/supabase/pilot.supabase";
 
-export type PilotDataType = {
-  name: string,
-  contactNumber?: string,
-  pilotExpertise?: PilotSkill_Title,
-  droneEquipments?: string[],
-  CAA_Info?: {
-    operator_id: string,
-    flyer_id: string
-  },
-  trainingProof?: string,
-  insuranceProof?: string
-}
+export type PilotDataType = Tables<'Employees'>
 
 export type DeliverableType = {
   id?: number,

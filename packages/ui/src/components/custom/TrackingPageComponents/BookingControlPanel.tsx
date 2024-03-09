@@ -1,10 +1,12 @@
 import React, { Dispatch, SetStateAction, useState, useEffect } from 'react'
 import { DeliverableType, type BookingControlPanelDataTypes, type PilotDataType } from './types'
 import Button from "../DuberButton";
-import { Phone, FileDown, FolderDown, Star } from "lucide-react";
-import { type PilotRateIssueType, pilotRateIssuesList, type RatingStatusType } from 'global-constants';
+import { Phone, FileDown, FolderDown, Star, Loader2 } from "lucide-react";
+import { type PilotRateIssueType, pilotRateIssuesList, type RatingStatusType, pilot_skills, getPilotProfilePictureLink } from 'global-constants';
 import MobileBookingDetails from './MobileBookingDetails';
 import { OrderData } from './BookingDetails';
+import Loading from '../Loading';
+import { customerClient } from "../../../supabase/client";
 
 type handleCancelBooking = () => void;
 
@@ -42,6 +44,11 @@ export default function BookingControlPanel({
   showMobileBookingDetails,
   setShowMobileBookingDetails
 }: BookingControlPanelProps) {
+
+  if (isPilotAssigned) {
+    console.log(pilotData)
+  }
+
   return (
     <div className={`relative w-full h-full  overflow-hidden flex flex-col rounded-lg ${className}`}>
       <div className={`w-full flex-1 z-20 flex flex-col items-center sm:justify-end justify-between ${deliverablesView ? "p-0" : 'p-2 h-full'}`}>
@@ -68,6 +75,7 @@ export default function BookingControlPanel({
         {(deliverablesView && !showSubscriptionView) && (
           <DeliverablesView
             pilotData={pilotData!}
+            orderData={orderData!}
             deliverablesList={deliverablesList}
             isDeliverablesExpired={isDeliverablesExpired!}
             setShowSubscriptionView={setShowSubscriptionView!}
@@ -148,10 +156,10 @@ function PilotDetaisPanel({ isPilotAssigned, pilotData }: { isPilotAssigned: boo
   const [showMore, setShowMore] = useState<boolean>(false)
 
   function handleDownloadProof({ type }: { type: "training" | "insurance" }) {
-    let url = type === 'insurance' ? pilotData.insuranceProof : type === 'training' ? pilotData.trainingProof : "";
+    let url = type === 'insurance' ? pilotData.droneInsurance : type === 'training' ? pilotData.proofDoc : "";
 
     if (typeof window !== "undefined") {
-      window.open(url, '_blank');
+      window.open(url!, '_blank');
     }
   }
 
@@ -164,31 +172,37 @@ function PilotDetaisPanel({ isPilotAssigned, pilotData }: { isPilotAssigned: boo
 
       <div className={`w-full flex justify-between items-center`}>
         <div className={`flex flex-1 gap-x-3 ${showMore ? "flex-row-reverse items-start justify-between" : "items-center"}`}>
-          <img src="/assets/avatar.jpg" alt="" className='h-16 rounded-lg' />
+          <img src={pilotData?.profilePic ? getPilotProfilePictureLink(pilotData.profilePic) : "/assets/avatar.jpg"} alt="" className='h-16 rounded-lg' />
 
           <div className="">
             <h2 className='font-semibold text-base text-duber-navyBlue'>Pilot {showMore ? "Name" : "Assigned"}</h2>
-            <h2 className='text-sm text-duber-navyBlue'>{isPilotAssigned ? pilotData.name : 'To be confirmed'}</h2>
+            <h2 className='text-sm text-duber-navyBlue'>{isPilotAssigned ? `${pilotData.firstName} ${pilotData.lastName}` : 'To be confirmed'}</h2>
           </div>
         </div>
 
-        {pilotData?.contactNumber && !showMore && <div className='p-3 rounded-lg bg-duber-skyBlue'>
+        {pilotData?.telNumber && !showMore && <a href={`tel:${pilotData.telNumber}`} className='p-3 rounded-lg bg-duber-skyBlue'>
           <Phone className='w-5 h-5 text-white' />
-        </div>}
+        </a>}
       </div>
 
       {showMore && <div className=''>
         <h2 className='text-sm font-semibold text-duber-navyBlue'>Expertise</h2>
-        <p className='mt-1 text-xs text-duber-navyBlue'>{pilotData.pilotExpertise}</p>
+        <p className='mt-1 text-xs text-duber-navyBlue'>
+          {pilotData.pilot_skill?.map((skill, index) => (
+            <span key={index}>{pilot_skills.filter(skillData => skillData.slug === skill)[0].title}, </span>
+          ))}
+        </p>
 
         <h2 className='mt-3 text-sm font-semibold text-duber-navyBlue'>Drone Equipment</h2>
         <p className='mt-1 text-xs text-duber-navyBlue'>
-          {pilotData.droneEquipments?.map((item, index) => <span key={index}>{item}, </span>)}
+          {pilotData.userDrones?.map(drone => (
+            <span key={drone.id}>{drone.brand.name} {drone.model}, </span>
+          ))}
         </p>
 
         <h2 className='mt-3 text-sm font-semibold text-duber-navyBlue'>CAA Information</h2>
-        <p className='mt-1 text-xs text-duber-navyBlue'>Operator ID : {pilotData.CAA_Info?.operator_id}</p>
-        <p className='mt-1 text-xs text-duber-navyBlue'>Flyer ID : {pilotData.CAA_Info?.flyer_id}</p>
+        <p className='mt-1 text-xs text-duber-navyBlue'>Operator ID : {pilotData.operatorID}</p>
+        <p className='mt-1 text-xs text-duber-navyBlue'>Flyer ID : {pilotData.flyerID}</p>
 
 
 
@@ -230,8 +244,9 @@ function DeliverableItem({ id, link, name, thumbnail, isDeliverablesExpired }: D
   )
 }
 
-function DeliverablesView({ pilotData, deliverablesList, isDeliverablesExpired, setShowSubscriptionView }: {
+function DeliverablesView({ pilotData, deliverablesList, orderData, isDeliverablesExpired, setShowSubscriptionView }: {
   pilotData: PilotDataType,
+  orderData: OrderData,
   deliverablesList: DeliverableType[] | [] | undefined,
   isDeliverablesExpired: boolean,
   setShowSubscriptionView: Dispatch<SetStateAction<boolean>>
@@ -262,23 +277,24 @@ function DeliverablesView({ pilotData, deliverablesList, isDeliverablesExpired, 
 
         {/* Deliverable List */}
         <div className={`flex-1 w-full grid grid-cols-3 gap-2 ${isIssuesShowing ? "max-h-[10rem]" : "max-h-[16rem]"} overflow-y-scroll`}>
-          {deliverablesList && deliverablesList.map((item) =>
+          {/* {deliverablesList && deliverablesList.map((item) =>
             <DeliverableItem
               key={item.id} id={item.id} link={item.link} name={item.name} thumbnail={item.thumbnail}
               isDeliverablesExpired={isDeliverablesExpired}
             />
-          )}
+          )} */}
         </div>
       </div>
 
       {/* Rate Pilot */}
-      <PilotRatingCard pilotData={pilotData} setIsIssuesShowing={setIsIssuesShowing} />
+      <PilotRatingCard pilotData={pilotData} orderData={orderData} setIsIssuesShowing={setIsIssuesShowing} />
     </div>
   )
 }
 
-function PilotRatingCard({ pilotData, setIsIssuesShowing }: {
+function PilotRatingCard({ pilotData, setIsIssuesShowing, orderData }: {
   pilotData: PilotDataType,
+  orderData: OrderData,
   setIsIssuesShowing: Dispatch<SetStateAction<boolean>>,
 }) {
   type StarIndexParam = { starIndex: number };
@@ -286,7 +302,45 @@ function PilotRatingCard({ pilotData, setIsIssuesShowing }: {
   const [pilotRate, setPilotRate] = useState<number>(0);
   const [showIssuePanel, setShowIssuePanel] = useState<boolean>(false);
   const [pilotIssue, setPilotIssue] = useState<PilotRateIssueType | null>(null);
-  const [ratingStatus, setRatingStatus] = useState<RatingStatusType | null>(null)
+  const [ratingStatus, setRatingStatus] = useState<RatingStatusType | null>(null);
+  const [submittingRate, setSubmittingRate] = useState<boolean>(false);
+  const [initializing, setInitializing] = useState<boolean | 'initialized'>(false)
+
+  async function initializeFeedback() {
+    try {
+      setInitializing(true)
+
+      const { data, error } = await customerClient.from('Feedback')
+        .select()
+        .eq('orderID', orderData.id!)
+
+      if (!error) {
+        if (data.length < 1) return;
+        const initializedScore = parseInt(data[0].ratingScore!);
+
+        setPilotRate(initializedScore);
+        setPilotIssue(data[0].ratingReason as PilotRateIssueType);
+
+        // Fill Stars
+        let forFilled: number[] = [];
+
+        for (let i = 1; i <= initializedScore; i++) {
+          forFilled.push(i);
+        }
+
+        setFilledStars(forFilled)
+      } else throw error
+
+      setInitializing('initialized')
+    } catch (err) {
+      setInitializing('initialized')
+    }
+  }
+
+  useEffect(() => {
+    initializeFeedback()
+  }, [])
+
 
   useEffect(() => {
     if (pilotRate === 1) {
@@ -305,7 +359,6 @@ function PilotRatingCard({ pilotData, setIsIssuesShowing }: {
               setRatingStatus(null);
     }
   }, [pilotRate])
-
 
   function onMouseEnterStar({ starIndex }: StarIndexParam) {
     if (pilotRate) return;
@@ -339,17 +392,72 @@ function PilotRatingCard({ pilotData, setIsIssuesShowing }: {
     setPilotRate(starIndex)
   }
 
+  async function triggerFeedbackRequest() {
+    try {
+      setSubmittingRate(true)
+
+      // get exsisting record
+      const { data: exsistingData, error: exsistingError } = await customerClient
+        .from('Feedback').select().eq('orderID', orderData.id!)
+
+      if (!exsistingError) {
+        if (exsistingData.length > 0) {
+          const { data, error } = await customerClient
+            .from('Feedback')
+            .update({ ratingScore: `${pilotRate}`, ratingReason: pilotRate > 1 ? null : pilotIssue })
+            .eq('orderID', orderData.id!)
+            .select()
+
+          if (!error) {
+            setPilotRate(parseInt(data[0].ratingScore!))
+            setPilotIssue(data[0].ratingReason as PilotRateIssueType)
+          }
+        } else {
+          const { data, error } = await customerClient
+            .from('Feedback')
+            .insert({
+              orderID: orderData.id,
+              customerID: orderData.customerID,
+              pilotID: pilotData.id,
+              ratingScore: `${pilotRate}`,
+              ratingReason: pilotRate > 1 ? null : pilotIssue
+            })
+            .select()
+
+          if (!error) {
+            setPilotRate(parseInt(data[0].ratingScore!))
+            setPilotIssue(data[0].ratingReason as PilotRateIssueType)
+          }
+        }
+      }
+
+      setSubmittingRate(false)
+    } catch (err) {
+      setSubmittingRate(false)
+    }
+  }
+
+  // Handle trigger feedback request in effect
+  useEffect(() => {
+    initializing === 'initialized' && triggerFeedbackRequest()
+  }, [initializing, pilotRate, pilotIssue])
+
+
   return (
     <div className="w-full p-2.5 bg-white rounded-lg">
       <h2 className="text-duber-navyBlue font-semibold text-lg mb-3">Rate Pilot</h2>
 
-      <div className={`flex gap-x-3 ${showIssuePanel ? "items-start" : "items-center"}`}>
-        <img src="assets/avatar.jpg" alt="" className='h-16 rounded-lg' />
+      <div className={`relative flex gap-x-3 ${showIssuePanel ? "items-start" : "items-center"}`}>
+        {initializing !== 'initialized' && <div className="absolute top-0 left-0 w-full h-full bg-white/70 flex items-center justify-center">
+          <Loading className={'w-4 h-4 text-duber-navyBlue'} />
+        </div>}
+
+        <img src={pilotData.profilePic ? getPilotProfilePictureLink(pilotData.profilePic) : "assets/avatar.jpg"} alt="" className='h-16 rounded-lg' />
 
         <div className="">
           <div className="flex items-center justify-between">
-            <p className="text-duber-navyBlue text-[13px]">{pilotData.name}</p>
-            {ratingStatus && <p className="text-duber-navyBlue text-base font-semibold">{ratingStatus}</p>}
+            <p className="text-duber-navyBlue text-[13px]">{pilotData.firstName} {pilotData.lastName}</p>
+            {ratingStatus && <p className="text-duber-navyBlue text-base font-semibold flex items-center gap-x-1">{submittingRate && <Loading className={'w-4 h-4 text-duber-navyBlue'} />} {ratingStatus}</p>}
           </div>
           <div className="mt-1 flex items-center gap-x-2">
             {new Array(5).fill(undefined).map((_, index) => {

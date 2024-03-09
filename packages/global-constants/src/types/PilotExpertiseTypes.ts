@@ -1,4 +1,3 @@
-
 export type PilotExpertiseTitle = 'Asset Management' | 'Marketing' | 'Social Events';
 export type PilotExpertiseSlug = 'asset_management' | 'marketing' | 'social_events';
 

@@ -242,6 +242,15 @@ export const updateForgotPassword = async (email, timestamp, password) => {
   return data;
 };
 
+export const getJobRating = async (jobId) => {
+  const res = await customerClient
+    .from("Feedback")
+    .select()
+    .eq("orderID", jobId);
+
+  return res;
+};
+
 // =====================================================
 // ------------------ ADMIN FUNCTIONS ------------------
 // =====================================================

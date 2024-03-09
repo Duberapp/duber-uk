@@ -91,9 +91,7 @@ export const updateEmployeeJobs = async (body) => {
 export const getPilotData = async (id) => {
   const res = await supabaseEmployeeClient
     .from("Employees")
-    .select(
-      "firstName, lastName, telNumber, email, userSkills, userDrones, profilePic"
-    )
+    .select("*")
     .eq("id", id);
 
   return res;

@@ -4,7 +4,7 @@
  * Used in        : workspace-pilot
  */
 import { Dispatch, SetStateAction, useState, useRef } from 'react'
-import { pilot_skills, type PilotSkill, type PilotSkill_Slug } from '../../../shared-data'
+import { pilot_skills, type PilotSkill, type PilotSkill_Slug } from 'global-constants'
 import { Card } from '../../../components/ui/card'
 import CheckCircleIcon from '../../../icons/CheckCircleIcon';
 

@@ -79,23 +79,21 @@ const TrackOrder = ({ data, pilot, error }) => {
   const [showSubscriptionView, setShowSubscriptionView] = useState(false);
   const [showMobileBookingDetails, setShowMobileBookingDetails] =
     useState(false);
-
-  const deliverablesList = new Array(30).fill().map((_, index) => ({
-    id: index + 1,
-    name: "DJI_12322432.img",
-    thumbnail: "assets/deliver_thumbnail_test.jpg",
-    link: "#",
-  }));
   // ================-----=================
 
-  const handleDownloadReceipt = () =>
+  const handleDownloadReceipt = () => {
     window.open(`${data.invoiceURL}`, "_blank");
+  };
 
   return (
     <MainLayout TrackingPage={true}>
       <div className="w-full sm:h-screen h-[90vh] flex items-center justify-center">
         <TrackingPageLayout>
-          <TrackingBar className="min-w-full" status={data.status} />
+          <TrackingBar
+            className="min-w-full"
+            status={data.status}
+            deliverables={data.deliverableURLs}
+          />
 
           <SubscriptionInfoBar
             className="min-w-full"
@@ -116,6 +114,7 @@ const TrackOrder = ({ data, pilot, error }) => {
             <BookingDetails
               className="sm:flex hidden flex-1"
               orderData={{
+                id: data.id,
                 address: data.address,
                 arrivalTime: data.arrivalTime,
                 date: formatDate(new Date(data.date)),
@@ -125,6 +124,7 @@ const TrackOrder = ({ data, pilot, error }) => {
                   (exp) => exp.slug === data.pilotExpertize
                 )[0].title,
                 bookingDescription: data.customerNote,
+                customerID: data.customerID,
               }}
               AddToCalender={
                 <AddToCalender
@@ -160,10 +160,12 @@ const TrackOrder = ({ data, pilot, error }) => {
               }
               showCancelBookingPanel={showCancelBookingPanel}
               setShowCancelBookingPanel={setShowCancelBookingPanel}
-              isPilotAssigned={false}
-              pilotData={{}}
-              deliverablesView={false}
-              deliverablesList={deliverablesList}
+              isPilotAssigned={pilot !== null}
+              pilotData={pilot}
+              deliverablesView={
+                data.status === "Completed" && data.deliverableURLs !== null
+              }
+              deliverablesList={data.deliverableURLs}
               isDeliverablesExpired={false}
               showSubscriptionView={showSubscriptionView}
               setShowSubscriptionView={setShowSubscriptionView}
@@ -181,6 +183,7 @@ const TrackOrder = ({ data, pilot, error }) => {
                 </div>
               }
               orderData={{
+                id: data.id,
                 address: data.address,
                 arrivalTime: data.arrivalTime,
                 date: formatDate(new Date(data.date)),
@@ -190,6 +193,7 @@ const TrackOrder = ({ data, pilot, error }) => {
                   (exp) => exp.slug === data.pilotExpertize
                 )[0].title,
                 bookingDescription: data.customerNote,
+                customerID: data.customerID,
               }}
             />
           </div>
