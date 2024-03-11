@@ -131,16 +131,18 @@ const SinglePage = () => {
 
         await getPaymentData();
 
-        let { data: ratingData, error: ratingError } = await getJobRating(
-          data[0].id
-        );
-        if (!ratingError) {
-          ratingData = ratingData[0];
+        if (data[0].status === "Completed") {
+          let { data: ratingData, error: ratingError } = await getJobRating(
+            data[0].id
+          );
+          if (!ratingError && ratingData) {
+            ratingData = ratingData[0];
 
-          setCustomerRatingData({
-            ratingScore: parseInt(ratingData.ratingScore),
-            ratingReason: ratingData.ratingReason,
-          });
+            setCustomerRatingData({
+              ratingScore: parseInt(ratingData.ratingScore),
+              ratingReason: ratingData.ratingReason,
+            });
+          }
         }
 
         setCurrentJob(data[0]);
@@ -397,7 +399,11 @@ const SinglePage = () => {
 
   // Initialize countdown component
   useEffect(() => {
-    if (currentJob && includedDuration !== 0) {
+    if (
+      currentJob &&
+      includedDuration !== 0 &&
+      currentJob.status !== "Completed"
+    ) {
       const interval = setInterval(() => {
         setCountdown(
           getUploadCountdown(
