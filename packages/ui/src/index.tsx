@@ -1,8 +1,5 @@
 import "../style/styles.css"
 
-// supabase exports
-export * from './supabase/client'
-
 // data exports
 export { pilot_skills } from 'global-constants'
 
