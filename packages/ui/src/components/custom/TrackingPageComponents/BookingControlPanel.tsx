@@ -2,11 +2,12 @@ import React, { Dispatch, SetStateAction, useState, useEffect } from 'react'
 import { DeliverableType, type BookingControlPanelDataTypes, type PilotDataType } from './types'
 import Button from "../DuberButton";
 import { Phone, FileDown, FolderDown, Star, Loader2 } from "lucide-react";
-import { type PilotRateIssueType, pilotRateIssuesList, type RatingStatusType, pilot_skills, getPilotProfilePictureLink } from 'global-constants';
+import { type PilotRateIssueType, pilotRateIssuesList, type RatingStatusType, pilot_skills } from 'global-constants';
 import MobileBookingDetails from './MobileBookingDetails';
 import { OrderData } from './BookingDetails';
 import Loading from '../Loading';
 import { customerClient } from "supabase-config";
+import { getPilotProfilePictureLink } from "supabase-config";
 
 type handleCancelBooking = () => void;
 
