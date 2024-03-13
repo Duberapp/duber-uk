@@ -6,7 +6,7 @@ import { type PilotRateIssueType, pilotRateIssuesList, type RatingStatusType, pi
 import MobileBookingDetails from './MobileBookingDetails';
 import { OrderData } from './BookingDetails';
 import Loading from '../Loading';
-import { customerClient } from "../../../supabase/client";
+import { customerClient } from "supabase-config";
 
 type handleCancelBooking = () => void;
 

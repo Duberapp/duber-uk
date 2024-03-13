@@ -40,7 +40,8 @@
     "react-redux": "^8.0.4",
     "turf-area": "^3.0.12",
     "tw-elements": "^1.0.0-alpha12",
-    "ui": "workspace:*"
+    "ui": "workspace:*",
+    "supabase-config": "workspace:*"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",

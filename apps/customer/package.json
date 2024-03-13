@@ -45,6 +45,7 @@
     "rlayers": "^1.4.7",
     "stripe": "^10.15.0",
     "ui": "workspace:*",
+    "supabase-config": "workspace:*",
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {

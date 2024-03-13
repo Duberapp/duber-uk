@@ -3,6 +3,7 @@ const withTM = require("next-transpile-modules")([
   "ui",
   "global-constants",
   "duber-maps",
+  "supabase-config",
 ]);
 
 const nextConfig = withTM({

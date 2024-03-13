@@ -2,6 +2,7 @@
 const withTM = require("next-transpile-modules")([
   "ui",
   "duber-maps",
+  "supabase-config",
   "global-constants",
 ]);
 
