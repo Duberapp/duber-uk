@@ -1,5 +1,4 @@
-import supabase from "./supabaseClient";
-import customerClient from "./customerClient";
+import { customerClient, pilotClient as supabase } from "supabase-config";
 import { EncryptPassword } from "../utils/passwordSecure";
 import axios from "axios";
 
