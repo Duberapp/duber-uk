@@ -12,7 +12,6 @@ export * from './controllers/durationControllers'
 export * from './controllers/paymentDataControllers'
 export * from './controllers/formattingControllers'
 export * from './controllers/uploadCountdownAlgo'
-export * from './controllers/supabaseControllers/functions'
 
 // Data Exports
 export * from './data/durationData'
@@ -21,6 +20,3 @@ export * from './data/storagePlans'
 export * from './data/bookingFeedbackData'
 export * from './data/cancellationData'
 export * from './data/pilotSkillData'
-
-// Supabase Exports
-export * from './supabase/keys'
