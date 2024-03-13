@@ -5,6 +5,7 @@ export * from './types/DurationTypes'
 export * from './types'
 export * from './types/BookingFeedbackTypes'
 export * from './types/PilotSkillTypes'
+export * from './types/BackendRequestTypes'
 
 // Controller Exports
 export * from './controllers/durationControllers'

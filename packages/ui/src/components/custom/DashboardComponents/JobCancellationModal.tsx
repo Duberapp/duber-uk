@@ -1,17 +1,12 @@
 import { useState } from 'react'
-import { JobCancellationReasons } from "global-constants";
+import { CancelBookingReturn, JobCancellationReasons } from "global-constants";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "../../ui/card";
 import Button from '../DuberButton'
 import { XIcon } from 'lucide-react';
 
-interface CancelReturnType {
-  data: any | null,
-  error: any | null,
-}
-
 interface ModalProps {
   className: string,
-  onCancel: (data: any | null, error: any | null) => CancelReturnType;
+  onCancel: (data: any | null, error: any | null) => CancelBookingReturn;
   handleClose: () => void;
 }
 
@@ -24,6 +19,10 @@ export default function JobCancellationModal({ className, onCancel, handleClose 
     try {
       setIsLoading(true)
 
+      // Handle booking cancellation
+
+
+      // Used to pass response of booking cancellation return request to Application
       onCancel(`success -> ${activeReason}`, null);
 
       setIsLoading(false)
