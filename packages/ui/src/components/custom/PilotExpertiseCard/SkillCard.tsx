@@ -63,9 +63,9 @@ export default function PilotSkillCard({ selectedSkillList, skill, setSelectedSk
       </video>
 
       <div className="flex-1">
-        <h2 className="text-base font-semibold text-duber-skyBlue mt-2">{cardSkill.title}</h2>
+        <h2 className={`text-base font-semibold ${isSelected ? "text-duber-teal-dark" : "text-duber-skyBlue"} mt-2`}>{cardSkill.title}</h2>
 
-        <p className="text-sm text-duber-skyBlue mt-2 whitespace-pre-line">{cardSkill.description}</p>
+        <p className={`text-sm ${isSelected ? "text-duber-teal" : "text-duber-skyBlue"} mt-2 whitespace-pre-line`}>{cardSkill.description}</p>
       </div>
 
       <div className="w-full flex items-center justify-end bottom-0">

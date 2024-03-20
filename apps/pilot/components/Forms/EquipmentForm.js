@@ -12,7 +12,13 @@ import {
   setActiveForm,
 } from "../../redux/registerSlice";
 
-import { PilotSkillCard, pilot_skills } from "ui";
+import {
+  PilotSkillCard,
+  pilot_skills,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "ui";
 
 const EquipmentsForm = () => {
   const dispatch = useDispatch();
@@ -134,7 +140,8 @@ const EquipmentsForm = () => {
       )}
       <div className="mt-6">
         <p className="mb-5">Skill / Experience</p>
-        <div className="w-full flex gap-x-3 ">
+
+        <div className="w-full sm:flex hidden gap-x-3 ">
           {pilot_skills.map((skill) => (
             <PilotSkillCard
               key={skill.slug}
@@ -143,6 +150,23 @@ const EquipmentsForm = () => {
               setSelectedSkillList={setSelectedSkills}
             />
           ))}
+        </div>
+
+        <div className="sm:hidden flex">
+          <Carousel className="w-full h-full">
+            <CarouselContent>
+              {pilot_skills.map((skill) => (
+                <CarouselItem>
+                  <PilotSkillCard
+                    key={skill.slug}
+                    skill={skill.slug}
+                    selectedSkillList={selectedSkills}
+                    setSelectedSkillList={setSelectedSkills}
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         </div>
 
         <p className="mt-9 mb-5">Drone Equipment</p>

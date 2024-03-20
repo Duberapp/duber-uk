@@ -1,6 +1,7 @@
 
 export interface CancelBookingParams {
-  cancelledBy: "pilot" | "customer",
+  jobID: number,
+  cancelledBy: "pilot" | "customer" | "duber",
   reason: string
 }
 
