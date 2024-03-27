@@ -13,7 +13,7 @@ import {
   TimeOptions,
   calculatePilotJobValue,
   convertToStandardDateFormat,
-} from "../../../../packages/global-constants/src";
+} from "global-constants";
 import axios from "axios";
 import { MapPinIcon, Calendar, SunIcon, Clock4Icon } from "lucide-react";
 import GoogleMap from "../GoogleMap";

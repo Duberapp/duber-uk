@@ -32,6 +32,14 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
   const [showJobList, setShowJobList] = useState(true);
   const [loading, setLoading] = useState(false);
 
+  // ----------- screen width -------------
+  let screenWidth;
+  if (typeof window !== "undefined") {
+    // Client-side-only code
+    screenWidth = window.screen.width;
+  }
+  // ----------------------------------------
+
   // Filtering for My Jobs section
   const filterItems = [
     { id: 1, label: "Every Status" },
@@ -200,11 +208,17 @@ const JobListLayout = ({ data, disableAccept, setDisableAccept }) => {
                   availableList.length !== 0 &&
                   availableList.map((item) => (
                     <JobCard
+                      key={item.JobID}
                       expertise={item.capability}
                       jobID={item.JobID}
                       jobLocation={item.address}
                       jobDate={item.date}
-                      onClick={handleJobCardClick}
+                      onClick={() =>
+                        handleJobCardClick(
+                          item.JobID,
+                          screenWidth < 1024 ? true : false
+                        )
+                      }
                       isActive={activeJobID === item.JobID}
                       jobStatus={item.status}
                     />

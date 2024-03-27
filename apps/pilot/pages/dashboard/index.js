@@ -29,6 +29,7 @@ export default function Home({ jobListing }) {
   const user = useUser();
   const dispatch = useDispatch();
   const [disableAccept, setDisableAccept] = useState(false);
+  const [sharedTransferRate, setSharedTransferRate] = useState(null);
 
   useEffect(() => {
     // Get current user and save data as global state
@@ -48,10 +49,14 @@ export default function Home({ jobListing }) {
   return (
     <>
       {screenWidth < 1024 && activeJob !== null && (
-        <Mobile_AvailableJob disableAccept={disableAccept} />
+        <Mobile_AvailableJob
+          disableAccept={disableAccept}
+          transferRate={sharedTransferRate}
+        />
       )}
+
       <DashboardLayout
-        className={screenWidth < 1024 && activeJob !== null && "hidden"}
+        className={screenWidth < 1024 && activeJob !== null ? "hidden" : ""}
         headerComponent={
           <div className="lg:hidden w-full z-10 fixed flex items-center justify-center bg-white shadow-md">
             <img
@@ -62,6 +67,9 @@ export default function Home({ jobListing }) {
           </div>
         }
         disableAccept={disableAccept}
+        passPaymentData={(payload) =>
+          setSharedTransferRate(payload.transferRate)
+        }
       >
         <JobListLayout
           data={jobListing}

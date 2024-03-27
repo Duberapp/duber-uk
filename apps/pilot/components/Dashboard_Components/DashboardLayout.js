@@ -32,6 +32,7 @@ const DashboardLayout = ({
   className,
   headerComponent,
   disableAccept,
+  passPaymentData,
 }) => {
   const router = useRouter();
   const session_user = useUser();
@@ -51,7 +52,11 @@ const DashboardLayout = ({
 
         if (error) throw error;
 
-        setTransferRate(data.length > 0 ? data[0].transferAmount_rate : 40);
+        const preparedTransferRate =
+          data.length > 0 ? data[0].transferAmount_rate : 40;
+
+        setTransferRate(preparedTransferRate);
+        passPaymentData({ transferRate: preparedTransferRate });
       } catch (err) {
         console.log(err);
       }

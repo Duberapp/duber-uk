@@ -100,7 +100,7 @@ const AcceptJob_DetailsBar = ({
         onClick={handleAccept}
         variant={chooseTimePanel ? "pink" : "skyBlue"}
         size={"lg"}
-        className="w-full text-base h-11"
+        className="w-full text-base sm:h-11 h-14"
         isLoading={loading}
         loadingText="Accepting Job..."
       >
