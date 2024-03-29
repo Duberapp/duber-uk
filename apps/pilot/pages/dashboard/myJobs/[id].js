@@ -40,11 +40,12 @@ import {
 } from "ui";
 import { RouteIcon, PhoneIcon, Star } from "lucide-react";
 import {
+  calculatePilotJobValue,
   convertToStandardDateFormat,
   getUploadCountdown,
   isOrderCancellationEligible,
   pilotRateIssuesList,
-} from "../../../../../packages/global-constants/src";
+} from "global-constants";
 
 const SinglePage = () => {
   const {
@@ -432,30 +433,17 @@ const SinglePage = () => {
             <Mobile_SidebarHeader
               onBackPress={handleBackNavigate}
               centerComponent={
-                <div className="flex flex-col items-center">
-                  <p className="text-sm font-semibold">
-                    {currentJob.pilotExpertize}
+                <div className="flex items-center gap-x-3">
+                  <p className="text-base text-duber-pink font-bold">
+                    £ {calculatePilotJobValue(currentJob.amount, transferRate)}
                   </p>
-                  <p className="text-xs text-gray-400">#{currentJob.id}</p>
-                  <button
-                    className={`px-2 py-1 mt-1 text-[.6rem] font-medium rounded-md ${
-                      currentJob.status == "Live" && "bg-red-100 text-red-500"
-                    } ${
-                      currentJob.status == "Completed" &&
-                      "bg-blue-100 text-blue-500"
-                    } ${
-                      currentJob.status == "Available" &&
-                      "bg-green-100 text-green-500"
-                    }`}
-                  >
-                    {currentJob?.status}
-                  </button>
+                  <p className="text-base text-duber-pink">#{currentJob.id}</p>
                 </div>
               }
             />
           }
         >
-          <div className="w-full h-full px-4 py-3">
+          <div className="w-full h-full sm:px-4 sm:py-3 px-2 py-1">
             {/* Header */}
             <div className="lg:flex hidden flex-1 h-fit items-center justify-between ">
               <p className="text-duber-pink font-semibold text-lg">
@@ -483,7 +471,7 @@ const SinglePage = () => {
               )}
 
               {/* Job Details -> Content and Overview */}
-              <div className="flex flex-row gap-x-4 p-5">
+              <div className="flex sm:flex-row flex-col gap-x-4 sm:p-5 p-3">
                 {/* Col 01 */}
                 <div className="flex-1">
                   <SingleJob_OverviewCard
@@ -511,12 +499,12 @@ const SinglePage = () => {
                       />
                     </div>
 
-                    <div className="mt-2 flex items-end justify-between">
+                    <div className="sm:mt-2 mt-4 flex items-end justify-between">
                       <div className="">
                         <p className="text-xs text-gray-400">
                           Location / Full Address
                         </p>
-                        <p className="text-base text-duber-navyBlue">
+                        <p className="sm:text-base text-[13px] text-duber-navyBlue">
                           {currentJob.status !== "Completed"
                             ? currentJob.address
                             : currentJob.address.split(",")[
@@ -526,40 +514,40 @@ const SinglePage = () => {
                       </div>
 
                       {currentJob.status !== "Completed" && (
-                        <div className="flex items-center gap-x-1">
+                        <a
+                          className="flex items-center gap-x-1"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href={`https://www.google.com/maps/place/${currentJob.address}`}
+                        >
                           <RouteIcon
-                            className="w-4 h-4 text-skyBlue"
+                            className="sm:size-4 size-8 sm:p-0 p-1 text-skyBlue sm:rounded-none rounded-lg sm:bg-transparent bg-duber-skyBlue-light"
                             strokeWidth={2}
                           />
-                          <a
-                            className="text-sm underline text-skyBlue cursor-pointer"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={`https://www.google.com/maps/place/${currentJob.address}`}
-                          >
+                          <p className="text-sm sm:flex hidden underline text-skyBlue cursor-pointer">
                             Open in maps
-                          </a>
-                        </div>
+                          </p>
+                        </a>
                       )}
                     </div>
 
-                    <div className="mt-2">
+                    <div className="sm:mt-2 mt-4">
                       <p className="text-xs text-gray-400">Start Date</p>
-                      <p className="text-base text-duber-navyBlue">
+                      <p className="sm:text-base text-[13px] text-duber-navyBlue">
                         {convertToStandardDateFormat(currentJob.date)}
                       </p>
                     </div>
 
-                    <div className="mt-2 flex items-center">
+                    <div className="sm:mt-2 mt-4 flex items-center">
                       <div className="flex-1">
                         <p className="text-xs text-gray-400">Arrival Time</p>
-                        <p className="text-base text-duber-navyBlue">
+                        <p className="sm:text-base text-[13px] text-duber-navyBlue">
                           {currentJob.arrivalTime}
                         </p>
                       </div>
                       <div className="flex-1">
                         <p className="text-xs text-gray-400">Duration</p>
-                        <p className="text-base text-duber-navyBlue">
+                        <p className="sm:text-base text-[13px] text-duber-navyBlue">
                           {includedDuration + currentJob.extendDuration} Hours
                         </p>
                       </div>
@@ -571,31 +559,31 @@ const SinglePage = () => {
                           <p className="text-xs text-gray-400">
                             Customers Name
                           </p>
-                          <p className="text-base text-duber-navyBlue">
+                          <p className="sm:text-base text-[13px]  text-duber-navyBlue">
                             {`${currentJob.customerID.title} ${currentJob.customerID.firstName} ${currentJob.customerID.lastName}`}
                           </p>
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 sm:ml-0 ml-3">
                           <p className="text-xs text-gray-400">Company</p>
-                          <p className="text-base text-duber-navyBlue">
+                          <p className="sm:text-base text-[13px] text-duber-navyBlue">
                             {currentJob.customerID.companyName}
                           </p>
                         </div>
-                        <div className="flex-1 justify-end flex items-center gap-x-1">
-                          <PhoneIcon className="w-4 h-4 text-duber-skyBlue" />
-                          <a
-                            className="text-sm underline text-skyBlue cursor-pointer"
-                            href={`tel:${currentJob.customerID.phoneNumber}`}
-                          >
+                        <a
+                          className="flex-1 justify-end flex items-center gap-x-1"
+                          href={`tel:${currentJob.customerID.phoneNumber}`}
+                        >
+                          <PhoneIcon className="sm:size-4 size-8 sm:p-0 p-1 text-skyBlue sm:rounded-none rounded-lg sm:bg-transparent bg-duber-skyBlue-light" />
+                          <p className="sm:flex hidden text-sm underline text-skyBlue cursor-pointer">
                             Call Them
-                          </a>
-                        </div>
+                          </p>
+                        </a>
                       </div>
                     )}
 
-                    <div className="mt-2">
+                    <div className="sm:mt-2 mt-4">
                       <p className="text-xs text-gray-400">Job Brief</p>
-                      <p className="text-base text-duber-navyBlue">
+                      <p className="sm:text-base text-[13px] text-duber-navyBlue">
                         {currentJob.customerNote}
                       </p>
                     </div>
@@ -603,7 +591,7 @@ const SinglePage = () => {
                 </div>
 
                 {/* Col 02 */}
-                <div className="flex-1 min-h-[300px] overflow-hidden rounded-md">
+                <div className="sm:flex hidden flex-1 min-h-[300px] overflow-hidden rounded-md">
                   {currentJob.mapData.polygon ? (
                     <GoogleMap
                       polygons={[currentJob.mapData.polygon]}
@@ -624,16 +612,36 @@ const SinglePage = () => {
                 </div>
               </div>
 
+              <div className="sm:hidden flex h-[200px] mt-1 mb-6 overflow-hidden rounded-md px-3">
+                {currentJob.mapData.polygon && (
+                  <GoogleMap
+                    polygons={[currentJob.mapData?.polygon]}
+                    staticMapType={"roadmap"}
+                    mapState={"static"}
+                    location={currentJob.mapData?.center}
+                    zoom={1}
+                    mapOptions={{
+                      gestureHandling: true,
+                    }}
+                    areaComponent={
+                      <h2 className="font-semibold text-sm text-black">
+                        {currentJob.area} m<sup>2</sup>
+                      </h2>
+                    }
+                  />
+                )}
+              </div>
+
               {currentJob.status !== "Completed" ? (
                 <div className="flex items-center justify-between px-5 mt-3">
-                  <p className="text-duber-navyBlue">
+                  <p className="sm:flex hidden text-duber-navyBlue">
                     <span className="font-medium">Requested File Format</span>
                     {currentJob.captureFormat === "Both (Video/Photo)"
                       ? " (Photos & Videos)"
                       : ` (${currentJob.captureFormat})`}
                   </p>
 
-                  <div className="flex items-center gap-x-3">
+                  <div className="flex items-center sm:justify-end justify-between sm:w-fit w-full gap-x-3">
                     <p className="text-duber-skyBlue underline hover:font-medium cursor-pointer">
                       Retry All
                     </p>
@@ -655,7 +663,7 @@ const SinglePage = () => {
                     Customers Feeback
                   </h2>
 
-                  <div className="max-w-fit mt-3">
+                  <div className="sm:max-w-fit max-w-full mt-3">
                     <p className="w-full text-end mb-2 text-duber-navyBlue font-semibold text-sm">
                       {customerRatingData.ratingScore === 1
                         ? "Terrible"
@@ -670,7 +678,7 @@ const SinglePage = () => {
                         : ""}
                     </p>
 
-                    <div className="flex items-center gap-x-3">
+                    <div className="flex items-center sm:w-fit w-full sm:justify-normal justify-between gap-x-3">
                       {new Array(5).fill(undefined).map((_, index) => {
                         index += 1;
                         let isFilled = index <= customerRatingData.ratingScore;
