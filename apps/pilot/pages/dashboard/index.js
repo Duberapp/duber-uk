@@ -6,14 +6,9 @@ import {
   DashboardLayout,
   JobListLayout,
   Mobile_AvailableJob,
-  BillingAlert,
-  StripeConnectButton,
 } from "../../components";
-import {
-  getJobListing,
-  getUserByEmail,
-  sendNotification,
-} from "../../config/supabaseFunctions";
+import { getJobListing, getUserByEmail } from "../../config/supabaseFunctions";
+import { useRouter } from "next/router";
 
 export default function Home({ jobListing }) {
   // ----------- screen width -------------
@@ -30,6 +25,7 @@ export default function Home({ jobListing }) {
   const dispatch = useDispatch();
   const [disableAccept, setDisableAccept] = useState(false);
   const [sharedTransferRate, setSharedTransferRate] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     // Get current user and save data as global state
@@ -42,6 +38,12 @@ export default function Home({ jobListing }) {
 
     if (!isLoading && user) {
       dispatch(setIsAdmin(user.user_metadata?.isAdmin));
+
+      if (user.user_metadata?.isAdmin) {
+        router.push("/admin-dashboard");
+        return;
+      }
+
       getUserData();
     }
   }, [isLoading]);

@@ -7,6 +7,8 @@ export * from './types/BookingFeedbackTypes'
 export * from './types/PilotSkillTypes'
 export * from './types/BackendRequestTypes'
 
+export * from './types/AdminTypes/index'
+
 // Controller Exports
 export * from './controllers/durationControllers'
 export * from './controllers/paymentDataControllers'
@@ -20,3 +22,5 @@ export * from './data/storagePlans'
 export * from './data/bookingFeedbackData'
 export * from './data/cancellationData'
 export * from './data/pilotSkillData'
+
+export * from './data/AdminData/index'
