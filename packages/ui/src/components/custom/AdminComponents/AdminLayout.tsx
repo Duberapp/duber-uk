@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, useState } from 'react'
-import { type AdminRouteSlug, type HeaderType, type AdminRouteGroup } from 'global-constants'
+import { type AdminRouteSlug } from 'global-constants'
 import AdminSidebar from './AdminSidebar'
 import { ScrollArea } from "../../ui/scroll-area";
 
@@ -9,8 +9,7 @@ interface AdminLayoutProps {
   sideBarLogo?: React.ReactNode,
   handleRoute: (route: AdminRouteSlug) => MouseEventHandler<HTMLButtonElement>,
   userPlaceholderImage: string,
-  children?: React.ReactNode | React.ReactNode[],
-  headerType?: HeaderType,
+  children?: React.ReactNode | React.ReactNode[]
   headerComponent?: React.ReactNode | React.ReactNode[]
 }
 
@@ -21,8 +20,7 @@ const AdminLayout = ({
   userPlaceholderImage,
   handleRoute,
   children,
-  headerComponent,
-  headerType = 'root' }: AdminLayoutProps) => {
+  headerComponent }: AdminLayoutProps) => {
 
   return (
     <main className="p-5 flex flex-row h-full gap-x-5">

@@ -7,7 +7,7 @@ const Bookings = () => {
   const { id } = router.query;
   console.log(id);
 
-  return <AdminLayoutProvider headerType={"sub-root"} />;
+  return <AdminLayoutProvider />;
 };
 
 export default Bookings;

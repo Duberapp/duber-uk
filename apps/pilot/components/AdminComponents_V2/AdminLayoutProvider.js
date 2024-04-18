@@ -3,7 +3,7 @@ import { AdminLayout } from "ui";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 
-const AdminLayoutProvider = ({ headerType, children, headerComponent }) => {
+const AdminLayoutProvider = ({ children, headerComponent }) => {
   const router = useRouter();
   const stateUser = useSelector((state) => state.currentUser.currentUser);
 
@@ -22,7 +22,6 @@ const AdminLayoutProvider = ({ headerType, children, headerComponent }) => {
           </div>
         }
         userPlaceholderImage="/assets/avatar.jpg"
-        headerType={headerType}
         children={children}
         headerComponent={headerComponent}
       />

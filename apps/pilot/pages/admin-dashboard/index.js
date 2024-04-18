@@ -75,7 +75,6 @@ const AdminDashboard = () => {
 
   return (
     <AdminLayoutProvider
-      headerType={"root"}
       headerComponent={
         <h3 className="text-lg font-semibold text-duber-navyBlue">Dashboard</h3>
       }

@@ -7,7 +7,6 @@ const Bookings = () => {
 
   return (
     <AdminLayoutProvider
-      headerType={"root"}
       headerComponent={
         <h3 className="text-lg font-semibold text-duber-navyBlue">Bookings</h3>
       }
