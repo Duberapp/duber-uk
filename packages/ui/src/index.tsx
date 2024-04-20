@@ -49,3 +49,5 @@ export { default as BookingControlPanel } from './components/custom/TrackingPage
 export { default as ApplicationCard } from './components/custom/AdminComponents/ApplicationCard'
 export { default as AdminSidebar } from './components/custom/AdminComponents/AdminSidebar'
 export { default as AdminLayout } from './components/custom/AdminComponents/AdminLayout'
+export { default as DashboardCard } from './components/custom/AdminComponents/DashboardCard'
+export * from './components/custom/AdminComponents/Views/index'

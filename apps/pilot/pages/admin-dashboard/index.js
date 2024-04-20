@@ -11,6 +11,9 @@ import {
   TabsList,
   TabsTrigger,
   DatePickerWithRange,
+  DashboardSalesView,
+  DashboardBookingView,
+  DashboardDeliverablesView,
 } from "ui";
 
 const AdminDashboard = () => {
@@ -49,7 +52,7 @@ const AdminDashboard = () => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve("Fake async operation completed");
-      }, 5000); // simulating a 2-second delay
+      }, 1000); // simulating a 2-second delay
     });
   }
 
@@ -79,7 +82,7 @@ const AdminDashboard = () => {
         <h3 className="text-lg font-semibold text-duber-navyBlue">Dashboard</h3>
       }
     >
-      <Tabs defaultValue="sales" className="w-full rounded-sm">
+      <Tabs defaultValue="sales" className="w-full h-full rounded-sm">
         <div className="w-full flex items-center justify-between mb-5">
           <TabsList className="grid w-[400px] h-11 p-1 grid-cols-3">
             <TabsTrigger className="h-full font-semibold text-sm" value="sales">
@@ -112,18 +115,20 @@ const AdminDashboard = () => {
 
         {isDataFetching ? (
           <div className="w-full h-full flex items-center justify-center flex-1">
-            <Loading className="h-6 w-6 animate-spin text-duber-navyBlue" />
+            <div className="mt-6 bg-slate-50 p-3 rounded-full shadow-lg">
+              <Loading className="h-6 w-6 animate-spin text-duber-navyBlue" />
+            </div>
           </div>
         ) : (
           <>
             <TabsContent value="sales">
-              <h2>Sales view</h2>
+              <DashboardSalesView />
             </TabsContent>
             <TabsContent value="booking">
-              <h2>Booking view</h2>
+              <DashboardBookingView />
             </TabsContent>
             <TabsContent value="deliverables">
-              <h2>Deliverables view</h2>
+              <DashboardDeliverablesView />
             </TabsContent>
           </>
         )}
