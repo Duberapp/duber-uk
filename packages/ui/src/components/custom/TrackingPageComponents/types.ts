@@ -1,5 +1,5 @@
 import { PilotSkill_Title } from "global-constants"
-import { Tables } from "supabase-config/src/types/pilot.supabase";
+import { Tables } from "supabase-config/types/pilot.supabase";
 
 export type PilotDataType = Tables<'Employees'>
 

@@ -36,6 +36,8 @@ export { InitialSidebar, JobDetailsSidebar, SideBarLayout } from './components/c
 export { default as ArrivalTimeCard } from './components/custom/DashboardComponents/ArrivalTimeCard'
 export { default as SingleJob_OverviewCard } from './components/custom/DashboardComponents/SingleJob_OverviewCard'
 export { default as JobCancellationModal } from './components/custom/DashboardComponents/JobCancellationModal'
+export { default as FilterDropdown } from "./components/custom/DashboardComponents/FilterDropdown";
+
 
 // Tracking Page -> Components Exports
 export { default as TrackingPageLayout } from './components/custom/TrackingPageComponents/TrackingPageLayout'

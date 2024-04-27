@@ -7,12 +7,13 @@ type Props = {
   noIcon?: boolean,
   title: string,
   mainText: string,
-  infoText: string,
+  infoText?: string,
+  className?: string
 }
 
-export default function DashboardCard({ icon, infoText, mainText, title, noIcon = true }: Props) {
+export default function DashboardCard({ icon, infoText, mainText, title, noIcon = true, className }: Props) {
   return (
-    <Card x-chunk="dashboard-01-chunk-1" className='w-full'>
+    <Card x-chunk="dashboard-01-chunk-1" className={`w-full ${className}`}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
           {title}
@@ -21,9 +22,9 @@ export default function DashboardCard({ icon, infoText, mainText, title, noIcon 
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{mainText}</div>
-        <p className="text-xs text-muted-foreground">
+        {infoText && <p className="text-xs text-muted-foreground">
           {infoText}
-        </p>
+        </p>}
       </CardContent>
     </Card>
   )

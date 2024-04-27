@@ -1,7 +1,6 @@
 import { type PilotExpertise, type PilotExpertiseSlug, PilotExpertises, type JobStatusType } from 'global-constants'
 import { Card } from '../../ui/card'
 import Button from '../DuberButton'
-import { useEffect, useState } from 'react';
 
 interface JobCardProps {
   expertise: PilotExpertiseSlug,
@@ -10,10 +9,11 @@ interface JobCardProps {
   jobDate: string,
   onClick: (jobId: number, preventRoute?: boolean) => void,
   isActive: boolean,
-  jobStatus: JobStatusType
+  jobStatus: JobStatusType,
+  isAdmin?: boolean,
 }
 
-export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClick, isActive, jobStatus }: JobCardProps) {
+export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClick, isActive, jobStatus, isAdmin }: JobCardProps) {
   const pilotExpertise: PilotExpertise | null = PilotExpertises.filter(exp => expertise === exp.slug)[0];
 
   const getJobLocation = (jobLocation: string) => {
@@ -26,7 +26,7 @@ export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClic
   }
 
   return (
-    <Card className="bg-white p-2.5 flex sm:flex-row flex-col items-center sm:gap-x-2.5 gap-x-0">
+    <Card className="w-full bg-white p-2.5 flex sm:flex-row flex-col items-center sm:gap-x-2.5 gap-x-0">
       <div className="bg-duber-navyBlue p-2.5 rounded-md sm:w-48 w-full">
         <div className="flex items-center justify-between">
           <p className="text-xs font-thin text-white">Required Expertise</p>
@@ -35,13 +35,13 @@ export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClic
         <h2 className='font-semibold text-base text-white whitespace-nowrap'>{pilotExpertise?.title}</h2>
       </div>
 
-      <div className="flex flex-row flex-1 sm:gap-x-2.5 gap-x-0 sm:justify-normal justify-between w-full sm:mt-0 mt-1">
-        <div className="flex flex-col justify-center flex-1">
+      <div className={`flex flex-row flex-1 sm:gap-x-2.5 gap-x-0 sm:justify-normal ${isAdmin ? "justify-start" : "justify-between"} w-full sm:mt-0 mt-1`}>
+        <div className={`flex flex-col justify-center ${!isAdmin ? 'flex-1' : "mr-7"}`}>
           <p className="sm:text-xs text-[10px] font-thin text-duber-navyBlue">Location</p>
           <h2 className='font-semibold sm:text-base text-sm text-duber-navyBlue'>{getJobLocation(jobLocation)}</h2>
         </div>
 
-        <div className="flex flex-col justify-center flex-1">
+        <div className={`flex flex-col justify-center ${!isAdmin && 'flex-1'}`}>
           <p className="sm:text-xs text-[10px] font-thin text-duber-navyBlue">Date</p>
           <h2 className='font-semibold sm:text-base text-sm text-duber-navyBlue'>{
             new Date(jobDate)
@@ -50,18 +50,27 @@ export default function JobCard({ expertise, jobDate, jobID, jobLocation, onClic
           }</h2>
         </div>
 
-        <div className="flex flex-col gap-y-1 justify-center items-end sm:flex-1 flex-none">
+        {isAdmin && (
+          <div className="flex flex-col justify-center items-end flex-1 mr-6">
+            <p className="sm:text-xs text-[10px] font-thin text-duber-navyBlue">Booking ID</p>
+            <h2 className='font-semibold sm:text-base text-sm text-duber-navyBlue'>#{jobID}</h2>
+          </div>
+        )}
+
+        <div className={`flex flex-col gap-y-1 justify-center items-end ${!isAdmin && 'sm:flex-1 flex-none'}`}>
           {jobStatus !== 'Available' && (
             <StatusBadge className='sm:block hidden' status={jobStatus} />
           )}
+
           <Button
             variant={!isActive ? "teal" : "pink"}
             size={jobStatus === 'Available' ? "xxl" : "lg"}
             onClick={() => onClick(jobID)}
-            className={`${jobStatus !== 'Available' ? "w-full" : ""} sm:w-full w-fit sm:px-0 px-5 sm:text-base text-sm sm:h-12 h-11`}
+            className={`${jobStatus !== 'Available' ? "w-full" : ""} sm:w-36 sm:max-w-36 w-fit sm:px-0 px-5 sm:text-base text-sm sm:h-12 h-11`}
           >
             View
           </Button>
+
         </div>
       </div>
 

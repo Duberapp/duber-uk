@@ -129,6 +129,7 @@ export const getSingleJob = async (jobID) => {
             address,
             date,
             customerID (
+                id,
                 firstName,
                 lastName,
                 email,

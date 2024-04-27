@@ -1,4 +1,4 @@
-import { type AdminNavLinksType } from '../../types/AdminTypes'
+import { type AdminNavLinksType, type FilterItem } from '../../types/AdminTypes'
 
 export const AdminNavLinks: AdminNavLinksType[] = [
   {
@@ -36,5 +36,28 @@ export const AdminNavLinks: AdminNavLinksType[] = [
     title: "Settings",
     route: 'settings',
     slug: '/admin-dashboard/settings'
+  }
+]
+
+export const BookingStatusFilterValues: FilterItem[] = [
+  {
+    slug: 'available',
+    title: "Available"
+  },
+  {
+    slug: 'completed',
+    title: "Completed"
+  },
+  {
+    slug: "live",
+    title: "Live"
+  },
+  {
+    slug: "customer_cancelled",
+    title: "Customer Cancelled"
+  },
+  {
+    slug: "pilot_cancelled",
+    title: "Pilot Cancelled"
   }
 ]

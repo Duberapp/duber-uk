@@ -1,5 +1,5 @@
 import React from "react";
-import AdminLayoutProvider from "../../components/AdminComponents_V2/AdminLayoutProvider";
+import AdminLayoutProvider from "../../../components/AdminComponents_V2/AdminLayoutProvider";
 
 const Customers = () => {
   return (

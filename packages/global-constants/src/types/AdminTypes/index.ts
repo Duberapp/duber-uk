@@ -17,3 +17,10 @@ export interface AdminNavLinksType {
 }
 
 export type HeaderType = 'root' | 'sub-root';
+
+export type StatusFilterSlug = 'available' | 'live' | 'completed' | 'pilot_cancelled' | 'customer_cancelled'
+
+export type FilterItem = {
+  slug: string | StatusFilterSlug,
+  title: string
+}

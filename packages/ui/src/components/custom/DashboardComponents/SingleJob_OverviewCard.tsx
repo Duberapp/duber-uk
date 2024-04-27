@@ -5,11 +5,12 @@ import { StatusBadge } from './JobCard'
 interface SingleJobOverviewCardProps {
   capability: PilotExpertiseSlug,
   jobValue: number,
-  transferRate: number,
-  jobStatus: JobStatusType
+  transferRate?: number,
+  jobStatus: JobStatusType,
+  isAdmin?: boolean
 }
 
-export default function SingleJobOverviewCard({ capability, jobStatus, jobValue, transferRate }: SingleJobOverviewCardProps) {
+export default function SingleJobOverviewCard({ capability, jobStatus, jobValue, transferRate, isAdmin }: SingleJobOverviewCardProps) {
 
   return (
     <Card className='bg-duber-navyBlue px-3 py-4 flex items-center justify-between'>
@@ -18,10 +19,10 @@ export default function SingleJobOverviewCard({ capability, jobStatus, jobValue,
         <h2 className='text-2xl font-semibold text-white'>{PilotExpertises.filter(exp => exp.slug === capability)[0].title}</h2>
       </div>
 
-      <div className="">
-        <p className="text-duber-pink font-medium mb-1">Payout £ {calculatePilotJobValue(jobValue, transferRate)}</p>
+      {!isAdmin && <div className="">
+        <p className="text-duber-pink font-medium mb-1">Payout £ {calculatePilotJobValue(jobValue, transferRate!)}</p>
         <StatusBadge status={jobStatus} className='px-8 text-base font-medium' />
-      </div>
+      </div>}
     </Card>
   )
 }
