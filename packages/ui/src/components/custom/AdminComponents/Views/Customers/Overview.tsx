@@ -15,7 +15,7 @@ interface Props {
   subscriptions?: string | number
 }
 
-export default function Overview({ currentCustomer, totalBookings, subscriptions, totalDeliverableSize, totalSales }: Props) {
+export default function Overview({ totalBookings, subscriptions, totalDeliverableSize, totalSales }: Props) {
   const [filterStatus, setFilterStatus] = useState("")
   const [filterExpertise, setFilterExpertise] = useState("")
 
