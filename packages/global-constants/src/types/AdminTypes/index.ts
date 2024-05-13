@@ -24,3 +24,17 @@ export type FilterItem = {
   slug: string | StatusFilterSlug,
   title: string
 }
+
+export type UserTypeSlug = 'guest' | 'account';
+
+export type UserTypeItem = {
+  slug: UserTypeSlug,
+  title: string
+}
+
+export type SubscriptionTypeSlug = 'inactive' | 'active';
+
+export type SubscriptionTypeItem = {
+  slug: SubscriptionTypeSlug,
+  title: string,
+}

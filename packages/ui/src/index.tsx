@@ -52,4 +52,5 @@ export { default as ApplicationCard } from './components/custom/AdminComponents/
 export { default as AdminSidebar } from './components/custom/AdminComponents/AdminSidebar'
 export { default as AdminLayout } from './components/custom/AdminComponents/AdminLayout'
 export { default as DashboardCard } from './components/custom/AdminComponents/DashboardCard'
+export { default as CustomerCard } from './components/custom/AdminComponents/CustomerCard'
 export * from './components/custom/AdminComponents/Views/index'

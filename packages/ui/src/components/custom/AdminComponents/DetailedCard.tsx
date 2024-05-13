@@ -7,12 +7,13 @@ type DetailedCardProps = {
   topic: { title: string, subtitle?: string },
   content: { title: string, subtitle?: string },
   infoText?: string | string[],
-  onView: () => void
+  onView: () => void,
+  className?: string
 }
 
-export default function DetailedCard({ content, date, onView, topic, type, infoText }: DetailedCardProps) {
+export default function DetailedCard({ className, content, date, onView, topic, type, infoText }: DetailedCardProps) {
   return (
-    <Card className='p-2 pb-3 shadow-md bg-white border-1 border-slate-100'>
+    <Card className={`p-2 pb-3 shadow-md bg-white border border-slate-100 ${className}`}>
       <div className="w-full bg-duber-navyBlue flex items-center justify-between p-3 rounded-lg">
         <div className="">
           <p className="text-[10px] text-white">{

@@ -1,4 +1,4 @@
-import { type AdminNavLinksType, type FilterItem } from '../../types/AdminTypes'
+import { SubscriptionTypeItem, type AdminNavLinksType, type FilterItem, type UserTypeItem } from '../../types/AdminTypes'
 
 export const AdminNavLinks: AdminNavLinksType[] = [
   {
@@ -60,4 +60,20 @@ export const BookingStatusFilterValues: FilterItem[] = [
     slug: "pilot_cancelled",
     title: "Pilot Cancelled"
   }
+]
+
+export const UserTypeFilterValues: UserTypeItem[] = [
+  {
+    slug: "guest",
+    title: "Guest"
+  },
+  {
+    slug: "account",
+    title: "Account"
+  }
+]
+
+export const SubscriptionTypeValues: SubscriptionTypeItem[] = [
+  { slug: "inactive", title: "No Subscription" },
+  { slug: "active", title: "Subscription Active" }
 ]

@@ -18,6 +18,7 @@ import {
 } from "ui/admin";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "ui/shadcn";
 import { getUser as getCustomerUserData } from "supabase-config/functions/customer";
+import { getPilot as getPilotUserData } from "supabase-config/functions/pilot";
 
 const Bookings = () => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const Bookings = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [includedDuration, setIncludedDuration] = useState(null);
   const [customerUserData, setCustomerUserData] = useState(null);
+  const [pilotUserData, setPilotUserData] = useState(null);
 
   const handleFetchJob = async () => {
     try {
@@ -55,6 +57,15 @@ const Bookings = () => {
         await getCustomerUserData(data[0].customerID?.id);
       if (customerUserData && customerUserData.length > 0) {
         setCustomerUserData[customerUserData[0]];
+      }
+
+      // fetch pilot user data
+      const { data: pilotData, error: pilotUserError } = await getPilotUserData(
+        data[0].pilotID
+      );
+
+      if (pilotData && pilotData.length > 0) {
+        setPilotUserData(pilotData[0]);
       }
 
       setIsLoading(false);
@@ -251,15 +262,20 @@ const Bookings = () => {
 
               <TabsContent value="overview">
                 <BookingOverviewTab
+                  currentJob={currentJob}
                   viewCustomer={() =>
                     router.push(
                       `/admin-dashboard/customers/${currentJob.customerID.id}`
                     )
                   }
+                  viewPilot={() =>
+                    router.push(`/admin-dashboard/pilots/${currentJob.pilotID}`)
+                  }
                   customer={{
                     ...currentJob.customerID,
                     userData: customerUserData,
                   }}
+                  pilot={pilotUserData}
                 />
               </TabsContent>
               <TabsContent value="sales">

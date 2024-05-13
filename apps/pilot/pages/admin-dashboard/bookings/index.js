@@ -11,7 +11,7 @@ const Bookings = () => {
   const [filterExpertise, setFilterExpertise] = useState("");
 
   const handleViewBooking = (jobId, preventRoute) => {
-    router.push(`/admin-dashboard/bookings/7873619`);
+    router.push(`/admin-dashboard/bookings/8144516`);
   };
 
   return (

@@ -7,7 +7,7 @@ import MobileBookingDetails from './MobileBookingDetails';
 import { OrderData } from './BookingDetails';
 import Loading from '../Loading';
 import { customerClient } from "supabase-config";
-import { getPilotProfilePictureLink } from "supabase-config";
+import { getPilotProfilePictureLink } from "supabase-config/functions/pilot";
 
 type handleCancelBooking = () => void;
 
