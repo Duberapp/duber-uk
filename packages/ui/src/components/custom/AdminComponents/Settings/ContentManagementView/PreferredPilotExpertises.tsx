@@ -58,6 +58,9 @@ function OptionLayout({ image, setImage, setVideo, video }: MediaTypes) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
+  console.log(setImage);
+  console.log(setVideo);
+
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (videoRef.current) {
