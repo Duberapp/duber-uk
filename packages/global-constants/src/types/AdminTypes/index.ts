@@ -1,3 +1,5 @@
+import { type PilotExpertiseTitle, type PilotExpertiseSlug } from "../PilotExpertiseTypes";
+
 export type AdminRouteSlug =
   | '/admin-dashboard'
   | '/admin-dashboard/bookings'
@@ -5,9 +7,10 @@ export type AdminRouteSlug =
   | '/admin-dashboard/pilots'
   | '/admin-dashboard/applications'
   | '/admin-dashboard/settings'
+  | '/admin-dashboard/logout'
 
 
-export type AdminRouteGroup = 'dashboard' | 'bookings' | 'customers' | 'pilots' | 'applications' | 'settings';
+export type AdminRouteGroup = 'dashboard' | 'bookings' | 'customers' | 'pilots' | 'applications' | 'settings' | 'logout';
 
 export interface AdminNavLinksType {
   id: number,
@@ -37,4 +40,17 @@ export type SubscriptionTypeSlug = 'inactive' | 'active';
 export type SubscriptionTypeItem = {
   slug: SubscriptionTypeSlug,
   title: string,
+}
+
+export type PilotExpertiseFilterItem = {
+  slug: PilotExpertiseSlug,
+  title: PilotExpertiseTitle
+}
+
+export type ApplicationFilterSlug = 'new' | 'approved' | 'declined';
+export type ApplicationFilterTitle = 'New' | 'Approved' | 'Declined';
+
+export type ApplicationFilterItem = {
+  slug: ApplicationFilterSlug,
+  title: ApplicationFilterTitle
 }

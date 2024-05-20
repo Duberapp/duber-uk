@@ -1,4 +1,11 @@
-import { SubscriptionTypeItem, type AdminNavLinksType, type FilterItem, type UserTypeItem } from '../../types/AdminTypes'
+import {
+  type SubscriptionTypeItem,
+  type AdminNavLinksType,
+  type FilterItem,
+  type UserTypeItem,
+  type PilotExpertiseFilterItem,
+  type ApplicationFilterItem
+} from '../../types/AdminTypes'
 
 export const AdminNavLinks: AdminNavLinksType[] = [
   {
@@ -33,9 +40,15 @@ export const AdminNavLinks: AdminNavLinksType[] = [
   },
   {
     id: 6,
-    title: "Settings",
+    title: "App Settings",
     route: 'settings',
     slug: '/admin-dashboard/settings'
+  },
+  {
+    id: 9,
+    title: "Logout",
+    route: "logout",
+    slug: "/admin-dashboard/logout"
   }
 ]
 
@@ -76,4 +89,16 @@ export const UserTypeFilterValues: UserTypeItem[] = [
 export const SubscriptionTypeValues: SubscriptionTypeItem[] = [
   { slug: "inactive", title: "No Subscription" },
   { slug: "active", title: "Subscription Active" }
+]
+
+export const PilotExpertiseValues: PilotExpertiseFilterItem[] = [
+  { slug: "asset_management", title: "Asset Management" },
+  { slug: "marketing", title: "Marketing" },
+  { slug: "social_events", title: "Social Events" }
+]
+
+export const ApplicationsFilterValues: ApplicationFilterItem[] = [
+  { slug: "new", title: "New" },
+  { slug: "approved", title: "Approved" },
+  { slug: "declined", title: "Declined" },
 ]

@@ -8,6 +8,7 @@ export * from './types/PilotSkillTypes'
 export * from './types/BackendRequestTypes'
 
 export * from './types/AdminTypes/index'
+export * from './types/AdminTypes/settings/index'
 
 // Controller Exports
 export * from './controllers/durationControllers'

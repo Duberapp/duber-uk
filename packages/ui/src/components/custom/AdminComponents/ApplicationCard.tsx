@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Card } from '../../ui/card'
 import Button from '../DuberButton'
 
@@ -7,7 +8,8 @@ interface ApplicationCardProps {
   createdAt: string,
   isApproved: boolean,
   isDeclined: boolean,
-  test__handleView: () => void,
+  handleView: (pilotID: string) => void,
+  activeID: string,
 }
 
 export default function ApplicationCard({
@@ -16,17 +18,23 @@ export default function ApplicationCard({
   createdAt,
   isApproved,
   isDeclined,
-  test__handleView
+  handleView,
+  activeID,
 }: ApplicationCardProps) {
+  const [isActive, setIsActive] = useState<boolean>();
 
   const applicationStatus =
     (!isApproved && !isDeclined) ? 'new' :
       (!isApproved && isDeclined) ? "declined" :
-        (isApproved && !isDeclined) && "approved"
+        (isApproved && !isDeclined) && "approved";
 
-  function handleView() {
-    test__handleView()
-    console.log(pilotID)
+  useEffect(() => {
+    setIsActive(pilotID === activeID ? true : false);
+  }, [activeID])
+
+
+  function handleOnView() {
+    handleView(pilotID)
   }
 
   return (
@@ -53,10 +61,10 @@ export default function ApplicationCard({
       </div>
 
       <Button
-        className='w-16'
-        variant={'teal'}
+        className='w-16 px-5'
+        variant={isActive ? "pink" : 'teal'}
         size={'xxl'}
-        onClick={handleView}
+        onClick={handleOnView}
       >
         View
       </Button>

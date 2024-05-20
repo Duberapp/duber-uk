@@ -8,6 +8,7 @@ import {
   CustomersSalesTab,
   CustomersDeliverablesTab,
 } from "ui/admin";
+import GoogleMap from "../../../components/GoogleMap";
 
 const SingleCustomer = () => {
   const router = useRouter();
@@ -64,7 +65,25 @@ const SingleCustomer = () => {
               </div>
             </div>
           </div>
-          <div className="flex-1 bg-slate-200"></div>
+
+          {/* Google Map */}
+          <div className="flex-1 bg-slate-200 rounded-xl overflow-hidden">
+            <GoogleMap
+              markerMap={true}
+              markers={[
+                { lat: 50.851163, lng: -1.082433 },
+                { lat: 50.850897, lng: -1.082414 },
+              ]}
+              mapState={"static"}
+              location={{
+                lat: 54.5319222,
+                lng: -4.4985882,
+              }}
+              zoom={5}
+              staticMapType={"roadmap"}
+              preventZoom
+            />
+          </div>
         </div>
 
         {/* Views */}

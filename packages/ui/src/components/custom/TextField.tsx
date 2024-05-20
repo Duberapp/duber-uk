@@ -5,7 +5,8 @@ interface TextFieldProps extends InputProps {
   error: boolean,
   version?: "blue" | null,
   leftIcon?: React.ReactNode,
-  parentClassName?: string
+  parentClassName?: string,
+  noBorder?: boolean
 }
 
 function TextField({ error, version, leftIcon, parentClassName, ...rest }: TextFieldProps) {

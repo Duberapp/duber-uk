@@ -1,7 +1,7 @@
 import React, { MouseEventHandler } from 'react'
 import { AdminNavLinks, AdminNavLinksType, type AdminRouteGroup, type AdminRouteSlug } from 'global-constants'
 import DuberButton from '../DuberButton'
-import { ScrollTextIcon, BookmarkIcon, UserRoundCheck, UserIcon, FlagIcon, SettingsIcon, ChevronRight } from 'lucide-react'
+import { ScrollTextIcon, BookmarkIcon, UserRoundCheck, UserIcon, FlagIcon, SettingsIcon, ChevronRight, LogOutIcon } from 'lucide-react'
 
 interface AdminSidebarProps {
   className?: string,
@@ -9,11 +9,12 @@ interface AdminSidebarProps {
   logo?: React.ReactNode,
   handleRoute: (route: AdminRouteSlug) => MouseEventHandler<HTMLButtonElement>,
   user: any,
-  userPlaceholderImage: string
+  userPlaceholderImage: string,
+  handleLogout: () => void,
 }
 
 const AdminSidebar = ({
-  className, route, logo, handleRoute, user, userPlaceholderImage
+  className, route, logo, handleRoute, user, userPlaceholderImage, handleLogout
 }: AdminSidebarProps) => {
 
   const checkIsSubRoute = (navLink: AdminNavLinksType) => {
@@ -52,6 +53,7 @@ const AdminSidebar = ({
               {navLink.route === 'bookings' && <BookmarkIcon className={`w-6 h-6`} />}
               {navLink.route === 'customers' && <UserRoundCheck className={`w-6 h-6`} />}
               {navLink.route === 'pilots' && <UserIcon className={`w-6 h-6`} />}
+              {navLink.route === 'applications' && <FlagIcon className={`w-6 h-6`} />}
               {navLink.title}
             </p>
           </DuberButton>
@@ -68,11 +70,11 @@ const AdminSidebar = ({
               }
             `}
             variant={'ghost'}
-            onClick={() => handleRoute(navLink.slug)}
+            onClick={() => navLink.slug === '/admin-dashboard/logout' ? handleLogout() : handleRoute(navLink.slug)}
           >
             <p key={navLink.id} className='flex items-center gap-x-5'>
-              {navLink.route === 'applications' && <FlagIcon className={`w-6 h-6`} />}
               {navLink.route === 'settings' && <SettingsIcon className={`w-6 h-6`} />}
+              {navLink.route === 'logout' && <LogOutIcon className={`w-6 h-6`} />}
               {navLink.title}
             </p>
           </DuberButton>

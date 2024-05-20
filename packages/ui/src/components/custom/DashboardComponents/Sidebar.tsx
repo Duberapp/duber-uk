@@ -13,12 +13,13 @@ interface InitialSidebarProps {
   img_1: string,
   img_2: string,
   title: string,
-  description: string
+  description: string,
+  className?: string
 }
 
-export function InitialSidebar({ img_1, img_2, title, description }: InitialSidebarProps) {
+export function InitialSidebar({ img_1, img_2, title, description, className = "" }: InitialSidebarProps) {
   return (
-    <SideBarLayout>
+    <SideBarLayout className={`${className}`}>
       <CardContent className='flex items-center flex-col justify-center mx-9'>
         <CardTitle className='text-2xl text-white text-center'>{title}</CardTitle>
         <CardDescription className='text-sm mt-1 text-gray-50 font-light text-center'>{description}</CardDescription>

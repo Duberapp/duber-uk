@@ -14,3 +14,7 @@ export { default as BookingSettingsTab } from './Booking/Settings'
 export { default as CustomersOverviewTab } from './Customers/Overview'
 export { default as CustomersSalesTab } from './Customers/Sales'
 export { default as CustomersDeliverablesTab } from './Customers/Deliverables'
+
+// Pilots Tab Contents
+export { default as PilotOverviewTab } from './Pilots/Overview'
+export { default as PilotCredentialsTab } from './Pilots/Credentials'

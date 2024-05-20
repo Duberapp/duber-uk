@@ -4,6 +4,8 @@ import {
   GoogleMap,
   Polygon,
   useJsApiLoader,
+  Marker,
+  MarkerF,
 } from "@react-google-maps/api";
 import { TrashIcon, HandRaisedIcon } from "@heroicons/react/24/outline";
 import {
@@ -44,6 +46,9 @@ const MapComponent = ({
   mapOptions,
   zoom,
   areaComponent,
+  markerMap,
+  markers,
+  preventZoom,
 }) => {
   const mapRef = useRef();
   const polygonRefs = useRef([]);
@@ -85,6 +90,8 @@ const MapComponent = ({
   // Listen to location -> change center status
   useEffect(() => {
     mapRef.current?.setCenter(location);
+
+    if (preventZoom) return;
     mapRef.current?.setZoom(20);
   }, [location, mapRef.current]);
 
@@ -267,7 +274,8 @@ const MapComponent = ({
           zoomControl: false,
           fullscreenControl: false,
           clickableIcons: false,
-          gestureHandling: mapState === "static" ? "none" : "auto",
+          gestureHandling:
+            mapState === "static" && !markerMap ? "none" : "auto",
           ...mapOptions,
         }}
       >
@@ -306,6 +314,21 @@ const MapComponent = ({
                 editable={mapState === "static" ? false : true}
               />
             </OutsideClickHandler>
+          ))}
+
+        {/* Render markers */}
+        {markerMap &&
+          markers.length > 0 &&
+          markers.map((marker, index) => (
+            <Marker
+              key={index}
+              position={marker}
+              clickable={false}
+              icon={{
+                url: "https://vbgbnkwwdzwmzsddhoaf.supabase.co/storage/v1/object/public/other-assets/marker_elipse.png",
+                scaledSize: { width: 25, height: 25 },
+              }}
+            />
           ))}
 
         {/* Duber logo - Static & Dynamic */}
