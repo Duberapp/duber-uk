@@ -1,21 +1,18 @@
-import * as React from "react"
-import { addDays, format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
-import { DateRange } from "react-day-picker"
+import * as React from "react";
+import { addDays, format, subDays } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { DateRange } from "react-day-picker";
 
-import { cn } from "../../lib/utils"
-import { Button } from "../ui/button"
-import { Calendar } from "../ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../ui/popover"
+import { cn } from "../../lib/utils";
+import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
-interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> {
-  fromDate: Date | undefined,
-  toDate: Date | undefined,
-  alignment: 'start' | 'end' | 'center',
+interface DatePickerWithRangeProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  fromDate: Date | undefined;
+  toDate: Date | undefined;
+  alignment: "start" | "end" | "center";
   onChangeDateRange?: (range: DateRange | undefined) => void;
 }
 
@@ -24,16 +21,17 @@ export function DatePickerWithRange({
   fromDate,
   toDate,
   alignment,
-  onChangeDateRange
+  onChangeDateRange,
 }: DatePickerWithRangeProps) {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: fromDate || new Date(2022, 0, 20),
-    to: addDays(toDate || new Date(2022, 0, 20), 20),
-  })
+    // to: addDays(toDate || new Date(2022, 0, 20), 30),
+    to: toDate || new Date(2022, 0, 20),
+  });
 
   React.useEffect(() => {
-    onChangeDateRange && onChangeDateRange(date)
-  }, [date])
+    onChangeDateRange && onChangeDateRange(date);
+  }, [date]);
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -74,5 +72,5 @@ export function DatePickerWithRange({
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }
