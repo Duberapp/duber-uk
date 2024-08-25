@@ -1,18 +1,92 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminLayoutProvider from "../../../components/AdminComponents_V2/AdminLayoutProvider";
 import { useRouter } from "next/router";
-import { FilterDropdown, JobCard } from "ui";
+import { FilterDropdown, JobCard, Loading, useToast } from "ui";
 import { BookingStatusFilterValues, PilotExpertises } from "global-constants";
+import { adminAPIBaseURL } from "../../../utils/adminAPI_SDK";
+import axios from "axios";
+
+String.prototype.toProperCase = function () {
+  return this.replace(/\w\S*/g, function (txt) {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+};
 
 const Bookings = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
+  const [cancelledBy, setCancelledBy] = useState("");
   const [filterExpertise, setFilterExpertise] = useState("");
+  const [bookings, setBookings] = useState([]);
+  const { toast } = useToast();
 
+  // set cancelled by
+  useEffect(() => {
+    if (
+      filterStatus === "customer_cancelled" ||
+      filterStatus === "pilot_cancelled"
+    ) {
+      setCancelledBy(filterStatus.split("_")[0]);
+    }
+  }, [filterStatus]);
+
+  // Fetch data on initial load (2 sec. delay)
+  useEffect(() => {
+    let timeoutId;
+
+    if (bookings?.data === null) {
+      loadData();
+    } else {
+      timeoutId = setTimeout(loadData, 2000);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm, filterStatus, filterExpertise]);
+
+  // handle view booking
   const handleViewBooking = (jobId, preventRoute) => {
-    router.push(`/admin-dashboard/bookings/8144516`);
+    router.push(`/admin-dashboard/bookings/${jobId}`);
   };
+
+  // load data
+  async function bookingsRequest() {
+    let params = {};
+
+    if (searchTerm) params = { ...params, search: searchTerm };
+    if (filterStatus)
+      params = { ...params, status: filterStatus.toProperCase() };
+    if (cancelledBy) params = { ...params, cancelled_by: cancelledBy };
+    if (filterExpertise) params = { ...params, expertise: filterExpertise };
+
+    const res = await axios({
+      baseURL: adminAPIBaseURL,
+      url: `/bookings`,
+      params,
+    });
+
+    return res.data;
+  }
+
+  async function loadData() {
+    try {
+      setLoading(true);
+
+      const data = await bookingsRequest();
+      if (data.error) throw data.error;
+      setBookings(data);
+
+      setLoading(false);
+    } catch (err) {
+      toast({
+        title: "Something Went Wrong !",
+        description: err?.response?.data?.error || err.message,
+        variant: "destructive",
+      });
+      setLoading(false);
+    }
+  }
 
   return (
     <AdminLayoutProvider
@@ -51,53 +125,28 @@ const Bookings = () => {
         </div>
       }
     >
-      <div className="flex flex-col gap-y-5">
-        <JobCard
-          expertise="marketing"
-          jobID={"12345"}
-          jobDate={new Date()}
-          isAdmin
-          jobLocation="59, Washbrook Road, Portsmouth, UK"
-          jobStatus="Available"
-          onClick={handleViewBooking}
-        />
-        <JobCard
-          expertise="marketing"
-          jobID={"12345"}
-          jobDate={new Date()}
-          isAdmin
-          jobLocation="59, Washbrook Road, Portsmouth, UK"
-          jobStatus="Available"
-          onClick={handleViewBooking}
-        />
-        <JobCard
-          expertise="marketing"
-          jobID={"12345"}
-          jobDate={new Date()}
-          isAdmin
-          jobLocation="59, Washbrook Road, Portsmouth, UK"
-          jobStatus="Available"
-          onClick={handleViewBooking}
-        />
-        <JobCard
-          expertise="marketing"
-          jobID={"12345"}
-          jobDate={new Date()}
-          isAdmin
-          jobLocation="59, Washbrook Road, Portsmouth, UK"
-          jobStatus="Available"
-          onClick={handleViewBooking}
-        />
-        <JobCard
-          expertise="marketing"
-          jobID={"12345"}
-          jobDate={new Date()}
-          isAdmin
-          jobLocation="59, Washbrook Road, Portsmouth, UK"
-          jobStatus="Available"
-          onClick={handleViewBooking}
-        />
-      </div>
+      {loading ? (
+        <div className="w-full h-full flex items-center justify-center flex-1">
+          <div className="mt-6 bg-slate-50 p-3 rounded-full shadow-lg">
+            <Loading className="h-6 w-6 animate-spin text-duber-navyBlue" />
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-y-5">
+          {bookings.data?.map((booking) => (
+            <JobCard
+              key={booking.id}
+              expertise={booking.pilotExpertize}
+              jobID={booking.id}
+              jobDate={new Date(booking.date)}
+              jobLocation={booking.address}
+              jobStatus={booking.status}
+              onClick={() => handleViewBooking(booking.id)}
+              isAdmin
+            />
+          ))}
+        </div>
+      )}
     </AdminLayoutProvider>
   );
 };

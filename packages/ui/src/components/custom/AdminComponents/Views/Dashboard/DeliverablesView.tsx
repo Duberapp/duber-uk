@@ -3,64 +3,80 @@ import Chart from "../../../Chart";
 import { Card, CardContent } from "../../../../ui/card";
 import { ScrollArea } from "../../../../ui/scroll-area";
 import DetailedCard from "../../DetailedCard";
+import { useEffect, useState } from "react";
 
 interface DeliverablesViewProps {
   data: any;
 }
 
-const demoData = [
-  {
-    name: "Jan",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "Feb",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "Mar",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "Apr",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "May",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "Jun",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "Jul",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "Aug",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "Sep",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "Oct",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "Nov",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-  {
-    name: "Dec",
-    size: Math.floor(Math.random() * 100) + 1,
-  },
-];
-
 export default function DeliverablesView({ data }: DeliverablesViewProps) {
+  const [tableData, setTableData] = useState([
+    {
+      name: "Jan",
+      size: 0,
+    },
+    {
+      name: "Feb",
+      size: 0,
+    },
+    {
+      name: "Mar",
+      size: 0,
+    },
+    {
+      name: "Apr",
+      size: 0,
+    },
+    {
+      name: "May",
+      size: 0,
+    },
+    {
+      name: "Jun",
+      size: 0,
+    },
+    {
+      name: "Jul",
+      size: 0,
+    },
+    {
+      name: "Aug",
+      size: 0,
+    },
+    {
+      name: "Sep",
+      size: 0,
+    },
+    {
+      name: "Oct",
+      size: 0,
+    },
+    {
+      name: "Nov",
+      size: 0,
+    },
+    {
+      name: "Dec",
+      size: 0,
+    },
+  ]);
+
   if (!data) return <></>;
+
+  useEffect(() => {
+    if (data) {
+      const newData = tableData.map((item) => {
+        const newItem = data.monthlySizes[item.name];
+
+        return {
+          name: item.name,
+          size: newItem ? newItem : 0,
+        };
+      });
+
+      setTableData(newData);
+    }
+  }, [data]);
 
   return (
     <main className="w-full">
@@ -69,26 +85,26 @@ export default function DeliverablesView({ data }: DeliverablesViewProps) {
         <DashboardCard
           noIcon
           title="Total Size"
-          infoText="+20.1% from last month"
-          mainText="120GB"
+          // infoText="+20.1% from last month"
+          mainText={`${(data.totalBucketSize as number).toFixed(1)}GB`}
         />
         <DashboardCard
           noIcon
           title="Average Size"
-          infoText="+180.1% from last month"
-          mainText="4.3GB"
+          // infoText="+180.1% from last month"
+          mainText={`${(data.averageFolderSize as number).toFixed(1)}GB`}
         />
         <DashboardCard
           noIcon
           title="Videos"
-          infoText="+19% from last month"
-          mainText="+12,234"
+          // infoText="+19% from last month"
+          mainText={`+${data.totalVideoFiles as number}`}
         />
         <DashboardCard
           noIcon
           title="Photos"
-          infoText="+201 from yesterday"
-          mainText="+573"
+          // infoText="+201 from yesterday"
+          mainText={`+${data.totalPhotoFiles as number}`}
         />
       </div>
 
@@ -96,7 +112,7 @@ export default function DeliverablesView({ data }: DeliverablesViewProps) {
         <Chart
           title="Overview"
           className="flex-1 h-[30rem]"
-          chartData={demoData}
+          chartData={tableData}
           XAxisProp={{ dataKey: "name" }}
           YAxisProp={{ tickFormatter: (value) => `${value}GB` }}
           barDataKey="size"
@@ -113,72 +129,23 @@ export default function DeliverablesView({ data }: DeliverablesViewProps) {
               </div>
 
               <div className="flex flex-col gap-y-5 px-4">
-                <DetailedCard
-                  type="expiring_link"
-                  topic={{
-                    subtitle: "Required Expertise",
-                    title: "Assets Management",
-                  }}
-                  content={{ title: "Portsmouth, UK", subtitle: "Location" }}
-                  infoText={"10 Days"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
-                <DetailedCard
-                  type="expiring_link"
-                  topic={{
-                    subtitle: "Required Expertise",
-                    title: "Assets Management",
-                  }}
-                  content={{ title: "Portsmouth, UK", subtitle: "Location" }}
-                  infoText={"5 Days"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
-                <DetailedCard
-                  type="expiring_link"
-                  topic={{
-                    subtitle: "Required Expertise",
-                    title: "Assets Management",
-                  }}
-                  content={{ title: "Portsmouth, UK", subtitle: "Location" }}
-                  infoText={"Expired"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
-                <DetailedCard
-                  type="expiring_link"
-                  topic={{
-                    subtitle: "Required Expertise",
-                    title: "Assets Management",
-                  }}
-                  content={{ title: "Portsmouth, UK", subtitle: "Location" }}
-                  infoText={"Today"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
-                <DetailedCard
-                  type="expiring_link"
-                  topic={{
-                    subtitle: "Required Expertise",
-                    title: "Assets Management",
-                  }}
-                  content={{ title: "Portsmouth, UK", subtitle: "Location" }}
-                  infoText={"Expired"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
-                <DetailedCard
-                  type="expiring_link"
-                  topic={{
-                    subtitle: "Required Expertise",
-                    title: "Assets Management",
-                  }}
-                  content={{ title: "Portsmouth, UK", subtitle: "Location" }}
-                  infoText={"4 Days"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
+                {data.expiring_links.length > 0 &&
+                  data.expiring_links.map((sale: any) => (
+                    <DetailedCard
+                      type="expiring_link"
+                      topic={{
+                        subtitle: "Required Expertise",
+                        title: sale.Orders.pilotExpertize,
+                      }}
+                      content={{
+                        title: sale.Orders.address,
+                        subtitle: "Location",
+                      }}
+                      infoText={"10 Days"}
+                      onView={() => ""}
+                      date={new Date().toLocaleDateString()}
+                    />
+                  ))}
               </div>
             </ScrollArea>
           </CardContent>

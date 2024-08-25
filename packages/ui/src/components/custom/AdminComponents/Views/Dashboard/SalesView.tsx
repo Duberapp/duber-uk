@@ -156,8 +156,9 @@ export default function SalesView({ data }: SalesViewProps) {
               </div>
 
               <div className="flex flex-col gap-y-5 px-4">
-                {data.jobs.selectedRange.map((job: any) => (
+                {data.jobs.selectedRange.map((job: any, index: any) => (
                   <DetailedCard
+                    key={index}
                     type={job.SaleCategory}
                     topic={{
                       title: job.BookingType || job.AddonType,

@@ -76,6 +76,7 @@ const AdminDashboard = () => {
       url: `/dashboard/bookings`,
       params: { from: date_range.from, to: date_range.to },
     });
+
     return res.data;
   }
 
@@ -83,7 +84,9 @@ const AdminDashboard = () => {
     const res = await axios({
       baseURL: adminAPIBaseURL,
       url: `/dashboard/deliverables`,
+      params: { from: date_range.from, to: date_range.to },
     });
+
     return res.data;
   }
 

@@ -24,13 +24,13 @@ export default function DetailedCard({
   function getContentTitle(): { title: string; subtitle: string } {
     let preparedTitle = { title: "", subtitle: "" };
 
-    if (type === "booking") {
+    if (type === "booking" || type === "expiring_link") {
       let titleArr = (content.title as string).split(",");
       preparedTitle = {
         title: `
         ${titleArr[titleArr.length - 2]}, 
         ${titleArr[titleArr.length - 1]}`,
-        subtitle: "Booking",
+        subtitle: "Location",
       };
     } else if (type === "addon") {
       let sub = "";

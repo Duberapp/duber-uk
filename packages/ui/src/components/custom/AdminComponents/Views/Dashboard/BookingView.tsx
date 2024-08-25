@@ -3,6 +3,11 @@ import Chart from "../../../Chart";
 import { Card, CardContent } from "../../../../ui/card";
 import { ScrollArea } from "../../../../ui/scroll-area";
 import DetailedCard from "../../DetailedCard";
+import { useEffect, useState } from "react";
+import {
+  Tables,
+  type Tables as CustomerTables,
+} from "supabase-config/types/customer.supabase";
 
 interface BookingViewProps {
   data: any;
@@ -24,7 +29,63 @@ const demoData = [
 ];
 
 export default function BookingView({ data }: BookingViewProps) {
+  const [tableData, setTableData] = useState([
+    {
+      expertise: "Assets Management",
+      slug: "asset_management",
+      count: 0,
+      precentage: 0,
+    },
+    {
+      expertise: "Marketing",
+      slug: "marketing",
+      count: 0,
+      precentage: 0,
+    },
+    {
+      expertise: "Social Events",
+      slug: "social_events",
+      count: 0,
+      precentage: 0,
+    },
+  ]);
+
   if (!data) return <></>;
+
+  useEffect(() => {
+    if (data) {
+      let newData = tableData.map((item) => {
+        let newItem = {
+          ...item,
+          count: 0,
+        };
+
+        // loop through jobs data
+        data.bookingData.selectedRange.map(
+          (booking: CustomerTables<"Orders">) => {
+            if (booking.pilotExpertize === item.slug) {
+              newItem.count += 1;
+            }
+          }
+        );
+
+        // Push new item to table data
+        return newItem;
+      });
+
+      // Prepare precentage
+      newData = newData.map((item) => {
+        return {
+          ...item,
+          precentage: Math.floor(
+            (item.count / data.totalBookings.selectedRange) * 100
+          ),
+        };
+      });
+
+      setTableData(newData);
+    }
+  }, [data]);
 
   return (
     <main className="w-full">
@@ -33,26 +94,50 @@ export default function BookingView({ data }: BookingViewProps) {
         <DashboardCard
           noIcon
           title="Total Bookings"
-          infoText="+20.1% from last month"
-          mainText="+2343"
+          infoText={`+${(
+            (data.totalBookings.selectedRange /
+              (data.totalBookings.lastMonth === 0
+                ? 1
+                : data.totalBookings.lastMonth)) *
+            100
+          ).toFixed(1)}% from last month`}
+          mainText={`+${data.totalBookings.selectedRange}`}
         />
         <DashboardCard
           noIcon
           title="Unassigned"
-          infoText="+180.1% from last month"
-          mainText="+23"
+          infoText={`+${(
+            (data.unassignedBookings.selectedRange /
+              (data.unassignedBookings.lastMonth === 0
+                ? 1
+                : data.unassignedBookings.lastMonth)) *
+            100
+          ).toFixed(1)}% from last month`}
+          mainText={`+${data.unassignedBookings.selectedRange}`}
         />
         <DashboardCard
           noIcon
           title="Live"
-          infoText="+19% from last month"
-          mainText="+12,234"
+          infoText={`+${(
+            (data.liveBookings.selectedRange /
+              (data.liveBookings.lastMonth === 0
+                ? 1
+                : data.liveBookings.lastMonth)) *
+            100
+          ).toFixed(1)}% from last month`}
+          mainText={`+${data.liveBookings.selectedRange}`}
         />
         <DashboardCard
           noIcon
           title="Completed"
-          infoText="+201 from yesterday"
-          mainText="+573"
+          infoText={`+${(
+            (data.completedBookings.selectedRange /
+              (data.completedBookings.lastMonth === 0
+                ? 1
+                : data.completedBookings.lastMonth)) *
+            100
+          ).toFixed(1)}% from last month`}
+          mainText={`+${data.completedBookings.selectedRange}`}
         />
       </div>
 
@@ -60,7 +145,7 @@ export default function BookingView({ data }: BookingViewProps) {
         <Chart
           title="Popular Expertise"
           className="flex-1 h-[30rem]"
-          chartData={demoData}
+          chartData={tableData}
           XAxisProp={{ dataKey: "expertise" }}
           YAxisProp={{ tickFormatter: (value) => `${value}%` }}
           barDataKey="precentage"
@@ -72,59 +157,22 @@ export default function BookingView({ data }: BookingViewProps) {
               <div className="py-4 px-6">
                 <h3 className="text-base font-semibold">Cancelled Booking</h3>
                 <p className="text-xs text-slate-500">
-                  5 cancellations in this month
+                  {data.cancelledBookings.length} cancellations in this month
                 </p>
               </div>
 
               <div className="flex flex-col gap-y-5 px-4">
-                <DetailedCard
-                  type="cancel"
-                  topic={{ title: "Assets Management" }}
-                  content={{ title: "Pilot" }}
-                  infoText={"#1434234"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
-                <DetailedCard
-                  type="cancel"
-                  topic={{ title: "Assets Management" }}
-                  content={{ title: "Customer" }}
-                  infoText={"#1434234"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
-                <DetailedCard
-                  type="cancel"
-                  topic={{ title: "Assets Management" }}
-                  content={{ title: "Pilot" }}
-                  infoText={"#1434234"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
-                <DetailedCard
-                  type="cancel"
-                  topic={{ title: "Assets Management" }}
-                  content={{ title: "Customer" }}
-                  infoText={"#1434234"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
-                <DetailedCard
-                  type="cancel"
-                  topic={{ title: "Assets Management" }}
-                  content={{ title: "Pilot" }}
-                  infoText={"#1434234"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
-                <DetailedCard
-                  type="cancel"
-                  topic={{ title: "Assets Management" }}
-                  content={{ title: "Customer" }}
-                  infoText={"#1434234"}
-                  onView={() => ""}
-                  date={new Date().toLocaleDateString()}
-                />
+                {data.cancelledBookings.length > 0 &&
+                  data.cancelledBookings.map((booking: Tables<"Orders">) => (
+                    <DetailedCard
+                      type="cancel"
+                      topic={{ title: booking.pilotExpertize as string }}
+                      content={{ title: booking.cancelled_by as string }}
+                      infoText={`#${booking.id}`}
+                      onView={() => ""}
+                      date={new Date(booking.date!).toLocaleDateString()}
+                    />
+                  ))}
               </div>
             </ScrollArea>
           </CardContent>
